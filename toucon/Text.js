@@ -1,8 +1,21 @@
-/* A text which can be indented and colored based on mapped rules
- * 
- * Copyright 2015 Paul Senkel
+/**
+ * @param {string} [text] the text
+ * @param {string} [indentLevel] integer string or value which will be translated  by the indentRules mapping
+ * valid integer string by the indentRules mapping
+ * @param {object} [indentRules] a map which translates the value passed in "indentLevel" to a valid integer string
+ * @param {string} [color] a web color, e.g. #ff0000, OR a value which will be translated by the colorRules mapping
+ * @param {object} [colorRules] a map which translates the value passed in "colorValue" to a valid web color
+ * @param {float} [indentBy] used for indenting the text in rem units depending on the passed indentLevel, defaultValue is 1.5
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * @desc A text which can be indented and colored based on mapped rules
+ * 
+ * @extends sap.m.Text
+ * @returns sap.m.Text
+ *
+ * @class
+ * @author Paul Senkel
+ * @copyright 2015 Paul Senkel
+ * @license Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
@@ -12,8 +25,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * */
-sap.m.Text.extend("toucon.Text", {  
+ * @version 1.0
+ *
+ * @constructor
+ * @public
+ * @alias toucon.Text
+ */
+var touconText = sap.m.Text.extend("toucon.Text", {  
 	metadata: {  
 		properties: {  
 			"text" : { type: "string", defaultValue: null },
@@ -24,6 +42,21 @@ sap.m.Text.extend("toucon.Text", {
 			"colorRules" : { type: "object", defaultValue: null }
 		}
 	},  
+	/**
+	 * @param {RenderManager} [oRm] 
+	 * @param {Control} [oControl] this control
+	 *
+	 * @desc Applies the params, resolves the values of indentLevel and color
+	 * against their respective indentRules and colorRules mappings,
+	 * renders the text with the optional indentLevel multiplied with the indentBy parameter
+	 * and the optional color and calls the sap.m.TextRenderer.render function.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf toucon.Text
+	 */
 	renderer: function(oRm, oControl) {
 		//If we get an indent level
 		if (oControl.getIndentLevel()!=null && oControl.getIndentLevel()!="") {
@@ -33,7 +66,7 @@ sap.m.Text.extend("toucon.Text", {
 			}
 			//Use the value from the provided lookup if defined
 			else if ((oControl.getIndentRules()[oControl.getIndentLevel()]===undefined)==false){
-				oRm.addStyle("padding-left",oControl.getIndentRules()[oControl.getIndentLevel()]);
+				oRm.addStyle("padding-left",(oControl.getIndentRules()[oControl.getIndentLevel()]*oControl.getIndentBy())+"rem");
 			}
 		}
 		//If we get a color (or a key that needs conversion9

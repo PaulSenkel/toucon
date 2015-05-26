@@ -1,10 +1,17 @@
-/* A content area with an icon, a title
+/**
+ * @param {string} [title] title of the box
+ * @param {string} [icon] URL to an icon, e.g. sap-icon://home
+ *
+ * @desc The Box control is a content area with an icon, a title
  * both are contained in an horizontal layout
  * followed by the standard content[]
- * 
- * Copyright 2015 Paul Senkel
+ * @extends sap.ui.layout.Grid
+ * @returns sap.ui.layout.Grid
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * @class
+ * @author Paul Senkel
+ * @copyright 2015 Paul Senkel
+ * @license Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
@@ -14,8 +21,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * */
-sap.ui.layout.Grid.extend("toucon.Box", {  
+ * @version 1.0
+ *
+ * @constructor
+ * @public
+ * @alias toucon.Box
+ */
+var touconBox = sap.ui.layout.Grid.extend("toucon.Box", {  
 	metadata: {  
 		properties: {  
 			title : { type: "string", defaultValue: null },
@@ -30,6 +42,14 @@ sap.ui.layout.Grid.extend("toucon.Box", {
 	oIcon: null,
 	oTitle: null,
 	//We release these variables manually onExit
+	/**
+	 * @desc Releases private variables
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+     * @memberOf toucon.Box
+	 */
 	exit: function () {
         if (this.oHeader) {
             this.oHeader.destroy();
@@ -44,6 +64,15 @@ sap.ui.layout.Grid.extend("toucon.Box", {
             delete this.oTitle;
         }
     },
+	/**
+	 * @desc Initializes the header, icon and title controls and applies CSS classes.
+	 *
+	 * @function
+	 * @implements CSS: .touconBox, .touconBoxUnderline, .touconBoxIcon, .touconBoxTitle
+	 * @since 1.0
+	 * @protected
+     * @memberOf toucon.Box
+	 */
 	init: function() {
 		//Box decoration (background, rounded corners etc.)
 		this.addStyleClass("touconBox");
@@ -57,8 +86,7 @@ sap.ui.layout.Grid.extend("toucon.Box", {
 
 		//We prepare the icon zone
 		this.oIcon = new sap.ui.core.Icon( {  
-	        src : "",  
-	        size : "32px",  
+	        src : ""  
 	    } ).addStyleClass("touconBoxIcon");
 		this.oHeader.addContent(this.oIcon);
 
@@ -74,6 +102,18 @@ sap.ui.layout.Grid.extend("toucon.Box", {
 			})}).addStyleClass("touconBoxTitle");
 		this.oHeader.addContent(this.oTitle);
 	},
+	/**
+	 * @param {RenderManager} [oRm] 
+	 * @param {Control} [oControl] this control
+	 *
+	 * @desc Applies the Box params and calls the sap.ui.layout.GridRenderer.render function.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf toucon.Box
+	 */
 	renderer: function(oRm, oControl) {
 		//Here we fill the icon and title
 		oControl.oIcon.setSrc(oControl.getIcon());

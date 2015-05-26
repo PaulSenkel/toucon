@@ -12,12 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * */
-sap.ui.model.type.String.extend("toucon.type.Default", {
+var touconTypeDefault = sap.ui.model.type.String.extend("toucon.type.Default", {
 	formatValue: function(oValue){return oValue;},
 	parseValue: function(oValue){return oValue;},
 	validateValue: function(oValue){}
 });
-sap.ui.model.type.String.extend("toucon.type.String", {
+var touconTypeString = sap.ui.model.type.String.extend("toucon.type.String", {
 	formatValue: function(oValue){
 		if (debug==true) console.log("toucon.type.String.formatValue: "+oValue);
 		return oValue;
@@ -39,7 +39,7 @@ sap.ui.model.type.String.extend("toucon.type.String", {
 		if (typeRegex.test(oValue)==false) {throw new sap.ui.model.ValidateException(exceptionLevel);} 
 	}
 });
-sap.ui.model.type.String.extend("toucon.type.PostCodeGermany", {
+var touconTypePostCodeGermany = sap.ui.model.type.String.extend("toucon.type.PostCodeGermany", {
 	formatValue: function(oValue){
 		if (debug==true) console.log("toucon.type.PostCodeGermany.formatValue: "+oValue);
 		return oValue;
