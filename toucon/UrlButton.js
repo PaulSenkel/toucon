@@ -25,7 +25,7 @@
  *
  * @constructor
  * @public
- * @alias toucon.UrlButton
+ * @alias toucon-UrlButton
  */
 var UrlButton = sap.m.Button.extend("toucon.UrlButton", {  
 	metadata: {  
@@ -42,7 +42,7 @@ var UrlButton = sap.m.Button.extend("toucon.UrlButton", {
 	 * @function
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon.UrlButton
+     * @memberOf toucon-UrlButton
 	 */
 	init: function () {
 		this.setIcon("sap-icon://world");
@@ -61,7 +61,7 @@ var UrlButton = sap.m.Button.extend("toucon.UrlButton", {
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon.UrlButton
+     * @memberOf toucon-UrlButton
 	 */
 	renderer: function(oRm, oControl) {
 		//Uses the mail address as default text

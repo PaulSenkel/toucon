@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: MailButton</title>
+    <title>JSDoc: Class: toucon-Page</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: MailButton</h1>
+    <h1 class="page-title">Class: toucon-Page</h1>
 
     
 
@@ -29,7 +29,7 @@
 <header>
     
         <h2>
-        MailButton
+        toucon-Page
         </h2>
         
     
@@ -42,14 +42,14 @@
 
     
 
-    <h4 class="name" id="MailButton"><span class="type-signature"></span>new MailButton<span class="signature">(mail<span class="signature-attributes">opt</span>, subject<span class="signature-attributes">opt</span>, body<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="toucon-Page"><span class="type-signature"></span>new toucon-Page<span class="signature">(topContent<span class="signature-attributes">opt</span>, mainContent<span class="signature-attributes">opt</span>, bottomContent<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    A button with a default mail icon and which will open the locale-mail client and prefill the e-mail with the given information
+    A container with three aggregations for content. topContents will be added to a sap.ui.layout.HorizontalLayoutmainContents will be added to a sap.ui.layout.GridbottomContents will be added to a sap.ui.layout.HorizontalLayout
 </div>
 
 
@@ -87,13 +87,13 @@
 
         <tr>
             
-                <td class="name"><code>mail</code></td>
+                <td class="name"><code>topContent</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">sap.ui.core.Control</span>
 
 
             
@@ -113,20 +113,20 @@
 
             
 
-            <td class="description last">the e-mail address</td>
+            <td class="description last">controls which are added here will be displayed horizontally</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>subject</code></td>
+                <td class="name"><code>mainContent</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">sap.ui.core.Control</span>
 
 
             
@@ -146,20 +146,20 @@
 
             
 
-            <td class="description last">an optional value for the subject</td>
+            <td class="description last">controls which are added here will be displayed in a responsive grid according to their layout data</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>body</code></td>
+                <td class="name"><code>bottomContent</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">sap.ui.core.Control</span>
 
 
             
@@ -179,7 +179,7 @@
 
             
 
-            <td class="description last">an optional value for the body of the message</td>
+            <td class="description last">controls which are added here will be displayed horizontally</td>
         </tr>
 
     
@@ -236,7 +236,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MailButton.js.html">MailButton.js</a>, <a href="MailButton.js.html#line31">line 31</a>
+        <a href="Page.js.html">Page.js</a>, <a href="Page.js.html#line33">line 33</a>
     </li></ul></dd>
     
 
@@ -263,7 +263,7 @@
 
         
 <div class="param-desc">
-    sap.m.Button
+    sap.m.Page
 </div>
 
 
@@ -282,7 +282,7 @@
 
 
     <ul>
-        <li>sap.m.Button</li>
+        <li>sap.m.Page</li>
     </ul>
 
 
@@ -306,14 +306,14 @@
 
     
 
-    <h4 class="name" id=".init"><span class="type-signature">(protected, static) </span>init<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".exit"><span class="type-signature">(protected, static) </span>exit<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Initializes the button icon with the default icon sap-icon://email and attaches the press function which will call the mailto link with target "hidden"Please note that this version requires the existence of a hidden iFrame called "hidden"!
+    Releases private variables
 </div>
 
 
@@ -360,7 +360,354 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MailButton.js.html">MailButton.js</a>, <a href="MailButton.js.html#line49">line 49</a>
+        <a href="Page.js.html">Page.js</a>, <a href="Page.js.html#line60">line 60</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getBottomContainer"><span class="type-signature">(static) </span>getBottomContainer<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Through this function we grant direct access to the bootomContent aggregation
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Page.js.html">Page.js</a>, <a href="Page.js.html#line138">line 138</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getContentContainer"><span class="type-signature">(static) </span>getContentContainer<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Through this function we grant direct access to the mainContent aggregation
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Page.js.html">Page.js</a>, <a href="Page.js.html#line127">line 127</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getTopContainer"><span class="type-signature">(static) </span>getTopContainer<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Through this function we grant direct access to the topContent aggregation
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Page.js.html">Page.js</a>, <a href="Page.js.html#line116">line 116</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".init"><span class="type-signature">(protected, static) </span>init<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Initializes the top, main and bottom content containers and applies CSS classes.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li>CSS: .touconPage, .touconPageHeader, .touconPageContent, .touconPageFooter</li>
+        
+    </ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Page.js.html">Page.js</a>, <a href="Page.js.html#line83">line 83</a>
     </li></ul></dd>
     
 
@@ -398,7 +745,7 @@
 
 
 <div class="description">
-    Applies the mail parameter as text if no text was set and calls the sap.m.ButtonRenderer.render function.
+    Pushes the top, main and bottom contents into the three respective layout containers'scontent aggregations and calls the sap.m.PageRenderer.render function.
 </div>
 
 
@@ -539,7 +886,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MailButton.js.html">MailButton.js</a>, <a href="MailButton.js.html#line71">line 71</a>
+        <a href="Page.js.html">Page.js</a>, <a href="Page.js.html#line154">line 154</a>
     </li></ul></dd>
     
 
@@ -581,13 +928,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="toucon.FormLine.html">FormLine</a></li><li><a href="toucon.Icon.html">Icon</a></li><li><a href="toucon.InfoBox.html">InfoBox</a></li><li><a href="toucon.MailButton.html">MailButton</a></li><li><a href="toucon.Page.html">Page</a></li><li><a href="toucon.PhoneButton.html">PhoneButton</a></li><li><a href="toucon.StatusIndicator.html">StatusIndicator</a></li><li><a href="toucon.Text.html">Text</a></li><li><a href="toucon.type.Default.html">Default</a></li><li><a href="toucon.type.PostCodeGermany.html">PostCodeGermany</a></li><li><a href="toucon.type.String.html">String</a></li><li><a href="toucon.UrlButton.html">UrlButton</a></li><li><a href="toucon-Box.html">toucon-Box</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu May 28 2015 00:34:59 GMT+0200 (Mitteleuropäische Sommerzeit)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu May 28 2015 00:41:37 GMT+0200 (Mitteleuropäische Sommerzeit)
 </footer>
 
 <script> prettyPrint(); </script>

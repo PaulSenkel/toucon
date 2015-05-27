@@ -33,7 +33,7 @@
  *
  * @constructor
  * @public
- * @alias toucon.FormLine
+ * @alias toucon-FormLine
  */
 var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {  
 	metadata: {  
@@ -74,7 +74,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 	 * @implements CSS: .touconLabel, .touconLabelLM, .touconLabelS
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon.FormLine
+     * @memberOf toucon-FormLine
 	 */
 	init: function() {
 		console.log("toucon.FormLine.init");
@@ -107,7 +107,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 	 * @implements CSS: .touconMandatory
 	 * @since 1.0
 	 * @private
-     * @memberOf toucon.FormLine
+     * @memberOf toucon-FormLine
 	 */
 	_prepareLabelLM : function () {
 		var oControl = this;
@@ -147,7 +147,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 	 * @implements CSS: .touconMandatory
 	 * @since 1.0
 	 * @private
-     * @memberOf toucon.FormLine
+     * @memberOf toucon-FormLine
 	 */
 	_prepareLabelS : function () {
 		var oControl = this;
@@ -200,7 +200,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 	 * @implements CSS: .touconMandatory, .touconControl
 	 * @since 1.0
 	 * @private
-     * @memberOf toucon.FormLine
+     * @memberOf toucon-FormLine
 	 */
 	_prepareControl : function () {
 		var oControl = this;
@@ -236,7 +236,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 	 * @function
 	 * @since 1.0
 	 * @public
-     * @memberOf toucon.FormLine
+     * @memberOf toucon-FormLine
 	 */
 	getLabelLM: function() {
 		oControl._prepareLabelLM();
@@ -249,7 +249,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 	 * @function
 	 * @since 1.0
 	 * @public
-     * @memberOf toucon.FormLine
+     * @memberOf toucon-FormLine
 	 */
 	getLabelS: function() {
 		oControl._prepareLabelS();
@@ -262,7 +262,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 	 * @function
 	 * @since 1.0
 	 * @public
-     * @memberOf toucon.FormLine
+     * @memberOf toucon-FormLine
 	 */
 	getControl: function() {
 		oControl._prepareControl();
@@ -277,7 +277,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 	 * @function
 	 * @since 1.0
 	 * @public
-     * @memberOf toucon.FormLine
+     * @memberOf toucon-FormLine
 	 */
 	renderInto: function (oControl) {
 //		oControl.addContent(this.getAggregation("_errorText"));
@@ -295,7 +295,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon.FormLine
+     * @memberOf toucon-FormLine
 	 */
 	renderer: function(oRm, oControl) {
 //		oControl._prepareErrorText();

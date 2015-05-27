@@ -31,7 +31,7 @@
  *
  * @constructor
  * @public
- * @alias toucon.InfoBox
+ * @alias toucon-InfoBox
  */
 var touconInfoBox = sap.ui.core.Control.extend("toucon.InfoBox", {  
 	metadata: {  
@@ -64,7 +64,7 @@ var touconInfoBox = sap.ui.core.Control.extend("toucon.InfoBox", {
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon.InfoBox
+     * @memberOf toucon-InfoBox
 	 */
 	renderer: function(oRm, oControl) {
 		var texts = [];

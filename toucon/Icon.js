@@ -27,7 +27,7 @@
  *
  * @constructor
  * @public
- * @alias toucon.Icon
+ * @alias toucon-Icon
  */
 var touconIcon = sap.ui.core.Icon.extend("toucon.Icon", {  
 	metadata: {  
@@ -51,7 +51,7 @@ var touconIcon = sap.ui.core.Icon.extend("toucon.Icon", {
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon.Icon
+     * @memberOf toucon-Icon
 	 */
 	renderer: function(oRm, oControl) {
 		//If no icon (key) was given, then let's use the default one

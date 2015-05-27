@@ -28,7 +28,7 @@
  *
  * @constructor
  * @public
- * @alias toucon.Page
+ * @alias toucon-Page
  */
 var touconPage = sap.m.Page.extend("toucon.Page", {  
 	metadata: {  
@@ -55,7 +55,7 @@ var touconPage = sap.m.Page.extend("toucon.Page", {
 	 * @function
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon.Page
+     * @memberOf toucon-Page
 	 */
 	exit: function () {
         if (this.oTopContainer) {
@@ -78,7 +78,7 @@ var touconPage = sap.m.Page.extend("toucon.Page", {
 	 * @implements CSS: .touconPage, .touconPageHeader, .touconPageContent, .touconPageFooter
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon.Page
+     * @memberOf toucon-Page
 	 */
 	init: function() {
 		//Page decoration (background etc.)
@@ -111,7 +111,7 @@ var touconPage = sap.m.Page.extend("toucon.Page", {
 	 * @function
 	 * @since 1.0
 	 * @public
-     * @memberOf toucon.Page
+     * @memberOf toucon-Page
 	 */
 	getTopContainer : function () {
 		return this.oTopContainer;
@@ -122,7 +122,7 @@ var touconPage = sap.m.Page.extend("toucon.Page", {
 	 * @function
 	 * @since 1.0
 	 * @public
-     * @memberOf toucon.Page
+     * @memberOf toucon-Page
 	 */
 	getContentContainer : function () {
 		return this.oMainContainer;
@@ -133,7 +133,7 @@ var touconPage = sap.m.Page.extend("toucon.Page", {
 	 * @function
 	 * @since 1.0
 	 * @public
-     * @memberOf toucon.Page
+     * @memberOf toucon-Page
 	 */
 	getBottomContainer : function () {
 		return this.oBottomContainer;
@@ -149,7 +149,7 @@ var touconPage = sap.m.Page.extend("toucon.Page", {
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon.Page
+     * @memberOf toucon-Page
 	 */
 	renderer: function(oRm, oControl) {
 		//We fill our three layouts with the aggregation

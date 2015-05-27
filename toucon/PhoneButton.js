@@ -24,7 +24,7 @@
  *
  * @constructor
  * @public
- * @alias toucon.PhoneButton
+ * @alias toucon-PhoneButton
  */
 var touconPhoneButton = sap.m.Button.extend("toucon.PhoneButton", {  
 	metadata: {  
@@ -40,7 +40,7 @@ var touconPhoneButton = sap.m.Button.extend("toucon.PhoneButton", {
 	 * @function
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon.PhoneButton
+     * @memberOf toucon-PhoneButton
 	 */
 	init: function () {
 		this.setIcon("sap-icon://phone");
@@ -59,7 +59,7 @@ var touconPhoneButton = sap.m.Button.extend("toucon.PhoneButton", {
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon.PhoneButton
+     * @memberOf toucon-PhoneButton
 	 */
 	renderer: function(oRm, oControl) {
 		//Uses the mail address as default text

@@ -25,7 +25,7 @@
  *
  * @constructor
  * @public
- * @alias toucon.Box
+ * @alias toucon-Box
  */
 var touconBox = sap.ui.layout.Grid.extend("toucon.Box", {  
 	metadata: {  
@@ -48,7 +48,7 @@ var touconBox = sap.ui.layout.Grid.extend("toucon.Box", {
 	 * @function
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon.Box
+     * @memberOf toucon-Box
 	 */
 	exit: function () {
         if (this.oHeader) {
@@ -71,7 +71,7 @@ var touconBox = sap.ui.layout.Grid.extend("toucon.Box", {
 	 * @implements CSS: .touconBox, .touconBoxUnderline, .touconBoxIcon, .touconBoxTitle
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon.Box
+     * @memberOf toucon-Box
 	 */
 	init: function() {
 		//Box decoration (background, rounded corners etc.)
@@ -112,7 +112,7 @@ var touconBox = sap.ui.layout.Grid.extend("toucon.Box", {
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon.Box
+     * @memberOf toucon-Box
 	 */
 	renderer: function(oRm, oControl) {
 		//Here we fill the icon and title

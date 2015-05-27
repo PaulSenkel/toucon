@@ -29,7 +29,7 @@
  *
  * @constructor
  * @public
- * @alias toucon.Text
+ * @alias toucon-Text
  */
 var touconText = sap.m.Text.extend("toucon.Text", {  
 	metadata: {  
@@ -55,7 +55,7 @@ var touconText = sap.m.Text.extend("toucon.Text", {
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon.Text
+     * @memberOf toucon-Text
 	 */
 	renderer: function(oRm, oControl) {
 		//If we get an indent level

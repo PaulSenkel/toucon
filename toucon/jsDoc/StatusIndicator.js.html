@@ -1,4 +1,32 @@
-jQuery.sap.require("toucon.Icon");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: StatusIndicator.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: StatusIndicator.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>jQuery.sap.require("toucon.Icon");
 /**
  * @param {string} [value] an integer string, default is "0", or a value which will be translated by the valueRules map
  * @param {string} [defaultValue] an integer string, default is "0", which is used as fallback if the value is overwritten with ""
@@ -130,14 +158,14 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 	 * 
 	 * ASC:
 	 * Red if > redLimit
-	 * Yellow if <= redLimit and > greenLimit
-	 * Green if <= greenLimit and > blueLimit
+	 * Yellow if &lt;= redLimit and > greenLimit
+	 * Green if &lt;= greenLimit and > blueLimit
 	 * Else Blue
 	 * 
 	 * DESC:
-	 * Blue if <= blueLimit
-	 * Red if > blueLimit and <= redLimit
-	 * Yellow if > redLimit and < greenLimit
+	 * Blue if &lt;= blueLimit
+	 * Red if > blueLimit and &lt;= redLimit
+	 * Yellow if > redLimit and &lt; greenLimit
 	 * Else Green
 	 *
 	 * @function
@@ -154,9 +182,9 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
     	if (oControl.getValue()==null || oControl.getValue()=="") {
 			oControl.setValue(oControl.getDefaultValue());
 		}
-		if (oControl.getValue()!=null && oControl.getValue()!="") {
+		if (oControl.getValue()!=null &amp;&amp; oControl.getValue()!="") {
 			//No conversion rule is given, use the value directly if integer
-			if (oControl.getValueRules()==null && parseInt(oControl.getValue())==oControl.getValue()){
+			if (oControl.getValueRules()==null &amp;&amp; parseInt(oControl.getValue())==oControl.getValue()){
 				value = oControl.getValue();
 			}
 			//Use the value from the provided lookup if defined
@@ -168,19 +196,19 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 			if(oControl.getAsc()){
 				if(value > oControl.getRedLimit()){
 					state = "Red";
-				}else if(value <= oControl.getRedLimit() && value > oControl.getGreenLimit()){
+				}else if(value &lt;= oControl.getRedLimit() &amp;&amp; value > oControl.getGreenLimit()){
 					state = "Yellow";			
-				}else if(value <= oControl.getGreenLimit() && value > oControl.getBlueLimit()){
+				}else if(value &lt;= oControl.getGreenLimit() &amp;&amp; value > oControl.getBlueLimit()){
 					state = "Green";		
 				}else {
 					state = "Blue";
 				}
 			}else{
-				if(value <= oControl.getBlueLimit()){
+				if(value &lt;= oControl.getBlueLimit()){
 					state = "Blue";
-				}else if(value > oControl.getBlueLimit() && value <= oControl.getRedLimit()){
+				}else if(value > oControl.getBlueLimit() &amp;&amp; value &lt;= oControl.getRedLimit()){
 					state = "Red";
-				}else if(value > oControl.getRedLimit() && value < oControl.getGreenLimit()){
+				}else if(value > oControl.getRedLimit() &amp;&amp; value &lt; oControl.getGreenLimit()){
 					state = "Yellow";			
 				}else{
 					state = "Green";		
@@ -188,13 +216,13 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 			}
 
 			//If there's a chance to display the icon
-			if (oControl.getShowValue()==false && oControl.getShowIcon()==true) {
+			if (oControl.getShowValue()==false &amp;&amp; oControl.getShowIcon()==true) {
 				//Finalising the icon, use icon-specific value if given
-				if (oControl.getIconValue()!=null && oControl.getIconValue()!="") {
+				if (oControl.getIconValue()!=null &amp;&amp; oControl.getIconValue()!="") {
 					oControl.getAggregation("_icon").setIcon(oControl.getIconValue());
 				} else {
 					//If no icon-specific value is given, then use the global input value if special icon rules are given (means that the user wants to map a value to an icon rule)
-					if (oControl.getIconRules()!=null && (oControl.getIconRules()===undefined)==false) {
+					if (oControl.getIconRules()!=null &amp;&amp; (oControl.getIconRules()===undefined)==false) {
 						oControl.getAggregation("_icon").setIcon(oControl.getValue());
 					} 
 					//If no icon-specific values or rules are given, then use the state against the initial iconRules
@@ -203,17 +231,17 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 					}
 				}
 				//Apply special iconRules if given
-				if (oControl.getIconRules()!=null && (oControl.getIconRules()===undefined)==false) {
+				if (oControl.getIconRules()!=null &amp;&amp; (oControl.getIconRules()===undefined)==false) {
 					oControl.getAggregation("_icon").setIconRules(oControl.getIconRules());
 				}
 			}
 
 			//Global div
-			oRm.write("<div"); 
+			oRm.write("&lt;div"); 
 			oRm.writeControlData(oControl);  
 			oRm.write(">");
 			//Background div
-			oRm.write("<div");
+			oRm.write("&lt;div");
 			//Global color definition through CSS by State
 			oRm.addClass("touconStatusIndicator"+state+"BG"); 
 			oRm.writeClasses();
@@ -246,9 +274,9 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 				oRm.addStyle("border-bottom-width", oControl.getSize()*1.2+"rem");
 			}
 			oRm.writeStyles();
-			oRm.write("> </div>");
+			oRm.write("> &lt;/div>");
 			//Value/icon div
-			oRm.write("<div");
+			oRm.write("&lt;div");
 			oRm.addClass("touconStatusIndicator"+state+"Text"); 
 			oRm.writeClasses();
 			oRm.addStyle("margin-top", "-"+oControl.getSize()+"rem");                                                        
@@ -269,11 +297,33 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 			if (oControl.getShowValue()==true) {
 				oRm.writeEscaped(oControl.getValue()+"");
 			}  
-			else if (oControl.getShowIcon()==true && (oControl.getAggregation("_icon")===undefined)==false) {
+			else if (oControl.getShowIcon()==true &amp;&amp; (oControl.getAggregation("_icon")===undefined)==false) {
 				oRm.renderControl(oControl.getAggregation("_icon"));
 			}
-			oRm.write("</div>");                                                
-			oRm.write("</div>");
+			oRm.write("&lt;/div>");                                                
+			oRm.write("&lt;/div>");
 		}
     }
-});
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu May 28 2015 00:41:37 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
