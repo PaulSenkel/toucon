@@ -1,0 +1,138 @@
+/*Toucon components CSS*/
+.touconPage {
+  background: #e0ffff;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #e0ffff 0%, #ffaa00 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e0ffff), color-stop(100%, #ffaa00));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #e0ffff 0%, #ffaa00 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #e0ffff 0%, #ffaa00 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #e0ffff 0%, #ffaa00 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #e0ffff 0%, #ffaa00 100%);
+  /* W3C */
+}
+.touconPage > section {
+  overflow-y: auto !important;
+}
+.touconInfoBoxTitle,
+.touconInfoBoxTag {
+  font-family: "Arial";
+  font-size: 1em !important;
+  font-weight: bold;
+  display: block !important;
+  padding-top: 0.2em !important;
+}
+.touconBoxTitle {
+  font-family: "Arial";
+  font-size: 1.4em !important;
+  font-weight: bold;
+  display: block !important;
+  padding-top: 0.3em !important;
+  color: black !important;
+  margin-left: 5px;
+  white-space: normal !important;
+}
+.touconBoxIcon {
+  font-size: 1.4em !important;
+  padding-top: 0.2em !important;
+  color: black !important;
+}
+.touconBoxUnderline {
+  display: block !important;
+  border-bottom: 3px solid #ffaa00;
+}
+.touconBox {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+/*This aligns all labels at the end and shortens them with ...
+We have to select the outer DIV of the touconLabels (and other elements)
+like this, as we have no direct way to access this intermediate
+DIV which the responsive Grid injects*/
+.touconBox div.sapUiRespGridHiddenS {
+  text-align: end !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.touconLabel,
+.touconLabelValue {
+  padding-top: 0.5rem;
+}
+.touconLabel {
+  padding-right: 0.5rem;
+}
+.touconLabel.touconMandatory {
+  color: black !important;
+}
+.touconLabel:after {
+  content: ":" !important;
+}
+.touconLabel.touconMandatory:after {
+  content: "*:" !important;
+}
+.touconError {
+  color: #e0002f !important;
+  text-align: center;
+}
+.touconLink {
+  padding-top: 0.5rem;
+  padding-left: 0.5rem;
+}
+.touconLinkIcon {
+  margin-right: 0.3rem;
+}
+.touconControl {
+  width: 100% !important;
+}
+.touconControl.sapMLabel {
+  padding-top: 0.5rem;
+}
+.touconControl.touconMandatory input:not(.sapMInputBaseErrorInner),
+.touconControl.touconMandatory.sapMSlt {
+  border-color: #ffaa00 !important;
+  background-color: rgba(255, 200, 200, 0.9) !important;
+}
+.touconStatusIndicatorGreenBG {
+  background-color: #32cd32;
+}
+.touconStatusIndicatorGreenText {
+  float: left;
+  color: white;
+  text-align: center;
+}
+.touconStatusIndicatorRedBG {
+  background-color: #ff0000;
+}
+.touconStatusIndicatorRedText {
+  float: left;
+  color: white;
+  text-align: center;
+}
+.touconStatusIndicatorBlueBG {
+  background-color: #3232cd;
+}
+.touconStatusIndicatorBlueText {
+  float: left;
+  color: white;
+  text-align: center;
+}
+.touconStatusIndicatorYellowBG {
+  background: transparent;
+  border-bottom-color: #ffbf66;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-right-style: solid;
+}
+.touconStatusIndicatorYellowText {
+  float: left;
+  color: white;
+  text-align: center;
+}
