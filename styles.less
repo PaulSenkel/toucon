@@ -1,0 +1,53 @@
+//Company colors
+@lightCyan:#e0ffff;
+@orange:#ffaa00;
+@black:black;
+
+//Main usage of colors
+@lightCorporateColor:@lightCyan;
+@darkCorporateColor:@black;
+@mediumCorporateColor:@orange;
+
+//Main settings
+@logoURL:"toucon_logo_color.png";
+@logoWidth: 206px;
+@smallLogoURL:"toucon_logo_color30.png";
+@smallLogoWidth: 124px;
+@acceptButtonColor: @mediumCorporateColor;
+@acceptButtonBorderColor: @darkCorporateColor;
+@fontFamily:"Arial";
+
+//Status text colors
+@errorTextColor: #e0002f;
+@warningTextColor: #e0b300;
+@informationTextColor: #009de0;
+
+//Toucon settings
+@boxTitleColor: @darkCorporateColor;
+@boxUnderlineColor: @mediumCorporateColor;
+@boxUnderlineStrength: 3px;
+@boxBackgroundColor: rgba(255,255,255,0.9);
+@whiteTextColor: white;
+@labelSuffix: ":";
+@mandatoryLabelSuffix: "*:";
+@mandatoryLabelColor: black;
+@mandatoryFieldBorderColor: @mediumCorporateColor;
+@mandatoryFieldBackgroundColor: rgba(255,200,200,0.9);
+
+//Status colors
+@infoStatus:#3232CD;//blue
+@successStatus:#32CD32;//green
+@warningStatus:#ffbf66;//yellow/orange
+@errorStatus:#ff0000;//red
+
+//Detailed settings
+@bgColorTop:@lightCorporateColor;
+@bgColorBottom:@mediumCorporateColor;
+@topBorderColor:@mediumCorporateColor;
+
+//Functions
+.RoundedShape(@radius){
+ -webkit-border-radius:@radius;
+ -moz-border-radius:@radius;
+ border-radius:@radius; 
+}
