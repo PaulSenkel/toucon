@@ -1,18 +1,28 @@
+jQuery.sap.require("sap.ui.layout.Grid");
+jQuery.sap.require("sap.ui.layout.GridData");
+jQuery.sap.require("sap.ui.layout.HorizontalLayout");
+jQuery.sap.require("sap.ui.commons.RichTooltip");
+
 /**
  * @param {string} [title] title of the box
  * @param {string} [icon] URL to an icon, e.g. sap-icon://home
  * @param {string} [label] used as "Title:" in front of the field, can be a {binding}
  * @param {string} [tooltipText]used in a richtexttooltip which is being attached, can be a {binding}
  * @param {boolean} [mandatory] used for adding a styleclass; this will also be set to true if a toucon value type with a mandatory:true formatoption is being attached
+ * @param {boolean} [visible] used for managing visibility of the labels and controls, default is true
  * @param {sap.ui.core.Control} [control] e.g. a sap.m.Input which should be rendered in the form line
  * @param {sap.ui.layout.GridData} [labelLayoutData] must contain the span for the label which will be shown on Large and Medium screens
  * @param {sap.ui.layout.GridData} [controlLayoutData] must contain the span for the control itself
  *
  * @desc A container with two labels (one shown on medium and large screens, one on smartphones
- * which takes a Control to which it attaches a richtext tooltip
+ * which takes a Control to which it attaches a richtext tooltip.
+ * <br>
  * In the future we want to provide an additional label which displays an error text
  * if an error is raised (e.g. through the change event based on the valueState or other
- * information)
+ * information).
+ * <br><br>
+ * V1.01 - added visible flag
+ * 
  * @extends sap.ui.core.Control
  * @returns sap.ui.layout.Grid
  *
@@ -41,7 +51,8 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 			label : { type: "string", defaultValue: null },//used as "Title:" in front of the field, can be a {binding}
 //			errorText : { type: "string", defaultValue: null },//max 40chars, used as red subtext when the field is active, can be a {binding}
 			tooltipText : { type: "string", defaultValue: null },//used in a richtexttooltip which is being attached, can be a {binding}
-			mandatory : { type: "boolean", defaultValue: false }//used for adding a styleclass; this will also be set to true if a toucon value type with a mandatory:true formatoption is being attached
+			mandatory : { type: "boolean", defaultValue: false },//used for adding a styleclass; this will also be set to true if a toucon value type with a mandatory:true formatoption is being attached
+			visible :  { type: "boolean", defaultValue: true }
 		},
 		aggregations: {
 			control : { type: "sap.ui.core.Control", multiple: false, visibility: "public"},//e.g. a sap.m.Input which should be rendered in the form line
@@ -99,6 +110,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 	},
 	/**
 	 * @desc Applies all relevant FormLine parameters to the large-medium label.
+	 * <br>
 	 * We show the right-aligned label for L and M only, but not if these labels
 	 * take the whole width like for S if all label span indicators require full size, 
 	 * then we display only the regular label
@@ -122,9 +134,8 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 			//if all label span indicators require full size, then we display only the regular label
 			var span = oControl.getAggregation("labelLayoutData").getSpan();
 			if (span.indexOf("L12")>-1 && span.indexOf("M12")>-1) renderLabelS = false;
-			var labelTooltip = (oControl.getTooltipText()? oControl.getTooltipText() : oControl.getLabel());
 			labelLM.setText(oControl.getLabel());
-			labelLM.setTooltip(labelTooltip);
+			labelLM.setTooltip(oControl.getLabel());
 			labelLM.setLayoutData(new sap.ui.layout.GridData({
 				span: oControl.getLabelLayoutData().getSpan(),
 				visibleL: true,
@@ -132,13 +143,14 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 				visibleS: !renderLabelS
 			}));
 			innerGrid.addContent(labelLM);
-			if (oControl.getMandatory()==true) {
-				labelLM.addStyleClass("touconMandatory");
-			}
+//			if (oControl.getMandatory()==true) {
+//				labelLM.addStyleClass("touconMandatory");
+//			}
 		}
 	},
 	/**
 	 * @desc Applies all relevant FormLine parameters to the small label.
+	 * <br>
 	 * We show the right-aligned label for L and M only, but not if these labels
 	 * take the whole width like for S if all label span indicators require full size, 
 	 * then we display only the regular label
@@ -163,9 +175,8 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 			var span = oControl.getAggregation("labelLayoutData").getSpan();
 			if (span.indexOf("L12")>-1 && span.indexOf("M12")>-1) renderLabelS = false;
 			if (renderLabelS==true) {
-				var labelTooltip = (oControl.getTooltipText()? oControl.getTooltipText() : oControl.getLabel());
 				labelS.setText(oControl.getLabel());
-				labelS.setTooltip(labelTooltip);
+				labelS.setTooltip(oControl.getLabel());
 				labelS.setLayoutData(new sap.ui.layout.GridData({
 					span: "L12 M12 S12",
 					visibleL: false,
@@ -176,9 +187,9 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 					linebreakS: true
 				}));
 				innerGrid.addContent(labelS);
-				if (oControl.getMandatory()==true) {
-					labelS.addStyleClass("touconMandatory");
-				}
+//				if (oControl.getMandatory()==true) {
+//					labelS.addStyleClass("touconMandatory");
+//				}
 			}
 		}
 	},
@@ -194,6 +205,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 //	},
 	/**
 	 * @desc Applies all relevant FormLine parameters to the contained control (tooltip).
+	 * <br>
 	 * Also passes events which were attached to the FormLine to this control.
 	 *
 	 * @function
@@ -207,19 +219,19 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 		var input = oControl.getAggregation("control");
 		if ((input===null)==false) {
 			var innerGrid = oControl.getAggregation("_innerGrid");
-			var tooltip = oControl.getAggregation("_tooltip");
-			input.setTooltip(tooltip);
 			//We attach hooks for a default design
 			input.addStyleClass("touconControl");
 
 			if (oControl.getTooltipText()!="") {
+				var tooltip = oControl.getAggregation("_tooltip");
+				input.setTooltip(tooltip);
 				input.getTooltip().setText(oControl.getTooltipText());
 				if (oControl.getLabel()!="") input.getTooltip().setValueStateText(oControl.getLabel()+":");
 			}
 
-			if (oControl.getMandatory()==true) {
-				input.addStyleClass("touconMandatory");
-			}
+//			if (oControl.getMandatory()==true) {
+//				input.addStyleClass("touconMandatory");
+//			}
 
 			if ((oControl.mEventRegistry===undefined)==false) input.mEventRegistry=oControl.mEventRegistry;
 
@@ -292,6 +304,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 	 * @desc Prepares the two labels as well as the contained control, then renders the inner grid.
 	 *
 	 * @function
+	 * @implements .touconHidden (required CSS class for managing visibility with set/getVisible)
 	 * @since 1.0
 	 * @protected
 	 * @static
@@ -303,6 +316,18 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
 		oControl._prepareLabelS();
 		oControl._prepareControl();
 		var innerGrid = oControl.getAggregation("_innerGrid");
+		if (oControl.getVisible()==false){
+			innerGrid.addStyleClass("touconHidden");
+		} else {
+			innerGrid.removeStyleClass("touconHidden");
+		}
+		if (oControl.getMandatory()==true) {
+			innerGrid.addStyleClass("touconMandatory");
+		} else {
+			innerGrid.removeStyleClass("touconMandatory");
+		}
+		//setVisible is undefined for Grid! a bug?
+		//innerGrid.setVisible(false);
 		oRm.renderControl(innerGrid);
 		//We call the default renderer for this object as we do not want to do anything special
 		//sap.m.InputRenderer.render(oRm, oControl);

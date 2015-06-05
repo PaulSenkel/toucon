@@ -1,11 +1,12 @@
 jQuery.sap.require("toucon.Icon");
 /**
- * @param {string} [text] an integer string, default is "0", or a value which will be translated by the valueRules map
- * @param {object} [textRules] a map which translates the value to a valid integer string
+ * @param {string} [text] an string which will be translated by the textRules map or used as is
+ * @param {object} [textRules] a map which translates the text to a different string if given
  * @param {string} [icon] an icon URL or a value which will be translated by the iconRules map
  * @param {object} [iconRules] a map which translates the icon value to a valid icon URL
  *
- * @desc TODO
+ * @desc This Icon will render an imitation of a sap.m.Link which does not only display a text,
+ * but also an icon before that text.
  * 
  * @extends sap.m.Link
  * @returns sap.ui.core.Control

@@ -1,6 +1,11 @@
 @import "styles.less";
+//@import "styles_fussfisch.less";
+//@import "styles_syna.less";
 
 /*Toucon components CSS*/
+.touconHidden {
+       display: none !important;
+}
 .touconPage {
  background: @bgColorTop; /* Old browsers */
  background: -moz-linear-gradient(top, @bgColorTop 0%, @bgColorBottom 100%); /* FF3.6+ */
@@ -10,6 +15,15 @@
  background: -ms-linear-gradient(top, @bgColorTop 0%,@bgColorBottom 100%); /* IE10+ */
  background: linear-gradient(to bottom, @bgColorTop 0%,@bgColorBottom 100%); /* W3C */
  //filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@bgColorTop', endColorstr='@bgColorBottom',GradientType=0 ); /* IE6-9 */
+}
+.touconPageHeader, .touconPageFooter {
+                margin-left: 1rem;
+                margin-right: 1rem;
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+}
+.touconPageHeader > *, .touconPageFooter > * {
+                margin-right: 0.5rem !important;
 }
 .touconPage>section {
  overflow-y: auto !important;
@@ -61,6 +75,7 @@ DIV which the responsive Grid injects*/
 .touconLabel {
  padding-right:0.5rem;
 }
+
 .touconLabel.touconMandatory {
  color: @mandatoryLabelColor !important;
 }
@@ -71,17 +86,29 @@ DIV which the responsive Grid injects*/
 {
  content: @mandatoryLabelSuffix !important;
 }
+
+//FormLine v1.01
+.touconMandatory .touconLabel {
+ color: @mandatoryLabelColor !important;
+}
+.touconLabel:after {
+ content: @labelSuffix !important;
+}
+.touconMandatory .touconLabel:after {
+ content: @mandatoryLabelSuffix !important;
+}
+
 .touconError
 {
  color: @errorTextColor !important;
  text-align: center;
 }
 .touconLink {
- padding-top:0.5rem;
+  padding-top: 0.5rem;
  padding-left: 0.5rem;
 }
 .touconLinkIcon {
- margin-right: 0.3rem;
+       margin-right: 0.3rem;
 }
 .touconControl {
  width: 100% !important;
@@ -89,12 +116,23 @@ DIV which the responsive Grid injects*/
 .touconControl.sapMLabel {
   padding-top: 0.5rem;
 }
+
+//FormLine v1.0, direct mandatory field
 .touconControl.touconMandatory input:not(.sapMInputBaseErrorInner),
 .touconControl.touconMandatory.sapMSlt
 {
  border-color: @mandatoryFieldBorderColor !important;
  background-color: @mandatoryFieldBackgroundColor !important;
 }
+
+//FormLine v1.01 field in mandatory line
+.touconMandatory .touconControl input:not(.sapMInputBaseErrorInner),
+.touconMandatory .touconControl.sapMSlt,
+.touconMandatory .touconControl textarea.sapMTextAreaInner:not(.sapMInputBaseErrorInner) {
+ border-color: @mandatoryFieldBorderColor !important;
+ background-color: @mandatoryFieldBackgroundColor !important;
+}
+
 .touconStatusIndicatorGreenBG {
     background-color: @successStatus;
 }
@@ -132,4 +170,12 @@ DIV which the responsive Grid injects*/
     float: left;
        color: white;
        text-align: center;
+}
+ 
+//Special classes for the searchhelp subpackage (not open-sourced)
+.touconSearchHelpTableSelectDialog div.sapMDialogScrollCont {
+                padding:0 !important;
+}
+.touconSearchHelpInputSearchDialogButton {
+                width: 13rem;
 }

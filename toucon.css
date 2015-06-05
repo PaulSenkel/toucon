@@ -1,4 +1,7 @@
 /*Toucon components CSS*/
+.touconHidden {
+  display: none !important;
+}
 .touconPage {
   background: #e0ffff;
   /* Old browsers */
@@ -14,6 +17,17 @@
   /* IE10+ */
   background: linear-gradient(to bottom, #e0ffff 0%, #ffaa00 100%);
   /* W3C */
+}
+.touconPageHeader,
+.touconPageFooter {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.touconPageHeader > *,
+.touconPageFooter > * {
+  margin-right: 0.5rem !important;
 }
 .touconPage > section {
   overflow-y: auto !important;
@@ -76,6 +90,15 @@ DIV which the responsive Grid injects*/
 .touconLabel.touconMandatory:after {
   content: "*:" !important;
 }
+.touconMandatory .touconLabel {
+  color: black !important;
+}
+.touconLabel:after {
+  content: ":" !important;
+}
+.touconMandatory .touconLabel:after {
+  content: "*:" !important;
+}
 .touconError {
   color: #e0002f !important;
   text-align: center;
@@ -95,6 +118,12 @@ DIV which the responsive Grid injects*/
 }
 .touconControl.touconMandatory input:not(.sapMInputBaseErrorInner),
 .touconControl.touconMandatory.sapMSlt {
+  border-color: #ffaa00 !important;
+  background-color: rgba(255, 200, 200, 0.9) !important;
+}
+.touconMandatory .touconControl input:not(.sapMInputBaseErrorInner),
+.touconMandatory .touconControl.sapMSlt,
+.touconMandatory .touconControl textarea.sapMTextAreaInner:not(.sapMInputBaseErrorInner) {
   border-color: #ffaa00 !important;
   background-color: rgba(255, 200, 200, 0.9) !important;
 }
@@ -135,4 +164,10 @@ DIV which the responsive Grid injects*/
   float: left;
   color: white;
   text-align: center;
+}
+.touconSearchHelpTableSelectDialog div.sapMDialogScrollCont {
+  padding: 0 !important;
+}
+.touconSearchHelpInputSearchDialogButton {
+  width: 13rem;
 }
