@@ -1,11 +1,18 @@
+jQuery.sap.require("sap.ui.layout.Grid");
+jQuery.sap.require("sap.ui.layout.GridData");
+jQuery.sap.require("sap.ui.layout.HorizontalLayout");
+
 /**
  * @param {sap.ui.core.Control} [topContent] controls which are added here will be displayed horizontally
  * @param {sap.ui.core.Control} [mainContent] controls which are added here will be displayed in a responsive grid according to their layout data
  * @param {sap.ui.core.Control} [bottomContent] controls which are added here will be displayed horizontally
  *
  * @desc A container with three aggregations for content. 
+ * <br>
  * topContents will be added to a sap.ui.layout.HorizontalLayout
+ * <br>
  * mainContents will be added to a sap.ui.layout.Grid
+ * <br>
  * bottomContents will be added to a sap.ui.layout.HorizontalLayout
  * 
  * @extends sap.m.Page

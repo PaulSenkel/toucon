@@ -2,7 +2,7 @@
  * @param {string} [phone] the phone number
  *
  * @desc A button with a default phone icon and which will open the local
- * phone function
+ * phone function.
  *
  * @extends sap.m.Button
  * @returns sap.m.Button
@@ -35,7 +35,8 @@ var touconPhoneButton = sap.m.Button.extend("toucon.PhoneButton", {
 	/**
 	 * @desc Initializes the button icon with the default icon sap-icon://phone and 
 	 * attaches the press function which will call the "tel" link with target "hidden"
-	 * Please note that this version requires the existence of a hidden iFrame called "hidden"!
+	 * <br>
+	 * <b>Please note that this version requires the existence of a hidden iFrame called "hidden"!</b>
 	 *
 	 * @function
 	 * @since 1.0

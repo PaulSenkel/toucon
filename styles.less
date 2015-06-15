@@ -1,28 +1,38 @@
-//Company colors
+//Design choice – if you use false here, make sure that you declare a logo in the
+//Shell declaration in index.html
+@useBigSmallHeader:true;//false->use color/white option
+
+//DEFAULT SETTINGS
+//Company colors (Default)
 @lightCyan:#e0ffff;
 @orange:#ffaa00;
 @black:black;
-
 //Main usage of colors
 @lightCorporateColor:@lightCyan;
 @darkCorporateColor:@black;
 @mediumCorporateColor:@orange;
 
-//Main settings
-@logoURL:"toucon_logo_color.png";
-@logoWidth: 206px;
-@smallLogoURL:"toucon_logo_color30.png";
-@smallLogoWidth: 124px;
+//Main settings (Default)
+@fontFamily:"Arial";
 @acceptButtonColor: @mediumCorporateColor;
 @acceptButtonBorderColor: @darkCorporateColor;
-@fontFamily:"Arial";
+@logoURL:"toucon_logo_color.png";
+@logoWidth: 206px;
+//Only used if big/small header is used
+@smallLogoURL:"toucon_logo_color30.png";
+@smallLogoWidth: 124px;
+//Only used if no big/small header is used
+//Not working, please specify the white logo in the Shell declaration in index.html
+//@whiteLogoURL:"toucon_logo_white.png";
 
-//Status text colors
-@errorTextColor: #e0002f;
-@warningTextColor: #e0b300;
-@informationTextColor: #009de0;
+//Detailed settings (Default)
+@bgColorTop:@lightCorporateColor;
+@bgColorBottom:@mediumCorporateColor;
+@topBorderColor:@mediumCorporateColor;
+@shellBackgroundColor:@lightCorporateColor;
+@smallHeaderBackgroundColor:@lightCorporateColor;
 
-//Toucon settings
+//Toucon settings (Default)
 @boxTitleColor: @darkCorporateColor;
 @boxUnderlineColor: @mediumCorporateColor;
 @boxUnderlineStrength: 3px;
@@ -40,10 +50,10 @@
 @warningStatus:#ffbf66;//yellow/orange
 @errorStatus:#ff0000;//red
 
-//Detailed settings
-@bgColorTop:@lightCorporateColor;
-@bgColorBottom:@mediumCorporateColor;
-@topBorderColor:@mediumCorporateColor;
+//Status text colors
+@errorTextColor: #e0002f;
+@warningTextColor: #e0b300;
+@informationTextColor: #009de0;
 
 //Functions
 .RoundedShape(@radius){

@@ -1,0 +1,106 @@
+/* Jssor CSS classes for Jssor UI5 implementation toucon.ImageSlider */
+.jssora03l,.jssora03r {
+	display: block;
+	position: absolute;
+	/* size of arrow element */
+	width: 55px;
+	height: 55px;
+	cursor: pointer;
+	background: url(jssor/jssor_arrows02.png) no-repeat;
+	overflow: hidden;
+	opacity:0.5
+}
+.jssora03l:hover,.jssora03r:hover {
+	opacity:1.0
+}
+
+.jssora03l {
+	background-position: -3px -33px;
+}
+
+.jssora03r {
+	background-position: -63px -33px;
+}
+
+.jssora03l:hover {
+	background-position: -123px -33px;
+}
+
+.jssora03r:hover {
+	background-position: -183px -33px;
+}
+
+.jssora03l.jssora03ldn {
+	background-position: -243px -33px;
+}
+
+.jssora03r.jssora03rdn {
+	background-position: -303px -33px;
+}
+
+.jssort03 {
+	position: absolute;
+	width: 600px;
+	height: 60px
+}
+
+.jssort03 .p {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 64px;
+	height: 34px;
+}
+
+.jssort03 .t {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border: none
+}
+
+.jssort03 .w,.jssort03 .pav:hover .w,.jssort03 .p:hover .w  {
+	position: absolute;
+	width: 62px;
+	height: 32px;
+	border: #fff 1px dashed;
+	box-sizing: content-box
+}
+
+.jssort03 .pdn .w,.jssort03 .pav .w {
+	border-style: solid
+}
+
+.jssort03 .c {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 64px;
+	height: 34px;
+	background-color: #000;
+	filter: alpha(opacity = 45);
+	opacity: .45;
+	transition: opacity .6s;
+	-moz-transition: opacity .6s;
+	-webkit-transition: opacity .6s;
+	-o-transition: opacity .6s
+}
+
+.jssort03 .p:hover .c,.jssort03 .pav .c {
+	filter: alpha(opacity = 0);
+	opacity: 0
+}
+
+.jssort03 .p:hover .c {
+	transition: none;
+	-moz-transition: none;
+	-webkit-transition: none;
+	-o-transition: none
+}
+
+.jssort03 .w {
+	width: 62px;
+	height: 32px
+}

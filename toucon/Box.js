@@ -1,3 +1,7 @@
+jQuery.sap.require("sap.ui.layout.Grid");
+jQuery.sap.require("sap.ui.layout.GridData");
+jQuery.sap.require("sap.ui.layout.HorizontalLayout");
+
 /**
  * @param {string} [title] title of the box
  * @param {string} [icon] URL to an icon, e.g. sap-icon://home

@@ -9,7 +9,7 @@
  * @param {sap.ui.core.Control} [control] e.g. a sap.m.Input which should be rendered in the form line
  *
  * @desc A little box with a title on the left, an additional "tag" title on the right
- * followed with one ore more texts, followed by an optional control
+ * followed with one ore more texts, followed by an optional control.
  * 
  * @extends sap.ui.core.Control
  * @returns sap.ui.core.Control
@@ -50,13 +50,19 @@ var touconInfoBox = sap.ui.core.Control.extend("toucon.InfoBox", {
 	 * @param {Control} [oControl] this control
 	 *
 	 * @desc If the text parameter is a string, it will be added to an array.
+	 * <br>
 	 * If the text parameter is a non-array object, we presume that it is a map like {text:"text",color:"red",indentLevel:1}
 	 * and we add it to an array.
+	 * <br>
 	 * If the text parameter is an array, we will use it directly and we will presume that it either
 	 * contains strings or maps like {text:"text",color:"red",indentLevel:1}.
+	 * <br>
+	 * <br>
 	 * Then the InfoBox tag and title will be rendered and the renderer will then iterate over the text array.
+	 * <br>
 	 * It will then render the texts with the optional indentLevel (multiplied with the indentBy parameter)
 	 * and the optional color.
+	 * <br>
 	 * At the end the optional UI5 control will be rendered as well.
 	 * 
 	 * @function

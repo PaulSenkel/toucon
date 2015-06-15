@@ -3,7 +3,7 @@
  * @param {string} [target] an optional value for the target, defaultValue is _blank
  *
  * @desc A button with a default mail icon which will open the given URL
- * in the given target or by default in a new window/tab
+ * in the given target or by default in a new window/tab.
  *
  * @extends sap.m.Button
  * @returns sap.m.Button

@@ -4,7 +4,7 @@
  * @param {string} [body] an optional value for the body of the message
  *
  * @desc A button with a default mail icon and which will open the local
- * e-mail client and prefill the e-mail with the given information
+ * e-mail client and prefill the e-mail with the given information.
  *
  * @extends sap.m.Button
  * @returns sap.m.Button
@@ -39,7 +39,8 @@ var touconMailButton = sap.m.Button.extend("toucon.MailButton", {
 	/**
 	 * @desc Initializes the button icon with the default icon sap-icon://email and 
 	 * attaches the press function which will call the mailto link with target "hidden"
-	 * Please note that this version requires the existence of a hidden iFrame called "hidden"!
+	 * <br>
+	 * <b>Please note that this version requires the existence of a hidden iFrame called "hidden"!</b>
 	 *
 	 * @function
 	 * @since 1.0

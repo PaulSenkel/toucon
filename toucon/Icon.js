@@ -6,7 +6,7 @@
  * @param {object} [colorRules] a map which translates the value passed in "colorValue" to a valid web color
  *
  * @desc The Icon control enables us to display a colored icon based on incoming parameters
- * which we then map to valid icons and valid colors
+ * which we then map to valid icons and valid colors.
  * @extends sap.ui.core.Icon
  * @returns sap.ui.core.Icon
  *

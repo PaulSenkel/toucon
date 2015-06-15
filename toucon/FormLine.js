@@ -4,8 +4,6 @@ jQuery.sap.require("sap.ui.layout.HorizontalLayout");
 jQuery.sap.require("sap.ui.commons.RichTooltip");
 
 /**
- * @param {string} [title] title of the box
- * @param {string} [icon] URL to an icon, e.g. sap-icon://home
  * @param {string} [label] used as "Title:" in front of the field, can be a {binding}
  * @param {string} [tooltipText]used in a richtexttooltip which is being attached, can be a {binding}
  * @param {boolean} [mandatory] used for adding a styleclass; this will also be set to true if a toucon value type with a mandatory:true formatoption is being attached

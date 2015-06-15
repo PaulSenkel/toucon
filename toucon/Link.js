@@ -1,11 +1,11 @@
 jQuery.sap.require("toucon.Icon");
 /**
- * @param {string} [text] an string which will be translated by the textRules map or used as is
+ * @param {string} [text] a string which will be translated by the textRules map or used as is
  * @param {object} [textRules] a map which translates the text to a different string if given
  * @param {string} [icon] an icon URL or a value which will be translated by the iconRules map
  * @param {object} [iconRules] a map which translates the icon value to a valid icon URL
  *
- * @desc This Icon will render an imitation of a sap.m.Link which does not only display a text,
+ * @desc This Link will render an imitation of a sap.m.Link which does not only display a text,
  * but also an icon before that text.
  * 
  * @extends sap.m.Link
@@ -39,7 +39,7 @@ var touconLink = sap.m.Link.extend("toucon.Link", {
 			"iconRules" : { type: "object", defaultValue: null}
         },
         aggregations : {
-			_icon : { type: "sap.ui.core.Icon", multiple: false, visibility: "hidden"},
+			_icon : { type: "toucon.Icon", multiple: false, visibility: "hidden"},
         }
     },
     
@@ -63,10 +63,12 @@ var touconLink = sap.m.Link.extend("toucon.Link", {
 	 * @param {RenderManager} [oRm] 
 	 * @param {Control} [oControl] this control
 	 *
-	 * @desc TODO
-	 *
+	 * @desc Resolves the text and icon values 
+	 * against their respective textRules and iconRules mappings,
+	 * renders the link's HTML and the icon through its own renderer.
+	 * 
 	 * @function
-	 * @implements .touconLink
+	 * @implements .touconLink, .sapMLnk, .sapMLnkMaxWidth
 	 * @since 1.0
 	 * @protected
 	 * @static

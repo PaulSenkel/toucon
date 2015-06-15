@@ -16,10 +16,14 @@ jQuery.sap.require("toucon.Icon");
  *
  * @desc Displays a red rectangle, a yellow triangle or a green circle depending on the passed
  * integer value and limits for going green, blue or red. Yellow is the default state.
+ * <br>
  * You can also switch off the rendering of the actual value which is very handy
  * if you "fake" the numeric value through the valueRules mapping where you 
  * "translate" a text from your model (e.g. warning, error, success) to a fitting number.
+ * <br>
  * Thanks go to Abesh (https://gist.github.com/abesh/9504351) for the original ColorCircle control
+ * <br><br>
+ * V1.01 - corrected default red/green/blueLimit values and potential but when checking if ascending is true/false
  * 
  * @extends sap.ui.core.Control
  * @returns sap.ui.core.Control
@@ -37,7 +41,7 @@ jQuery.sap.require("toucon.Icon");
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @version 1.0
+ * @version 1.01
  *
  * @constructor
  * @public
@@ -54,9 +58,9 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 			"iconRules" : { type: "object", defaultValue: null},
 			"showIcon" : {type: "boolean", defaultValue: true},//if showValue is false the icon will be shown
 			"asc" : {type: "boolean", defaultValue: true},	
-			"redLimit" : {type: "int", defaultValue: "90"},	
-			"greenLimit" : {type: "int", defaultValue: "75"},			
-			"blueLimit" : {type: "int", defaultValue: "-1"},//not relevant for gauges, but interesting for calculated error, warning, success and info states			
+			"redLimit" : {type: "int", defaultValue: 90},	
+			"greenLimit" : {type: "int", defaultValue: 75},			
+			"blueLimit" : {type: "int", defaultValue: -1},//not relevant for gauges, but interesting for calculated error, warning, success and info states			
 			"size" : {type: "float", defaultValue: 2.0}			
         },
         aggregations : {
@@ -66,22 +70,39 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
     
 	/**
 	 * @desc Initializes the icon with default iconRules which will out-of-the-box map the following values to sap-icon URLs.
+	 * <br>
 	 * You can pass the following values in the iconValue and benefit from a standard value to icon mapping:
+	 * <br>
 	 * "Red":"sap-icon://decline",
+	 * <br>
 	 * "Yellow":"sap-icon://warning",
+	 * <br>
 	 * "Green":"sap-icon://accept",
+	 * <br>
 	 * "Blue":"sap-icon://hint",
+	 * <br>
 	 * "E":"sap-icon://decline",
+	 * <br>
 	 * "W":"sap-icon://warning",
+	 * <br>
 	 * "S":"sap-icon://accept",
+	 * <br>
 	 * "I":"sap-icon://hint",
+	 * <br>
 	 * "error":"sap-icon://decline",
+	 * <br>
 	 * "warning":"sap-icon://warning",
+	 * <br>
 	 * "success":"sap-icon://accept",
+	 * <br>
 	 * "info":"sap-icon://hint",
+	 * <br>
 	 * "ERROR":"sap-icon://decline",
+	 * <br>
 	 * "WARNING":"sap-icon://warning",
+	 * <br>
 	 * "SUCCESS":"sap-icon://accept",
+	 * <br>
 	 * "INFO":"sap-icon://hint"
 	 *
 	 * @function
@@ -117,27 +138,42 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 	 * @param {Control} [oControl] this control
 	 *
 	 * @desc The default state is Yellow. If the value is an empty string or null, then the defaultValue will be used.
+	 * <br>
 	 * If no valueRules mapping is given, then we parse the integer string to an integer, otherwise
 	 * we retrieve the the mapped value and parse this one instead.
+	 * <br>
 	 * Depending on whether ascending has been set to false or left on true, we will compare the value according to the ASC/DESC rules below.
-	 * 
+	 * <br>
+	 * <br>
 	 * Then we build the icon if the value will not be shown AND if the icon should be shown.
+	 * <br>
 	 * We set the icon's value with the iconValue if given, 
 	 * if an iconRules mapping is provided, then we use the value of this StatusIndicator,
 	 * if not we pass the state (Red, Yellow, Green or Blue) as value (this will work fine with 
 	 * the out-of-the-box mapping).
+	 * <br>
 	 * If we have an iconRules mapping, then we pass it to the icon.
-	 * 
+	 * <br>
+	 * <br>
 	 * ASC:
+	 * <br>
 	 * Red if > redLimit
+	 * <br>
 	 * Yellow if <= redLimit and > greenLimit
+	 * <br>
 	 * Green if <= greenLimit and > blueLimit
+	 * <br>
 	 * Else Blue
-	 * 
+	 * <br>
+	 * <br>
 	 * DESC:
+	 * <br>
 	 * Blue if <= blueLimit
+	 * <br>
 	 * Red if > blueLimit and <= redLimit
+	 * <br>
 	 * Yellow if > redLimit and < greenLimit
+	 * <br>
 	 * Else Green
 	 *
 	 * @function
@@ -165,7 +201,7 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 			}
 
 			//Determine state based on (mapped) value
-			if(oControl.getAsc()){
+			if(oControl.getAsc()==true){
 				if(value > oControl.getRedLimit()){
 					state = "Red";
 				}else if(value <= oControl.getRedLimit() && value > oControl.getGreenLimit()){
