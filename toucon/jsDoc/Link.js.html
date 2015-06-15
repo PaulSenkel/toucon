@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: MailButton.js</title>
+    <title>JSDoc: Source: Link.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: MailButton.js</h1>
+    <h1 class="page-title">Source: Link.js</h1>
 
     
 
@@ -26,16 +26,18 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @param {string} [mail] the e-mail address
- * @param {string} [subject] an optional value for the subject
- * @param {string} [body] an optional value for the body of the message
+            <pre class="prettyprint source linenums"><code>jQuery.sap.require("toucon.Icon");
+/**
+ * @param {string} [text] a string which will be translated by the textRules map or used as is
+ * @param {object} [textRules] a map which translates the text to a different string if given
+ * @param {string} [icon] an icon URL or a value which will be translated by the iconRules map
+ * @param {object} [iconRules] a map which translates the icon value to a valid icon URL
  *
- * @desc A button with a default mail icon and which will open the local
- * e-mail client and prefill the e-mail with the given information.
- *
- * @extends sap.m.Button
- * @returns sap.m.Button
+ * @desc This Link will render an imitation of a sap.m.Link which does not only display a text,
+ * but also an icon before that text.
+ * 
+ * @extends sap.m.Link
+ * @returns sap.ui.core.Control
  *
  * @class
  * @author Paul Senkel
@@ -54,56 +56,90 @@
  *
  * @constructor
  * @public
- * @alias toucon-MailButton
+ * @alias toucon-Link
  */
-var touconMailButton = sap.m.Button.extend("toucon.MailButton", {  
-	metadata: {  
-		properties: {  
-			"mail" : { type: "string", defaultValue: null },
-			"subject" : { type: "string", defaultValue: null },
-			"body" : { type: "string", defaultValue: null }
-		}
-	},
+var touconLink = sap.m.Link.extend("toucon.Link", {
+    metadata : {                              
+        properties : {
+           	"text" : {defaultValue: null},
+			"textRules" : { type: "object", defaultValue: null},
+           	"icon" : {defaultValue: null},
+			"iconRules" : { type: "object", defaultValue: null}
+        },
+        aggregations : {
+			_icon : { type: "toucon.Icon", multiple: false, visibility: "hidden"},
+        }
+    },
+    
 	/**
-	 * @desc Initializes the button icon with the default icon sap-icon://email and 
-	 * attaches the press function which will call the mailto link with target "hidden"
-	 * &lt;br>
-	 * &lt;b>Please note that this version requires the existence of a hidden iFrame called "hidden"!&lt;/b>
+	 * @desc Initializes the link and the icon
 	 *
 	 * @function
+	 * @implements .touconLinkIcon
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon-MailButton
+     * @memberOf toucon-Link
 	 */
-	init: function () {
-		this.setIcon("sap-icon://email");
-		this.attachPress((function () {
-				var params = "";
-				if (this.getSubject()!="") params = "?subject="+encodeURIComponent(this.getSubject());
-				if (this.getBody()!="") params = params+((params=="")? "?":"&amp;")+"body="+encodeURIComponent(this.getBody());
-				window.open("mailto:"+this.getMail()+params,"hidden");
-			}).bind(this));
-	},
+    init : function () {
+		if (sap.m.Link.prototype.init) {             
+			sap.m.Link.prototype.init.apply(this, arguments);
+		}
+    	//we prepare a toucon icon which will translate common values to icons
+    	this.setAggregation("_icon",new toucon.Icon().addStyleClass("touconLinkIcon"));
+    },
 	 /**
 	 * @param {RenderManager} [oRm] 
 	 * @param {Control} [oControl] this control
 	 *
-	 * @desc Applies the mail parameter as text if no text was set and 
-	 * calls the sap.m.ButtonRenderer.render function.
-	 *
+	 * @desc Resolves the text and icon values 
+	 * against their respective textRules and iconRules mappings,
+	 * renders the link's HTML and the icon through its own renderer.
+	 * 
 	 * @function
+	 * @implements .touconLink, .sapMLnk, .sapMLnkMaxWidth
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon-MailButton
+     * @memberOf toucon-Link
 	 */
-	renderer: function(oRm, oControl) {
-		//Uses the mail address as default text
-		if (oControl.getText()=="") oControl.setText(oControl.getMail());
+    renderer : function(oRm, oControl) {
+    	var text = "";
+    	var icon = "";
+		if (oControl.getText()!=null &amp;&amp; oControl.getText()!="") {
+			//No conversion rule is given, use the value directly
+			if (oControl.getTextRules()==null){
+				text = oControl.getText();
+			}
+			//Use the value from the provided lookup if defined
+			else if ((oControl.getTextRules()[oControl.getText()]===undefined)==false){
+				text = oControl.getTextRules()[oControl.getText()];
+			}
 
-		//Use the standard renderer to rendering this prepared control
-		sap.m.ButtonRenderer.render(oRm, oControl);
-	}
+			//No conversion rule is given, use the value directly
+			if (oControl.getIconRules()==null){
+				icon = oControl.getIcon();
+			}
+			//Use the value from the provided lookup if defined
+			else if ((oControl.getIconRules()[oControl.getIcon()]===undefined)==false){
+				icon = oControl.getIconRules()[oControl.getIcon()];
+			}
+			
+			//Global link
+			oRm.write("&lt;a"); 
+			oRm.writeControlData(oControl);  
+			oRm.addClass("sapMLnk sapMLnkMaxWidth touconLink");
+			oRm.writeClasses();
+			oRm.write("href=\"javascript:void(0);\" ");
+			oRm.write(">");
+			//Render icon
+			if (icon!="") {
+				oControl.getAggregation("_icon").setIcon(icon);
+				oRm.renderControl(oControl.getAggregation("_icon"));
+			} 
+			oRm.writeEscaped(text);
+			oRm.write("&lt;/a>");
+		}
+    }
 });</code></pre>
         </article>
     </section>

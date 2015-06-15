@@ -49,7 +49,7 @@
 
 
 <div class="description">
-    Displays a red rectangle, a yellow triangle or a green circle depending on the passedinteger value and limits for going green, blue or red. Yellow is the default state.You can also switch off the rendering of the actual value which is very handyif you "fake" the numeric value through the valueRules mapping where you "translate" a text from your model (e.g. warning, error, success) to a fitting number.Thanks go to Abesh (https://gist.github.com/abesh/9504351) for the original ColorCircle control
+    Displays a red rectangle, a yellow triangle or a green circle depending on the passedinteger value and limits for going green, blue or red. Yellow is the default state.<br>You can also switch off the rendering of the actual value which is very handyif you "fake" the numeric value through the valueRules mapping where you "translate" a text from your model (e.g. warning, error, success) to a fitting number.<br>Thanks go to Abesh (https://gist.github.com/abesh/9504351) for the original ColorCircle control<br><br>V1.01 - corrected default red/green/blueLimit values and potential but when checking if ascending is true/false
 </div>
 
 
@@ -492,7 +492,7 @@
 
     
     <dt class="tag-version">Version:</dt>
-    <dd class="tag-version"><ul class="dummy"><li>1.0</li></ul></dd>
+    <dd class="tag-version"><ul class="dummy"><li>1.01</li></ul></dd>
     
 
     
@@ -533,7 +533,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StatusIndicator.js.html">StatusIndicator.js</a>, <a href="StatusIndicator.js.html#line46">line 46</a>
+        <a href="StatusIndicator.js.html">StatusIndicator.js</a>, <a href="StatusIndicator.js.html#line50">line 50</a>
     </li></ul></dd>
     
 
@@ -610,7 +610,7 @@
 
 
 <div class="description">
-    Initializes the icon with default iconRules which will out-of-the-box map the following values to sap-icon URLs.You can pass the following values in the iconValue and benefit from a standard value to icon mapping:"Red":"sap-icon://decline","Yellow":"sap-icon://warning","Green":"sap-icon://accept","Blue":"sap-icon://hint","E":"sap-icon://decline","W":"sap-icon://warning","S":"sap-icon://accept","I":"sap-icon://hint","error":"sap-icon://decline","warning":"sap-icon://warning","success":"sap-icon://accept","info":"sap-icon://hint","ERROR":"sap-icon://decline","WARNING":"sap-icon://warning","SUCCESS":"sap-icon://accept","INFO":"sap-icon://hint"
+    Initializes the icon with default iconRules which will out-of-the-box map the following values to sap-icon URLs.<br>You can pass the following values in the iconValue and benefit from a standard value to icon mapping:<br>"Red":"sap-icon://decline",<br>"Yellow":"sap-icon://warning",<br>"Green":"sap-icon://accept",<br>"Blue":"sap-icon://hint",<br>"E":"sap-icon://decline",<br>"W":"sap-icon://warning",<br>"S":"sap-icon://accept",<br>"I":"sap-icon://hint",<br>"error":"sap-icon://decline",<br>"warning":"sap-icon://warning",<br>"success":"sap-icon://accept",<br>"info":"sap-icon://hint",<br>"ERROR":"sap-icon://decline",<br>"WARNING":"sap-icon://warning",<br>"SUCCESS":"sap-icon://accept",<br>"INFO":"sap-icon://hint"
 </div>
 
 
@@ -657,7 +657,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StatusIndicator.js.html">StatusIndicator.js</a>, <a href="StatusIndicator.js.html#line92">line 92</a>
+        <a href="StatusIndicator.js.html">StatusIndicator.js</a>, <a href="StatusIndicator.js.html#line113">line 113</a>
     </li></ul></dd>
     
 
@@ -695,7 +695,7 @@
 
 
 <div class="description">
-    The default state is Yellow. If the value is an empty string or null, then the defaultValue will be used.If no valueRules mapping is given, then we parse the integer string to an integer, otherwisewe retrieve the the mapped value and parse this one instead.Depending on whether ascending has been set to false or left on true, we will compare the value according to the ASC/DESC rules below.Then we build the icon if the value will not be shown AND if the icon should be shown.We set the icon's value with the iconValue if given, if an iconRules mapping is provided, then we use the value of this StatusIndicator,if not we pass the state (Red, Yellow, Green or Blue) as value (this will work fine with the out-of-the-box mapping).If we have an iconRules mapping, then we pass it to the icon.ASC:Red if > redLimitYellow if <= redLimit and > greenLimitGreen if <= greenLimit and > blueLimitElse BlueDESC:Blue if <= blueLimitRed if > blueLimit and <= redLimitYellow if > redLimit and < greenLimitElse Green
+    The default state is Yellow. If the value is an empty string or null, then the defaultValue will be used.<br>If no valueRules mapping is given, then we parse the integer string to an integer, otherwisewe retrieve the the mapped value and parse this one instead.<br>Depending on whether ascending has been set to false or left on true, we will compare the value according to the ASC/DESC rules below.<br><br>Then we build the icon if the value will not be shown AND if the icon should be shown.<br>We set the icon's value with the iconValue if given, if an iconRules mapping is provided, then we use the value of this StatusIndicator,if not we pass the state (Red, Yellow, Green or Blue) as value (this will work fine with the out-of-the-box mapping).<br>If we have an iconRules mapping, then we pass it to the icon.<br><br>ASC:<br>Red if > redLimit<br>Yellow if <= redLimit and > greenLimit<br>Green if <= greenLimit and > blueLimit<br>Else Blue<br><br>DESC:<br>Blue if <= blueLimit<br>Red if > blueLimit and <= redLimit<br>Yellow if > redLimit and < greenLimit<br>Else Green
 </div>
 
 
@@ -843,7 +843,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StatusIndicator.js.html">StatusIndicator.js</a>, <a href="StatusIndicator.js.html#line150">line 150</a>
+        <a href="StatusIndicator.js.html">StatusIndicator.js</a>, <a href="StatusIndicator.js.html#line186">line 186</a>
     </li></ul></dd>
     
 
@@ -885,13 +885,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-DateChooser.html">toucon-DateChooser</a></li><li><a href="toucon-FileDropzone.html">toucon-FileDropzone</a></li><li><a href="toucon-FileUploader.html">toucon-FileUploader</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-ImageSlider.html">toucon-ImageSlider</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-Link.html">toucon-Link</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-Popup.html">toucon-Popup</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-Tree.html">toucon-Tree</a></li><li><a href="toucon-TreeNode.html">toucon-TreeNode</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li><li><a href="toucon-YelpBadge.html">toucon-YelpBadge</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu May 28 2015 00:41:37 GMT+0200 (Mitteleuropäische Sommerzeit)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Mon Jun 15 2015 21:16:30 GMT+0200 (Mitteleuropäische Sommerzeit)
 </footer>
 
 <script> prettyPrint(); </script>

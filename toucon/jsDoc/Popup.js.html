@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: MailButton.js</title>
+    <title>JSDoc: Source: Popup.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: MailButton.js</h1>
+    <h1 class="page-title">Source: Popup.js</h1>
 
     
 
@@ -27,15 +27,15 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @param {string} [mail] the e-mail address
- * @param {string} [subject] an optional value for the subject
- * @param {string} [body] an optional value for the body of the message
+ * TODO
+ * @param {string} [title] title of the Popup
+ * @param {string} [icon] URL to an icon, e.g. sap-icon://home
  *
- * @desc A button with a default mail icon and which will open the local
- * e-mail client and prefill the e-mail with the given information.
- *
- * @extends sap.m.Button
- * @returns sap.m.Button
+ * @desc The Popup control is sap.m.Dialog with a custom header which includes a (x) close button.
+ * &lt;br> The CSS of this popup will automatically hide the title bar if the added content is a sap.m.Page.
+ * 
+ * @extends sap.m.Dialog
+ * @returns sap.m.Dialog
  *
  * @class
  * @author Paul Senkel
@@ -54,55 +54,101 @@
  *
  * @constructor
  * @public
- * @alias toucon-MailButton
+ * @alias toucon-Popup
  */
-var touconMailButton = sap.m.Button.extend("toucon.MailButton", {  
+var touconPopup = sap.m.Dialog.extend("toucon.Popup", {  
 	metadata: {  
 		properties: {  
-			"mail" : { type: "string", defaultValue: null },
-			"subject" : { type: "string", defaultValue: null },
-			"body" : { type: "string", defaultValue: null }
+			//title : { type: "string", defaultValue: "" },
+			closeButtonIcon : { type: "string", defaultValue: "sap-icon://sys-cancel" },
+			closeButtonText : { type: "string", defaultValue: "" },			
+		},
+		aggregations: {
 		}
 	},
+	//We use these "private" variables instead of "private" aggregations
+	//As the objects are removed from aggregations when we attach them somewhere else
+	_closeButton: null,
+	_headerTitle: null,
+	_headerBar: null,
 	/**
-	 * @desc Initializes the button icon with the default icon sap-icon://email and 
-	 * attaches the press function which will call the mailto link with target "hidden"
-	 * &lt;br>
-	 * &lt;b>Please note that this version requires the existence of a hidden iFrame called "hidden"!&lt;/b>
+	 * @desc Releases private variables
 	 *
 	 * @function
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon-MailButton
+     * @memberOf toucon-Popup
 	 */
-	init: function () {
-		this.setIcon("sap-icon://email");
-		this.attachPress((function () {
-				var params = "";
-				if (this.getSubject()!="") params = "?subject="+encodeURIComponent(this.getSubject());
-				if (this.getBody()!="") params = params+((params=="")? "?":"&amp;")+"body="+encodeURIComponent(this.getBody());
-				window.open("mailto:"+this.getMail()+params,"hidden");
-			}).bind(this));
+	exit: function () {
+        if (this._closeButton) {
+            this._closeButton.destroy();
+            delete this._closeButton;
+        }
+        if (this._headerBar) {
+            this._headerBar.destroy();
+            delete this._headerBar;
+        }
+        if (this._headerTitle) {
+            this._headerTitle.destroy();
+            delete this._headerTitle;
+        }
+    },
+	/**
+	 * @desc Initializes the header and its close button and applies CSS classes.
+	 *
+	 * @function
+	 * @implements CSS: .touconPopup, .touconPopupHeader, .sapUiSizeCompact
+	 * @since 1.0
+	 * @protected
+     * @memberOf toucon-Popup
+	 */
+	init: function() {
+		console.log("toucon-Popup init");
+		if (sap.m.Dialog.prototype.init) {             
+			sap.m.Dialog.prototype.init.apply(this, arguments);
+		}
+		//Popup decoration (hide eventual page title bars if the content is a page)
+		this.addStyleClass("touconPopup sapUiSizeCompact");//dialogHideInnerPageTitle
+		
+		this._closeButton = new sap.m.Button({
+			icon:this.getCloseButtonIcon(),
+			text:this.getCloseButtonText(),
+			press: (function(oEvent) { 
+				this.close(); 
+			}).bind(this)
+		});
+		this._headerTitle = new sap.m.Label({text:this.getTitle()});
+		this._headerBar = new sap.m.Bar({
+			design:sap.m.BarDesign.Header,
+			contentMiddle: this._headerTitle,
+			contentRight: this._closeButton
+		}).addStyleClass("touconPopupHeader");//dialogBrandedHeader
+
+		this.setCustomHeader(this._headerBar);
+		this.setType(sap.m.DialogType.Message);
+		console.log(this);
 	},
-	 /**
+	/**
 	 * @param {RenderManager} [oRm] 
 	 * @param {Control} [oControl] this control
 	 *
-	 * @desc Applies the mail parameter as text if no text was set and 
-	 * calls the sap.m.ButtonRenderer.render function.
+	 * @desc Applies the Popup params and calls the sap.m.DialogRenderer.render function.
 	 *
 	 * @function
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon-MailButton
+     * @memberOf toucon-Popup
 	 */
 	renderer: function(oRm, oControl) {
-		//Uses the mail address as default text
-		if (oControl.getText()=="") oControl.setText(oControl.getMail());
-
-		//Use the standard renderer to rendering this prepared control
-		sap.m.ButtonRenderer.render(oRm, oControl);
+		console.log("toucon-Popup render");
+		//Here we update the header title and close button
+		oControl._headerTitle.setText(oControl.getTitle());
+		oControl._closeButton.setText(oControl.getCloseButtonText());
+		oControl._closeButton.setIcon(oControl.getCloseButtonIcon());
+		
+		//We call the default renderer for this object as we do not want to do anything special
+		sap.m.DialogRenderer.render(oRm, oControl);
 	}
 });</code></pre>
         </article>

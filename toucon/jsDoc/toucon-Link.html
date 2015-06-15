@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: toucon-UrlButton</title>
+    <title>JSDoc: Class: toucon-Link</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: toucon-UrlButton</h1>
+    <h1 class="page-title">Class: toucon-Link</h1>
 
     
 
@@ -29,7 +29,7 @@
 <header>
     
         <h2>
-        toucon-UrlButton
+        toucon-Link
         </h2>
         
     
@@ -42,14 +42,14 @@
 
     
 
-    <h4 class="name" id="toucon-UrlButton"><span class="type-signature"></span>new toucon-UrlButton<span class="signature">(url<span class="signature-attributes">opt</span>, target<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="toucon-Link"><span class="type-signature"></span>new toucon-Link<span class="signature">(text<span class="signature-attributes">opt</span>, textRules<span class="signature-attributes">opt</span>, icon<span class="signature-attributes">opt</span>, iconRules<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    A button with a default mail icon which will open the given URLin the given target or by default in a new window/tab.
+    This Link will render an imitation of a sap.m.Link which does not only display a text,but also an icon before that text.
 </div>
 
 
@@ -87,7 +87,7 @@
 
         <tr>
             
-                <td class="name"><code>url</code></td>
+                <td class="name"><code>text</code></td>
             
 
             <td class="type">
@@ -113,14 +113,47 @@
 
             
 
-            <td class="description last">the URL</td>
+            <td class="description last">a string which will be translated by the textRules map or used as is</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>target</code></td>
+                <td class="name"><code>textRules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">a map which translates the text to a different string if given</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>icon</code></td>
             
 
             <td class="type">
@@ -146,7 +179,40 @@
 
             
 
-            <td class="description last">an optional value for the target, defaultValue is _blank</td>
+            <td class="description last">an icon URL or a value which will be translated by the iconRules map</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iconRules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">a map which translates the icon value to a valid icon URL</td>
         </tr>
 
     
@@ -203,7 +269,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="UrlButton.js.html">UrlButton.js</a>, <a href="UrlButton.js.html#line30">line 30</a>
+        <a href="Link.js.html">Link.js</a>, <a href="Link.js.html#line33">line 33</a>
     </li></ul></dd>
     
 
@@ -230,7 +296,7 @@
 
         
 <div class="param-desc">
-    sap.m.Button
+    sap.ui.core.Control
 </div>
 
 
@@ -249,7 +315,7 @@
 
 
     <ul>
-        <li>sap.m.Button</li>
+        <li>sap.m.Link</li>
     </ul>
 
 
@@ -280,7 +346,7 @@
 
 
 <div class="description">
-    Initializes the button icon with the default icon sap-icon://world and attaches the press function which will open the URL in the given target (or by defaultin a new window or tab).
+    Initializes the link and the icon
 </div>
 
 
@@ -311,6 +377,13 @@
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li>.touconLinkIcon</li>
+        
+    </ul></dd>
+    
 
     
 
@@ -327,7 +400,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="UrlButton.js.html">UrlButton.js</a>, <a href="UrlButton.js.html#line47">line 47</a>
+        <a href="Link.js.html">Link.js</a>, <a href="Link.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -365,7 +438,7 @@
 
 
 <div class="description">
-    Applies the URL parameter as text if no text was set and calls the sap.m.ButtonRenderer.render function.
+    Resolves the text and icon values against their respective textRules and iconRules mappings,renders the link's HTML and the icon through its own renderer.
 </div>
 
 
@@ -490,6 +563,13 @@
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li>.touconLink, .sapMLnk, .sapMLnkMaxWidth</li>
+        
+    </ul></dd>
+    
 
     
 
@@ -506,7 +586,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="UrlButton.js.html">UrlButton.js</a>, <a href="UrlButton.js.html#line66">line 66</a>
+        <a href="Link.js.html">Link.js</a>, <a href="Link.js.html#line77">line 77</a>
     </li></ul></dd>
     
 

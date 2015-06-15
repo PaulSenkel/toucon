@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: MailButton.js</title>
+    <title>JSDoc: Source: FileDropzone.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: MailButton.js</h1>
+    <h1 class="page-title">Source: FileDropzone.js</h1>
 
     
 
@@ -26,16 +26,22 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @param {string} [mail] the e-mail address
- * @param {string} [subject] an optional value for the subject
- * @param {string} [body] an optional value for the body of the message
- *
- * @desc A button with a default mail icon and which will open the local
- * e-mail client and prefill the e-mail with the given information.
- *
- * @extends sap.m.Button
- * @returns sap.m.Button
+            <pre class="prettyprint source linenums"><code>jQuery.sap.require("toucon.extlibs.dropzone-min");
+
+/**
+ * @param {object} [options] The map in which you have to specify the real DropZone's options (e.g. url, maxFilesize, maxFiles, etc.). Please refer to the dropzone.js
+ * documentation for more information
+ * @param {string} [cssUrl] The Url to the combined CSS, default: res/toucon-extlibs/dropzone.css
+ * 
+ * @desc This FileDropzone enables you to include a dropzone.js file uploader in your UI5 application
+ * without having to include CSS by hand and without having to think of what needs to
+ * happen in the View and what needs to happen in the Controller.
+ * &lt;br>&lt;br>
+ * Credits for the Dropzone library go to dropzonejs.com, please go there for up-to-date code, license information and donations.
+ * &lt;br>&lt;br>
+ * 
+ * @extends sap.ui.core.Control
+ * @returns sap.ui.core.Control
  *
  * @class
  * @author Paul Senkel
@@ -54,56 +60,80 @@
  *
  * @constructor
  * @public
- * @alias toucon-MailButton
+ * @alias toucon-FileDropzone
  */
-var touconMailButton = sap.m.Button.extend("toucon.MailButton", {  
-	metadata: {  
-		properties: {  
-			"mail" : { type: "string", defaultValue: null },
-			"subject" : { type: "string", defaultValue: null },
-			"body" : { type: "string", defaultValue: null }
-		}
-	},
+var touconFileDropzone = sap.ui.core.Control.extend("toucon.FileDropzone", {                         
+    metadata : {                              
+        properties : {
+        	"options" : {type: "object", defaultValue: null},
+           	"cssUrl" : { type: "string", defaultValue: "res/toucon-extlibs/dropzone.css"},
+        },
+        aggregations : {
+        }
+    },
+    dropzone:null,
+    cssLoaded:false,
 	/**
-	 * @desc Initializes the button icon with the default icon sap-icon://email and 
-	 * attaches the press function which will call the mailto link with target "hidden"
-	 * &lt;br>
-	 * &lt;b>Please note that this version requires the existence of a hidden iFrame called "hidden"!&lt;/b>
+	 * @desc Releases private variables
 	 *
 	 * @function
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon-MailButton
+     * @memberOf toucon-FileDropzone
 	 */
-	init: function () {
-		this.setIcon("sap-icon://email");
-		this.attachPress((function () {
-				var params = "";
-				if (this.getSubject()!="") params = "?subject="+encodeURIComponent(this.getSubject());
-				if (this.getBody()!="") params = params+((params=="")? "?":"&amp;")+"body="+encodeURIComponent(this.getBody());
-				window.open("mailto:"+this.getMail()+params,"hidden");
-			}).bind(this));
+	exit: function () {
+        if ((this.dropzone===undefined)==false) {
+            delete this.dropzone;
+        }
+        if ((this.cssLoaded===undefined)==false) {
+            delete this.cssLoaded;
+        }
+    },
+    /**
+	 * @desc Checks if the CSS is loaded or adds it to the &lt;head>.
+	 *
+	 * @function
+	 * @since 1.01
+	 * @protected
+     * @memberOf toucon-FileDropzone
+	 */
+    onBeforeRendering : function () {
+    	if (this.cssLoaded==false &amp;&amp; !jQuery("link[href='"+this.getCssUrl()+"']").length) {
+    	    jQuery('&lt;link href="'+this.getCssUrl()+'" rel="stylesheet">').appendTo("head");
+    	}
+    },
+	/**
+	 * @desc Generates and runs the Yelp function which imports the Javascript
+	 * and generates the button.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+     * @memberOf toucon-FileDropzone
+	 */
+	onAfterRendering: function() {
+		this.dropzone = new Dropzone("#"+this.getId(), this.getOptions());
 	},
-	 /**
+	/**
 	 * @param {RenderManager} [oRm] 
 	 * @param {Control} [oControl] this control
 	 *
-	 * @desc Applies the mail parameter as text if no text was set and 
-	 * calls the sap.m.ButtonRenderer.render function.
+	 * @desc Renders an div into which the DropZone will be generated.
 	 *
 	 * @function
+	 * @implements CSS: .dropzone
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon-MailButton
+     * @memberOf toucon-FileDropzone
 	 */
-	renderer: function(oRm, oControl) {
-		//Uses the mail address as default text
-		if (oControl.getText()=="") oControl.setText(oControl.getMail());
-
-		//Use the standard renderer to rendering this prepared control
-		sap.m.ButtonRenderer.render(oRm, oControl);
-	}
+    renderer : function(oRm, oControl) {
+			oRm.write("&lt;div"); 
+			oRm.writeControlData(oControl);
+			oRm.addClass("dropzone");
+			oRm.writeClasses();
+			oRm.write("&lt;/div>");
+    }
 });</code></pre>
         </article>
     </section>

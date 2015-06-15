@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: toucon-UrlButton</title>
+    <title>JSDoc: Class: toucon-Tree</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: toucon-UrlButton</h1>
+    <h1 class="page-title">Class: toucon-Tree</h1>
 
     
 
@@ -29,7 +29,7 @@
 <header>
     
         <h2>
-        toucon-UrlButton
+        toucon-Tree
         </h2>
         
     
@@ -42,14 +42,14 @@
 
     
 
-    <h4 class="name" id="toucon-UrlButton"><span class="type-signature"></span>new toucon-UrlButton<span class="signature">(url<span class="signature-attributes">opt</span>, target<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="toucon-Tree"><span class="type-signature"></span>new toucon-Tree<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    A button with a default mail icon which will open the given URLin the given target or by default in a new window/tab.
+    This Tree allows for Treenodes which can contain a MenuButton with a hierarchical menu.
 </div>
 
 
@@ -58,100 +58,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">the URL</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>target</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">an optional value for the target, defaultValue is _blank</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -203,7 +109,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="UrlButton.js.html">UrlButton.js</a>, <a href="UrlButton.js.html#line30">line 30</a>
+        <a href="Tree.js.html">Tree.js</a>, <a href="Tree.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -230,7 +136,7 @@
 
         
 <div class="param-desc">
-    sap.m.Button
+    sap.ui.core.Control
 </div>
 
 
@@ -249,7 +155,7 @@
 
 
     <ul>
-        <li>sap.m.Button</li>
+        <li>sap.ui.commons.Tree</li>
     </ul>
 
 
@@ -280,7 +186,7 @@
 
 
 <div class="description">
-    Initializes the button icon with the default icon sap-icon://world and attaches the press function which will open the URL in the given target (or by defaultin a new window or tab).
+    Initializes the underlying sap.ui.commons.Tree
 </div>
 
 
@@ -311,184 +217,12 @@
     
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="UrlButton.js.html">UrlButton.js</a>, <a href="UrlButton.js.html#line47">line 47</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
         
-            
-
-    
-
-    <h4 class="name" id=".renderer"><span class="type-signature">(protected, static) </span>renderer<span class="signature">(oRm<span class="signature-attributes">opt</span>, oControl<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Applies the URL parameter as text if no text was set and calls the sap.m.ButtonRenderer.render function.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
+            <li>.touconTree</li>
         
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>oRm</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">RenderManager</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>oControl</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Control</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">this control</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-    <dt class="tag-since">Since:</dt>
-    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
-    
-
-    
-
-    
-
-    
-
+    </ul></dd>
     
 
     
@@ -506,7 +240,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="UrlButton.js.html">UrlButton.js</a>, <a href="UrlButton.js.html#line66">line 66</a>
+        <a href="Tree.js.html">Tree.js</a>, <a href="Tree.js.html#line52">line 52</a>
     </li></ul></dd>
     
 

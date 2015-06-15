@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: MailButton.js</title>
+    <title>JSDoc: Source: TreeNode.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: MailButton.js</h1>
+    <h1 class="page-title">Source: TreeNode.js</h1>
 
     
 
@@ -26,16 +26,23 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @param {string} [mail] the e-mail address
- * @param {string} [subject] an optional value for the subject
- * @param {string} [body] an optional value for the body of the message
- *
- * @desc A button with a default mail icon and which will open the local
- * e-mail client and prefill the e-mail with the given information.
- *
- * @extends sap.m.Button
- * @returns sap.m.Button
+            <pre class="prettyprint source linenums"><code>jQuery.sap.require("sap.ui.commons.Tree");
+jQuery.sap.require("sap.ui.commons.TreeNode");
+jQuery.sap.require("sap.ui.commons.MenuButton");
+jQuery.sap.require("sap.ui.commons.MenuItem");
+jQuery.sap.require("sap.ui.commons.Menu");
+
+/**
+ * @param {sap.ui.commons.MenuButton} [menuButton] MenuButton containing a possible action menu for this node.
+ * This aggregation is created by default, so that you just have to use the setMenu function in order
+ * to attach a suitable sap.ui.commons.Menu.
+ * @param {toucon.TreeNode[]} [nodes] Child nodes for this node.
+ * 
+ * @desc This Treenode extends the original sap.ui.commons.Treenode by allowing the presence of a right-aligned
+ * MenuButton in order to provide additional actions for the Treenode.
+ * 
+ * @extends sap.ui.commons.TreeNode
+ * @returns sap.ui.core.Control
  *
  * @class
  * @author Paul Senkel
@@ -54,56 +61,73 @@
  *
  * @constructor
  * @public
- * @alias toucon-MailButton
+ * @alias toucon-TreeNode
  */
-var touconMailButton = sap.m.Button.extend("toucon.MailButton", {  
-	metadata: {  
-		properties: {  
-			"mail" : { type: "string", defaultValue: null },
-			"subject" : { type: "string", defaultValue: null },
-			"body" : { type: "string", defaultValue: null }
-		}
-	},
+var touconTreeNode = sap.ui.commons.TreeNode.extend("toucon.TreeNode", {
+    metadata : {                              
+        properties : {
+        },
+        aggregations : {
+			menuButton : { type: "sap.ui.commons.MenuButton", multiple: false, visibility: "public"},
+			/**
+			 * Subnodes for the current node
+			 */
+			nodes : {type : "toucon.TreeNode", multiple : true, singularName : "node"}
+        }
+    },
+    _menu : null,
 	/**
-	 * @desc Initializes the button icon with the default icon sap-icon://email and 
-	 * attaches the press function which will call the mailto link with target "hidden"
-	 * &lt;br>
-	 * &lt;b>Please note that this version requires the existence of a hidden iFrame called "hidden"!&lt;/b>
+	 * @desc Releases private variables
 	 *
 	 * @function
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon-MailButton
+     * @memberOf toucon-TreeNode
 	 */
-	init: function () {
-		this.setIcon("sap-icon://email");
-		this.attachPress((function () {
-				var params = "";
-				if (this.getSubject()!="") params = "?subject="+encodeURIComponent(this.getSubject());
-				if (this.getBody()!="") params = params+((params=="")? "?":"&amp;")+"body="+encodeURIComponent(this.getBody());
-				window.open("mailto:"+this.getMail()+params,"hidden");
-			}).bind(this));
-	},
-	 /**
-	 * @param {RenderManager} [oRm] 
-	 * @param {Control} [oControl] this control
-	 *
-	 * @desc Applies the mail parameter as text if no text was set and 
-	 * calls the sap.m.ButtonRenderer.render function.
+	exit: function () {
+        if (this._menu) {
+            this._menu.destroy();
+            delete this._menu;
+        }
+    },
+	/**
+	 * @desc Adds the menu to this treenode
 	 *
 	 * @function
 	 * @since 1.0
 	 * @protected
-	 * @static
-     * @memberOf toucon-MailButton
+     * @memberOf toucon-TreeNode
 	 */
-	renderer: function(oRm, oControl) {
-		//Uses the mail address as default text
-		if (oControl.getText()=="") oControl.setText(oControl.getMail());
-
-		//Use the standard renderer to rendering this prepared control
-		sap.m.ButtonRenderer.render(oRm, oControl);
-	}
+	setMenu: function (menu) {
+        this._menu = menu;
+    },
+	/**
+	 * @desc Getter for the menu to this treenode
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+     * @memberOf toucon-TreeNode
+	 */
+	getMenu: function () {
+        return this._menu;
+    },
+	/**
+	 * @desc Initializes the TreeNode and creates the default MenuButton with an "action" icon.
+	 *
+	 * @function
+	 * @implements .touconTreeNodeMenuButton
+	 * @since 1.0
+	 * @protected
+     * @memberOf toucon-TreeNode
+	 */
+    init : function () {
+		if (sap.ui.commons.TreeNode.prototype.init) {             
+			sap.ui.commons.TreeNode.prototype.init.apply(this, arguments);
+		}
+    	//we prepare a default Menu Button to which we can now directly set a menu
+    	this.setAggregation("menuButton",new sap.ui.commons.MenuButton({icon: "sap-icon://action"}).addStyleClass("touconTreeNodeMenuButton"));
+    }
 });</code></pre>
         </article>
     </section>

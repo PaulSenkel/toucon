@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: MailButton.js</title>
+    <title>JSDoc: Source: YelpBadge.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: MailButton.js</h1>
+    <h1 class="page-title">Source: YelpBadge.js</h1>
 
     
 
@@ -27,15 +27,16 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @param {string} [mail] the e-mail address
- * @param {string} [subject] an optional value for the subject
- * @param {string} [body] an optional value for the body of the message
- *
- * @desc A button with a default mail icon and which will open the local
- * e-mail client and prefill the e-mail with the given information.
- *
- * @extends sap.m.Button
- * @returns sap.m.Button
+ * @param {string} [businessId] The ID of your business. You can find it in the Review Badges HTML: &lt;div id="yelp-biz-badge-plain-&lt;b>SrNNWDe25T2abQ9jI8LPYQ&lt;/b>">
+ * @param {string} [badgeType]  Review with stars: "rrc" (default), Simple button: "plain", Small button: "yelp", Review with number of reviews: "rc"
+ * @param {string} [link] The URL which will be opened, when you click on the Yelp button (should be a URL to your Yelp page)
+ * @param {string} [title] The default title which the link will contain before the button is rendered, is also used as tooltip
+ * 
+ * @desc This YelpBadge enables you to print out several YelpBadges in your UI5 views.
+ * &lt;br>It generates the HTML and the code which needs to be executed after the rendering.
+ * 
+ * @extends sap.ui.core.Control
+ * @returns sap.ui.core.Control
  *
  * @class
  * @author Paul Senkel
@@ -54,56 +55,56 @@
  *
  * @constructor
  * @public
- * @alias toucon-MailButton
+ * @alias toucon-YelpBadge
  */
-var touconMailButton = sap.m.Button.extend("toucon.MailButton", {  
-	metadata: {  
-		properties: {  
-			"mail" : { type: "string", defaultValue: null },
-			"subject" : { type: "string", defaultValue: null },
-			"body" : { type: "string", defaultValue: null }
-		}
-	},
+var touconYelpBadge = sap.ui.core.Control.extend("toucon.YelpBadge", {                         
+    metadata : {                              
+        properties : {
+        	"businessId" : {type: "string", defaultValue: null},	
+        	"badgeType" : {type: "string", defaultValue: "rrc"},
+        	"title" : {type: "string", defaultValue: null},
+        	"link" : {type: "string", defaultValue: null},
+        },
+        aggregations : {
+        }
+    },
 	/**
-	 * @desc Initializes the button icon with the default icon sap-icon://email and 
-	 * attaches the press function which will call the mailto link with target "hidden"
-	 * &lt;br>
-	 * &lt;b>Please note that this version requires the existence of a hidden iFrame called "hidden"!&lt;/b>
+	 * @desc Generates and runs the Yelp function which imports the Javascript
+	 * and generates the button.
 	 *
 	 * @function
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon-MailButton
+     * @memberOf toucon-YelpBadge
 	 */
-	init: function () {
-		this.setIcon("sap-icon://email");
-		this.attachPress((function () {
-				var params = "";
-				if (this.getSubject()!="") params = "?subject="+encodeURIComponent(this.getSubject());
-				if (this.getBody()!="") params = params+((params=="")? "?":"&amp;")+"body="+encodeURIComponent(this.getBody());
-				window.open("mailto:"+this.getMail()+params,"hidden");
-			}).bind(this));
+	onAfterRendering: function() {
+		(function(d, t, c) {
+			var g = d.createElement(t);
+			var s = d.getElementsByTagName(t)[0];
+			g.id = "yelp-biz-badge-script-"+c.getBadgeType()+"-"+c.getBusinessId();
+			console.log(g.id);
+			g.src = "//dyn.yelpcdn.com/biz_badge_js/en_US/"+c.getBadgeType()+"/"+c.getBusinessId()+".js";s.parentNode.insertBefore(g, s);}(document, 'script', this));
 	},
-	 /**
+	/**
 	 * @param {RenderManager} [oRm] 
 	 * @param {Control} [oControl] this control
 	 *
-	 * @desc Applies the mail parameter as text if no text was set and 
-	 * calls the sap.m.ButtonRenderer.render function.
+	 * @desc Renders an outer div which represents this YelpBadge UI5 control
+	 * and an inner div which represents the "real" review badge.
 	 *
 	 * @function
+	 * @implements TODO
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon-MailButton
+     * @memberOf toucon-YelpBadge
 	 */
-	renderer: function(oRm, oControl) {
-		//Uses the mail address as default text
-		if (oControl.getText()=="") oControl.setText(oControl.getMail());
-
-		//Use the standard renderer to rendering this prepared control
-		sap.m.ButtonRenderer.render(oRm, oControl);
-	}
+    renderer : function(oRm, oControl) {
+			oRm.write("&lt;div"); 
+			oRm.writeControlData(oControl);
+			oRm.write(">&lt;div id=\"yelp-biz-badge-"+oControl.getBadgeType()+"-"+oControl.getBusinessId()+"\">&lt;a href=\""+oControl.getLink()+"\" title=\""+oControl.getTitle()+"\">"+oControl.getTitle()+"&lt;/a>&lt;/div>");
+			oRm.write("&lt;/div>");
+    }
 });</code></pre>
         </article>
     </section>

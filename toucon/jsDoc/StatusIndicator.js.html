@@ -44,10 +44,14 @@
  *
  * @desc Displays a red rectangle, a yellow triangle or a green circle depending on the passed
  * integer value and limits for going green, blue or red. Yellow is the default state.
+ * &lt;br>
  * You can also switch off the rendering of the actual value which is very handy
  * if you "fake" the numeric value through the valueRules mapping where you 
  * "translate" a text from your model (e.g. warning, error, success) to a fitting number.
+ * &lt;br>
  * Thanks go to Abesh (https://gist.github.com/abesh/9504351) for the original ColorCircle control
+ * &lt;br>&lt;br>
+ * V1.01 - corrected default red/green/blueLimit values and potential but when checking if ascending is true/false
  * 
  * @extends sap.ui.core.Control
  * @returns sap.ui.core.Control
@@ -65,7 +69,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @version 1.0
+ * @version 1.01
  *
  * @constructor
  * @public
@@ -82,9 +86,9 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 			"iconRules" : { type: "object", defaultValue: null},
 			"showIcon" : {type: "boolean", defaultValue: true},//if showValue is false the icon will be shown
 			"asc" : {type: "boolean", defaultValue: true},	
-			"redLimit" : {type: "int", defaultValue: "90"},	
-			"greenLimit" : {type: "int", defaultValue: "75"},			
-			"blueLimit" : {type: "int", defaultValue: "-1"},//not relevant for gauges, but interesting for calculated error, warning, success and info states			
+			"redLimit" : {type: "int", defaultValue: 90},	
+			"greenLimit" : {type: "int", defaultValue: 75},			
+			"blueLimit" : {type: "int", defaultValue: -1},//not relevant for gauges, but interesting for calculated error, warning, success and info states			
 			"size" : {type: "float", defaultValue: 2.0}			
         },
         aggregations : {
@@ -94,22 +98,39 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
     
 	/**
 	 * @desc Initializes the icon with default iconRules which will out-of-the-box map the following values to sap-icon URLs.
+	 * &lt;br>
 	 * You can pass the following values in the iconValue and benefit from a standard value to icon mapping:
+	 * &lt;br>
 	 * "Red":"sap-icon://decline",
+	 * &lt;br>
 	 * "Yellow":"sap-icon://warning",
+	 * &lt;br>
 	 * "Green":"sap-icon://accept",
+	 * &lt;br>
 	 * "Blue":"sap-icon://hint",
+	 * &lt;br>
 	 * "E":"sap-icon://decline",
+	 * &lt;br>
 	 * "W":"sap-icon://warning",
+	 * &lt;br>
 	 * "S":"sap-icon://accept",
+	 * &lt;br>
 	 * "I":"sap-icon://hint",
+	 * &lt;br>
 	 * "error":"sap-icon://decline",
+	 * &lt;br>
 	 * "warning":"sap-icon://warning",
+	 * &lt;br>
 	 * "success":"sap-icon://accept",
+	 * &lt;br>
 	 * "info":"sap-icon://hint",
+	 * &lt;br>
 	 * "ERROR":"sap-icon://decline",
+	 * &lt;br>
 	 * "WARNING":"sap-icon://warning",
+	 * &lt;br>
 	 * "SUCCESS":"sap-icon://accept",
+	 * &lt;br>
 	 * "INFO":"sap-icon://hint"
 	 *
 	 * @function
@@ -145,27 +166,42 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 	 * @param {Control} [oControl] this control
 	 *
 	 * @desc The default state is Yellow. If the value is an empty string or null, then the defaultValue will be used.
+	 * &lt;br>
 	 * If no valueRules mapping is given, then we parse the integer string to an integer, otherwise
 	 * we retrieve the the mapped value and parse this one instead.
+	 * &lt;br>
 	 * Depending on whether ascending has been set to false or left on true, we will compare the value according to the ASC/DESC rules below.
-	 * 
+	 * &lt;br>
+	 * &lt;br>
 	 * Then we build the icon if the value will not be shown AND if the icon should be shown.
+	 * &lt;br>
 	 * We set the icon's value with the iconValue if given, 
 	 * if an iconRules mapping is provided, then we use the value of this StatusIndicator,
 	 * if not we pass the state (Red, Yellow, Green or Blue) as value (this will work fine with 
 	 * the out-of-the-box mapping).
+	 * &lt;br>
 	 * If we have an iconRules mapping, then we pass it to the icon.
-	 * 
+	 * &lt;br>
+	 * &lt;br>
 	 * ASC:
+	 * &lt;br>
 	 * Red if > redLimit
+	 * &lt;br>
 	 * Yellow if &lt;= redLimit and > greenLimit
+	 * &lt;br>
 	 * Green if &lt;= greenLimit and > blueLimit
+	 * &lt;br>
 	 * Else Blue
-	 * 
+	 * &lt;br>
+	 * &lt;br>
 	 * DESC:
+	 * &lt;br>
 	 * Blue if &lt;= blueLimit
+	 * &lt;br>
 	 * Red if > blueLimit and &lt;= redLimit
+	 * &lt;br>
 	 * Yellow if > redLimit and &lt; greenLimit
+	 * &lt;br>
 	 * Else Green
 	 *
 	 * @function
@@ -193,7 +229,7 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 			}
 
 			//Determine state based on (mapped) value
-			if(oControl.getAsc()){
+			if(oControl.getAsc()==true){
 				if(value > oControl.getRedLimit()){
 					state = "Red";
 				}else if(value &lt;= oControl.getRedLimit() &amp;&amp; value > oControl.getGreenLimit()){
@@ -314,13 +350,13 @@ var touconStatusIndicator = sap.ui.core.Control.extend("toucon.StatusIndicator",
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-DateChooser.html">toucon-DateChooser</a></li><li><a href="toucon-FileDropzone.html">toucon-FileDropzone</a></li><li><a href="toucon-FileUploader.html">toucon-FileUploader</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-ImageSlider.html">toucon-ImageSlider</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-Link.html">toucon-Link</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-Popup.html">toucon-Popup</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-Tree.html">toucon-Tree</a></li><li><a href="toucon-TreeNode.html">toucon-TreeNode</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li><li><a href="toucon-YelpBadge.html">toucon-YelpBadge</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu May 28 2015 00:41:37 GMT+0200 (Mitteleuropäische Sommerzeit)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Mon Jun 15 2015 21:16:30 GMT+0200 (Mitteleuropäische Sommerzeit)
 </footer>
 
 <script> prettyPrint(); </script>
