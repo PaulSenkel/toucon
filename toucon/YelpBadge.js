@@ -6,6 +6,8 @@
  * 
  * @desc This YelpBadge enables you to print out several YelpBadges in your UI5 views.
  * <br>It generates the HTML and the code which needs to be executed after the rendering.
+ * <br><br>
+ * v1.01 - takes into account the current SAP UI5 Locale for the Yelp script import
  * 
  * @extends sap.ui.core.Control
  * @returns sap.ui.core.Control
@@ -23,7 +25,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @version 1.0
+ * @version 1.01
  *
  * @constructor
  * @public
@@ -49,14 +51,21 @@ var touconYelpBadge = sap.ui.core.Control.extend("toucon.YelpBadge", {
 	 * @protected
      * @memberOf toucon-YelpBadge
 	 */
-	onAfterRendering: function() {
-		(function(d, t, c) {
-			var g = d.createElement(t);
-			var s = d.getElementsByTagName(t)[0];
-			g.id = "yelp-biz-badge-script-"+c.getBadgeType()+"-"+c.getBusinessId();
-			console.log(g.id);
-			g.src = "//dyn.yelpcdn.com/biz_badge_js/en_US/"+c.getBadgeType()+"/"+c.getBusinessId()+".js";s.parentNode.insertBefore(g, s);}(document, 'script', this));
-	},
+    onAfterRendering: function() {
+    	(function(d, t, c) {
+    		var src = "//dyn.yelpcdn.com/biz_badge_js/"+sap.ui.getCore().getConfiguration().getLocale().toString().replace("-","_")+"/"+c.getBadgeType()+"/"+c.getBusinessId()+".js";
+    		var id = "yelp-biz-badge-script-"+c.getBadgeType()+"-"+c.getBusinessId();
+    		var g;
+    		if (d.getElementById(id)) {
+    			g = d.getElementById(id);
+    			g.parentNode.removeChild(g);
+    		}
+    		g = d.createElement(t);
+    		g.id = id;
+    		g.src = src;
+    		var s = d.getElementsByTagName(t)[0];
+    		s.parentNode.insertBefore(g, s);}(document, 'script', this));
+    },
 	/**
 	 * @param {RenderManager} [oRm] 
 	 * @param {Control} [oControl] this control
