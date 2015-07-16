@@ -32,18 +32,6 @@
 @shellBackgroundColor:@lightCorporateColor;
 @smallHeaderBackgroundColor:@lightCorporateColor;
 
-//Toucon settings (Default)
-@boxTitleColor: @darkCorporateColor;
-@boxUnderlineColor: @mediumCorporateColor;
-@boxUnderlineStrength: 3px;
-@boxBackgroundColor: rgba(255,255,255,0.9);
-@whiteTextColor: white;
-@labelSuffix: ":";
-@mandatoryLabelSuffix: "*:";
-@mandatoryLabelColor: black;
-@mandatoryFieldBorderColor: @mediumCorporateColor;
-@mandatoryFieldBackgroundColor: rgba(255,200,200,0.9);
-
 //Status colors
 @infoStatus:#3232CD;//blue
 @successStatus:#32CD32;//green
@@ -61,3 +49,49 @@
  -moz-border-radius:@radius;
  border-radius:@radius; 
 }
+
+//Grays
+@ui5TextGray: #666666;
+@mediumGray: #cccccc;
+@lightGray: #f7f7f7;
+
+.Shadow() {
+ box-shadow: 1px 1px 1px 0px black !important;
+ margin-bottom: 2px !important;
+ margin-right: 2px !important;	
+}
+
+//Toucon settings (Default)
+@roundedCornersRadius: 0.5rem;
+@boxTitleColor: @darkCorporateColor;
+@boxUnderlineColor: @mediumCorporateColor;
+@boxUnderlineStrength: 3px;
+@boxBackgroundColor: rgba(255,255,255,0.9);
+@whiteTextColor: white;
+@labelSuffix: ":";
+@mandatoryLabelSuffix: "*:";
+@mandatoryLabelColor: black;
+@mandatoryFieldBorderColor: @mediumCorporateColor;
+@mandatoryFieldBackgroundColor: rgba(255,200,200,0.9);
+@fileUploaderHeight: 200px;
+@tableHeaderTextColor: @darkCorporateColor;
+@tableHeaderBackgroundColor: @mediumGray;
+@tableBodyTopBackgroundColor: @lightGray;
+@tableBodyBottomBackgroundColor: @mediumGray;
+@tableRowHoverBackgroundColor: @mediumCorporateColor;
+@tableRowSelectedBackgroundColor: @mediumCorporateColor;
+@tableEditableColumnBackgroundColor: @darkCorporateColor;
+@tableEditableColumnTextColor: @darkCorporateColor;
+@tableEditableCellBackgroundColor: @mediumCorporateColor;
+@tableSelectColumnWidth: 50px;
+@tableOpenActionIcon: "icons/iconOpen24.png";
+@tableOpenHeaderText: "Open";
+@tableEditActionIcon: "icons/iconRight24.png";
+@tableEditHeaderText: "Edit";
+@calendarAppointmentBackgroundColor: lightblue;
+@calendarAppointmentWidth: 120px;
+@calendarTimeWidth: 50px;
+@calendarTimeBackgroundColor: @lightGray;
+@calendarHeaderBackgroundColor: @lightGray;
+@calendarTableBorderColor: @lightGray;
+@calendarBorderColor: @mediumGray;

@@ -2,6 +2,18 @@
 //@import "styles_fussfisch.less";
 //@import "styles_syna.less";
 
+/*Shadows */
+.sapMInputBase {
+  padding-right: 2px !important;
+}
+.sapMInputBase:not(.sapMInputBaseReadonly) > input,
+.sapMTextArea > textarea,
+.sapMSlt:not(.sapMSltDisabled),
+.sapMBtnInner {
+ .RoundedShape(@roundedCornersRadius);
+ .Shadow()
+}
+
 /*Toucon components CSS*/
 .touconHidden {
        display: none !important;
@@ -27,6 +39,9 @@
 }
 .touconPage>section {
  overflow-y: auto !important;
+}
+.touconPage div[class^='sapUiRespGrid']:empty, .touconPage div[class*=' sapUiRespGrid']:empty {
+   display: none;
 }
 .touconInfoBoxTitle, .touconInfoBoxTag {
  font-family:@fontFamily;
@@ -58,7 +73,8 @@
 }
 .touconBox {
  background-color: @boxBackgroundColor !important;
- .RoundedShape(6px);
+ .RoundedShape(@roundedCornersRadius);
+ .Shadow()
 }
 /*This aligns all labels at the end and shortens them with ...
 We have to select the outer DIV of the touconLabels (and other elements)
@@ -108,14 +124,15 @@ DIV which the responsive Grid injects*/
  padding-left: 0.5rem;
 }
 .touconLinkIcon {
-  margin-right: 0.3rem;
-  vertical-align: bottom !important;
+       margin-right: 0.3rem;
 }
 .touconControl {
  width: 100% !important;
 }
-.touconControl.sapMLabel {
+.touconControl.sapMLabel,.touconControl.sapMText {
+  padding-left: 0.5rem;
   padding-top: 0.5rem;
+  color:#666666;
 }
 
 //FormLine v1.0, direct mandatory field
@@ -181,6 +198,9 @@ DIV which the responsive Grid injects*/
                 width: 13rem;
 }
 
+.touconLinkIcon {
+	margin-right: 0.3rem;
+}
 .touconHidden {
 	display: none !important;
 }
@@ -188,31 +208,31 @@ DIV which the responsive Grid injects*/
 .touconFileUploader {
   margin: 0.5rem;
   padding: 0.5rem;
-  background-color: rgba(230, 230, 230, 0.9) !important;
+  background-color: @boxBackgroundColor !important;
   border-radius: 0.5rem;
 }
 .touconFileUploaderBody {
   width: 100%;
-  border: 1px solid #cccccc;
+  border: 1px solid @mediumGray;
   border-radius: 0.5rem;
-  background-color: #f7f7f7 !important;
+  background-color: @lightGray !important;
 }
 .touconFileUploaderForm {
   width: 100%;
-  height: 200px;
+  height: @fileUploaderHeight;
 }
 .touconFileUploaderDiv div.sapUiFupGroup {
   display:none;
 }
 .touconFileUploaderDropzone {
   width: 100%;
-  height: 200px;
+  height: @fileUploaderHeight;
   position: relative !important;
 }
 .touconFileUploaderDropzone input {
   width: 100%;
-  height: 200px;
-  font-size: 200px !important;
+  height: @fileUploaderHeight;
+  font-size: @fileUploaderHeight !important;
   position: relative !important;
   left: 0 !important;
 }
@@ -241,7 +261,7 @@ DIV which the responsive Grid injects*/
   border-radius: 0px;
   border-right: 0px;
   border-left: 0px;
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid @mediumGray;
 }
 .touconFileUploaderProgressIndicator div.sapUiProgIndBorder > div {
   height: 20px !important;
@@ -269,7 +289,10 @@ DIV which the responsive Grid injects*/
   -webkit-box-shadow: inset 0 -0.0625em transparent !important; 
   box-shadow: inset 0 -0.0625em transparent !important; 
 }
-
+/*resizes the content*/
+.touconPopup div.sapMDialogScrollCont div.sapUiView {
+	height:100%
+}
 /*colors the custom dialog header*/
 .touconPopupHeader {
 	background-color: @mediumCorporateColor !important;
@@ -278,4 +301,233 @@ DIV which the responsive Grid injects*/
 .touconPopupHeader span.sapMBtnIcon{
 	color: white !important;
   	text-shadow: 0 0.0625rem 0 rgba(0,0,0,0.5) !important;
+}
+
+/*Make disabled Select and Input fields look like normal text*/
+.touconTable .sapMSltDisabled,
+.touconTable .sapMInputBaseDisabled {
+	border: 0px !important;
+	background-color: transparent !important;
+	opacity: 1.0 !important;
+}
+.touconTable .sapMSltDisabled .sapMSltArrow {
+	display: none !important;
+}
+
+/*Make cells transparent and show a gradient background */
+.touconTable .sapUiTableRowHdr, 
+.touconTable .sapUiTableCell, 
+.touconTable .sapUiTableCCnt, 
+.touconTable .sapUiTableRowHdrScr, 
+.touconTable .sapUiTableCtrlScr, 
+.touconTable .sapUiTableCtrl {
+  background-color: transparent !important;
+}
+.touconTable .sapUiTableCell {
+  height: 32px;
+  line-height: 32px;
+}
+.touconTable .sapUiTableCnt {
+/*background: #e6e6e6; 
+background: -moz-linear-gradient(top,  #e6e6e6 18%, #bee8f4 56%, #e6e6e6 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(18%,#e6e6e6), color-stop(56%,#bee8f4), color-stop(100%,#e6e6e6));
+background: -webkit-linear-gradient(top,  #e6e6e6 18%,#bee8f4 56%,#e6e6e6 100%); 
+background: -o-linear-gradient(top,  #e6e6e6 18%,#bee8f4 56%,#e6e6e6 100%); 
+background: -ms-linear-gradient(top,  #e6e6e6 18%,#bee8f4 56%,#e6e6e6 100%); 
+background: linear-gradient(to bottom,  #e6e6e6 18%,#bee8f4 56%,#e6e6e6 100%); 
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6e6e6', endColorstr='#e6e6e6',GradientType=0 );
+*/
+ background: @tableBodyTopBackgroundColor; /* Old browsers */
+ background: -moz-linear-gradient(top, @tableBodyTopBackgroundColor 0%, @tableBodyBottomBackgroundColor 100%); /* FF3.6+ */
+ background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@tableBodyTopBackgroundColor), color-stop(100%,@tableBodyBottomBackgroundColor)); /* Chrome,Safari4+ */
+ background: -webkit-linear-gradient(top, @tableBodyTopBackgroundColor 0%,@tableBodyBottomBackgroundColor 100%); /* Chrome10+,Safari5.1+ */
+ background: -o-linear-gradient(top, @tableBodyTopBackgroundColor 0%,@tableBodyBottomBackgroundColor 100%); /* Opera 11.10+ */
+ background: -ms-linear-gradient(top, @tableBodyTopBackgroundColor 0%,@tableBodyBottomBackgroundColor 100%); /* IE10+ */
+ background: linear-gradient(to bottom, @tableBodyTopBackgroundColor 0%,@tableBodyBottomBackgroundColor 100%); /* W3C */
+ .RoundedShape(@roundedCornersRadius);
+ .Shadow();
+}
+
+/*Text color of controls in a table */
+.touconTable .sapMInputBaseReadonlyInner {
+	color: white !important;
+}
+/*Table border radius*/
+.touconTable .sapUiTableColHdrCnt {
+  border-top-left-radius: @roundedCornersRadius;
+  border-top-right-radius: @roundedCornersRadius;
+}
+.touconTable .sapUiTableCCnt {
+  border-bottom-left-radius: @roundedCornersRadius;
+  border-bottom-right-radius: @roundedCornersRadius;
+}
+.touconTable .sapUiTableCol, 
+.touconTable .sapUiTableColRowHdr {
+  background-color: @tableHeaderBackgroundColor !important;
+}
+.touconTable .sapUiTableCol .sapUiLbl {
+  color: @tableHeaderTextColor !important;
+  font-weight: bold !important;
+} 
+.touconTable .sapUiTableRowHvr,
+.touconTable .sapUiTableRowHvr > td > div,
+.touconTable .sapUiTableRowHvr > td,
+.touconTable .sapUiTableRowHdr.sapUiTableRowHvr,
+.touconTable .sapUiTableRowHdr.sapUiTableRowSel.sapUiTableRowHvr {
+  background-color: @tableRowHoverBackgroundColor !important;
+  width: 100%;
+  height: 32px;
+  line-height: 32px;
+}
+.touconTable .sapUiTableRowSel,
+.touconTable .sapUiTableRowSel>td>div,
+.touconTable .sapUiTableRowSel>td,
+.touconTable .sapUiTableRowHdr.sapUiTableRowSel {
+	background-color: @tableRowSelectedBackgroundColor !important;
+  width: 100%;
+  height: 32px;
+  line-height: 32px;
+}
+/*this avoids to display the standard hover gray*/
+.touconTable .sapUiTableRowHidden .sapUiTableCell {
+	visibility:visible !important;
+}
+/*this hides the contents of the cells that are supposed to be hidden*/
+.touconTable .sapUiTableRowHidden .sapUiTableCell > div,
+.touconTable .sapUiTableRowHidden .sapUiTableCell > span {
+	visibility:hidden !important;
+}
+.touconTable div.sapUiTableColRowHdr,
+.touconTable div.sapUiTableRowHdrScr {
+  width: @tableSelectColumnWidth;
+}
+.touconTable div.sapUiTableCtrlScr,
+.touconTable div.sapUiTableColHdrScr {
+  margin-left: @tableSelectColumnWidth !important;
+}
+.touconTableSelectToOpen div.sapUiTableColRowHdr:after {
+  content: @tableOpenHeaderText;
+  font-weight: normal;
+  font-size: 14px;
+  color: #000000;
+  width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 20px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: inherit;
+  text-align: center;
+}
+.touconTableSelectToEdit div.sapUiTableColRowHdr:after {
+  content: @tableEditHeaderText;
+  font-weight: normal;
+  font-size: 14px;
+  color: #000000;
+  width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 20px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: inherit;
+  text-align: center;
+}
+.touconTableSelectToOpen div.sapUiTableRowHdr {
+  background-image: url(@tableOpenActionIcon);
+  background-repeat: no-repeat;
+  background-position: center;
+  width: @tableSelectColumnWidth;
+}
+.touconTableSelectToEdit div.sapUiTableRowHdr {
+  background-image: url(@tableEditActionIcon);
+  background-repeat: no-repeat;
+  background-position: center;
+  width: @tableSelectColumnWidth;
+}
+.touconTableEditableColumn {
+  background-color: @tableEditableColumnBackgroundColor !important;
+}
+.touconTableEditableColumn .sapMLabel {
+  color: @tableEditableColumnTextColor !important;
+  font-weight: bold !important;
+}
+.touconTableEditableCell {
+  background-color: @tableEditableCellBackgroundColor !important;
+}
+/*Calendar container*/
+.touconCalendar {
+	height: 500px;
+	overflow: hidden;
+	border: 1px solid @calendarBorderColor;
+}
+.touconCalendar:hover {
+	overflow: auto;
+}
+/*Calendar table, sub-tables and sub-table of the time column*/
+.touconCalendarTable {
+	background-color: transparent;
+	border-collapse: collapse;
+	border: 1px solid @calendarTableBorderColor;
+	font-family: Arial;
+}
+.touconCalendarTable table {
+	background-color: transparent;
+	border-collapse: collapse;
+	border: 0;
+}
+.touconCalendarTimeColumn {
+	width: 100%;
+}
+/*Calendar table header*/
+.touconCalendarTable > tbody > tr > th {
+	background-color: @calendarHeaderBackgroundColor;
+	border: 1px solid @calendarTableBorderColor;
+	height: 30px;
+	vertical-align: middle;
+	padding-left:3px;
+	padding-right:3px;
+}
+/*Calendar cells, main column cells and cells of the time column*/
+.touconCalendarTable td {
+	vertical-align: top;
+	padding:0px;
+}
+.touconCalendarTable > tbody > tr > td {
+	background-color: white;
+	border: 1px solid @calendarTableBorderColor;
+	padding-top:0px;
+	padding-left:0px;
+	padding-right:3px;
+}
+.touconCalendarTimeColumn td {
+	padding-left:3px;
+	padding-right:0px;
+	width: 100%;
+}
+/*Calendar time and appointment divs and their content divs*/
+.touconCalendarTimeColumn td > div {
+	background-color: @calendarTimeBackgroundColor;
+	min-width: @calendarTimeWidth;
+	text-align: center;
+	width: 100%;
+}
+.touconCalendarTimeColumn td > div > div {
+	text-align: center;
+	padding: 2px;
+}
+.touconCalendarDayColumn td > div {
+	background-color: @calendarAppointmentBackgroundColor;
+ 	.RoundedShape(@roundedCornersRadius);
+	min-width: @calendarAppointmentWidth;
+	margin-left:3px;
+	overflow-y: hidden;
+}
+.touconCalendarDayColumn td > div:hover {
+	overflow-y: auto;
+}
+.touconCalendarDayColumn td > div > div {
+ 	padding: 2px;
 }
