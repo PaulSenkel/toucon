@@ -1,7 +1,8 @@
+jQuery.sap.require("toucon.NotificationBar");
 /**
- * TODO
  * @param {string} [title] title of the Popup
  * @param {string} [icon] URL to an icon, e.g. sap-icon://home
+ * @param {boolean} [useNotificationBar] default=true; defines whether this popup's subHeader consists of a toucon.NotificationBar (hidden by default)
  *
  * @desc The Popup control is sap.m.Dialog with a custom header which includes a (x) close button.
  * <br> The CSS of this popup will automatically hide the title bar if the added content is a sap.m.Page.
@@ -34,6 +35,7 @@ var touconPopup = sap.m.Dialog.extend("toucon.Popup", {
 			//title : { type: "string", defaultValue: "" },
 			closeButtonIcon : { type: "string", defaultValue: "sap-icon://sys-cancel" },
 			closeButtonText : { type: "string", defaultValue: "" },			
+			useNotificationBar : { type: "boolean", defaultValue: true}
 		},
 		aggregations: {
 		}
@@ -43,6 +45,7 @@ var touconPopup = sap.m.Dialog.extend("toucon.Popup", {
 	_closeButton: null,
 	_headerTitle: null,
 	_headerBar: null,
+	_notificationBar: null,
 	/**
 	 * @desc Releases private variables
 	 *
@@ -64,6 +67,10 @@ var touconPopup = sap.m.Dialog.extend("toucon.Popup", {
             this._headerTitle.destroy();
             delete this._headerTitle;
         }
+		if (this._notificationBar) {
+			this._notificationBar.destroy();
+			delete this._notificationBar;
+		}
     },
 	/**
 	 * @desc Initializes the header and its close button and applies CSS classes.
@@ -97,8 +104,23 @@ var touconPopup = sap.m.Dialog.extend("toucon.Popup", {
 		}).addStyleClass("touconPopupHeader");//dialogBrandedHeader
 
 		this.setCustomHeader(this._headerBar);
+		
+		this._notificationBar=new toucon.NotificationBar({visible:false});
+		
 		this.setType(sap.m.DialogType.Message);
 		console.log(this);
+	},
+	/**
+	 * @desc Through this function we grant direct access to the notificationBar which can also be called
+	 * through the getSubHeader function of the popup as it is added as such
+	 *
+	 * @function
+	 * @since 1.0
+	 * @public
+	 * @memberOf toucon-Popup
+	 */
+	getNotificationBar : function () {
+		return this._notificationBar;
 	},
 	/**
 	 * @param {RenderManager} [oRm] 
@@ -119,6 +141,13 @@ var touconPopup = sap.m.Dialog.extend("toucon.Popup", {
 		oControl._closeButton.setText(oControl.getCloseButtonText());
 		oControl._closeButton.setIcon(oControl.getCloseButtonIcon());
 		
+		if (oControl.getUseNotificationBar()==true) {
+//			&& (oControl.getNotificationBar()===undefined || oControl.getNotificationBar()===null)) {
+//			oControl.setNotificationBar(new toucon.NotificationBar());
+			oControl.setSubHeader(oControl._notificationBar);
+			if (oControl._notificationBar.hasMessages()==false)	oControl._notificationBar.setVisible(false);
+		}
+
 		//We call the default renderer for this object as we do not want to do anything special
 		sap.m.DialogRenderer.render(oRm, oControl);
 	}

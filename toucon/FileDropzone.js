@@ -38,7 +38,9 @@ var touconFileDropzone = sap.ui.core.Control.extend("toucon.FileDropzone", {
     metadata : {                              
         properties : {
         	"options" : {type: "object", defaultValue: null},
-           	"cssUrl" : { type: "string", defaultValue: "res/toucon-extlibs/dropzone.css"},
+           	"cssUrl" :  {type: "string", defaultValue: "res/toucon-extlibs/dropzone.css"},
+           	"visible" : {type: "boolean", defaultValue: true },
+           	"authorized" : {type: "boolean", defaultValue: true }
         },
         aggregations : {
         }
@@ -84,7 +86,9 @@ var touconFileDropzone = sap.ui.core.Control.extend("toucon.FileDropzone", {
      * @memberOf toucon-FileDropzone
 	 */
 	onAfterRendering: function() {
-		this.dropzone = new Dropzone("#"+this.getId(), this.getOptions());
+    	if (this.getVisible()==true && this.getAuthorized()==true) {
+    		this.dropzone = new Dropzone("#"+this.getId(), this.getOptions());
+    	}
 	},
 	/**
 	 * @param {RenderManager} [oRm] 
@@ -100,10 +104,16 @@ var touconFileDropzone = sap.ui.core.Control.extend("toucon.FileDropzone", {
      * @memberOf toucon-FileDropzone
 	 */
     renderer : function(oRm, oControl) {
+    	if (oControl.getVisible()==true) {
 			oRm.write("<div"); 
 			oRm.writeControlData(oControl);
 			oRm.addClass("dropzone");
 			oRm.writeClasses();
+			oRm.write(">");
+			if (oControl.getAuthorized()==false) {
+				oRm.write("<center>You are not authorized to upload documents.</center>");
+			}
 			oRm.write("</div>");
+    	}
     }
 });

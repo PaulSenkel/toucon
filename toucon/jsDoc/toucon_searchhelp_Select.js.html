@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: toucon/searchhelp/Select.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: toucon/searchhelp/Select.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @param {string} [serviceUrl] the URL of the data service
+ * @param {string} [searchHelpId] name of the backend value help
+ * @param {string} [keyField] name of the SAP column whose data should be written back to the data model
+ * @param {string} [keyBindingPath] path against which the selectedKey property will be bound
+ * @param {string} [valueField] name of the SAP column from which the display value should be retrieved
+ * @param {boolean} [displayKey] decides if the KEY will be combined with the VALUE for display as "KEY - VALUE"
+ * @param {sap.ui.model.Model} [listModel] enables us to provide an external model instead of loading one from the serviceUrl 
+ * if too many results have been returned (also used by the TableSelectDialog if the search 
+ * still returns too many results.
+ *
+ * @fires beforeRendering: at the beginning of the rendering process, before any actual rendering has been done
+ * @fires modelBuilt: when the listModel has been generated internally and attached to this control
+ * @fires bindingTriggered: when the triggerBinding function has finished 
+ * @fires cannotInitialize: when no listModel has been found and no serviceUrl/searchHelpId enables us to generate the model
+ * 
+ * @desc The searchhelp.Select is a drop down field which creates its own List model based on the serviceUrl and searchHelpId
+ * unless the listModel is set externally.
+ * 
+ * @extends sap.m.Select
+ * @returns sap.m.Select
+ *
+ * @class
+ * @author Tobias Gelhardt, Paul Senkel
+ * @version 1.0
+ *
+ * @constructor
+ * @public
+ * @alias searchhelp-Select
+ */
+var touconSearchhelpSelect = sap.m.Select.extend("toucon.searchhelp.Select", {
+	metadata : {
+		properties : {
+			serviceUrl : { type: "string", defaultValue: "" },
+			searchHelpId : { type: "string", defaultValue: null },
+			keyField :  { type: "string", defaultValue: null },
+			keyBindingPath :  { type: "string", defaultValue: null },
+			valueField :  { type: "string", defaultValue: null },
+			displayKey : { type: "boolean", defaultValue: false},
+			_initialized : { type: "boolean", defaultValue: false}
+		},
+		aggregations : {
+			listModel : { type: "sap.ui.model.Model", multiple: false, visibility: "public"},
+//			callBack : { multiple: false, visibility: "public"}
+		},
+		events : {
+			beforeRendering :  {enablePreventDefault : true},
+			modelBuilt :  {enablePreventDefault : true},
+			bindingTriggered :  {enablePreventDefault : true},
+			cannotInitialize : {enablePreventDefault : true},//fired when init was called
+//			ready : {enablePreventDefault : true}//fired when model was build and binding has been triggered
+		}
+	},
+
+	/**
+	 * @desc Applies the standard arguments to the sap.m.Select prototype.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+     * @memberOf searchhelp-Select
+	 */
+	init: function() {
+		if (sap.m.Select.prototype.init) {             
+			sap.m.Select.prototype.init.apply(this, arguments);
+		}
+	},
+
+	/**
+	 * @desc Fires the beforeRendering event.
+	 * &lt;br>Binds the keyBindingPath to the selectedKey.
+	 * &lt;br>Then triggers the binding process if a model is present
+	 * &lt;br>or builds a model if a serviceUrl and a searchHelpId is provided, then triggers the binding
+	 * &lt;br>or fires the cannotInitialize event.
+	 * 
+	 * @fires beforeRendering
+	 * @fires cannotInitialize
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+     * @memberOf searchhelp-Select
+	 */
+	onBeforeRendering : function () {
+		//console.log("Select.onBeforeRendering");
+		this.fireBeforeRendering();
+		var oControl=this;
+		//Telling this control from where it will determine which key is selected
+		if (oControl.getKeyBindingPath()!=null &amp;&amp; oControl.getKeyBindingPath()!=""){
+			oControl.bindProperty("selectedKey", {
+				path: oControl.getKeyBindingPath()
+			});
+		}
+		
+		//If this control's list was not yet initialized, but if we have a valid model
+		//Then we apply the model (which will also set this control's state to initialized)
+		if (this.getProperty("_initialized")==false &amp;&amp; this.getListModel()!=null){
+		//console.log(this.getListModel());
+//			console.log("Using existing model");
+			this.triggerBinding();
+		}
+		//If we do not have a valid model, then let's try to build one if we have what it takes
+		else if (this.getProperty("_initialized")==false &amp;&amp; this.getServiceUrl()!="" &amp;&amp; oControl.getSearchHelpId()!="") {
+			//Build model and then trigger the binding in the attachedRequestCompleted
+			this.buildModel(this.triggerBinding.bind(oControl));
+		}
+		else {
+			this.fireCannotInitialize();
+//			console.log("Select: we do not have a model, we have no serviceUrl and searchHelpId either. We cannot render properly like this.");
+//			console.log("Please make sure that you setListModel and triggerBinding or that you provide a serviceUrl and searchHelpId.");
+		}
+	},
+
+	 /**
+	 * @param {RenderManager} [oRm] 
+	 * @param {Control} [oControl] this control
+	 *
+	 * @desc Calls the sap.m.SelectRenderer.render function.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf searchhelp-Select
+	 */
+	renderer: function(oRm, oControl) {
+		//console.log("SearchHelpSelect.renderer");
+		sap.m.SelectRenderer.render(oRm, oControl);
+	},
+	
+	/**
+	 * @param {function} [callBack] function which should be executed when the attachRequestCompleted
+	 * function of the model has finished.
+	 * 
+	 * @desc Retrieves the attributes by calling [serviceUrl]/SearchHelpSet('[searchHelpId]')/AttributeSet?$select=Fieldname,ScrtextL,Datatype,Shlpinput,Shlpoutput,Shlpselpos,Shlplispos,Defaultval&amp;$format=json
+	 * &lt;br>
+	 * Then retrieves the values by calling [serviceUrl]/ValueSetBySearchString/?searchHelpName='[searchHelpId]'&amp;searchString='[selectOptions]'?$select=Fieldname,Recordpos,Fieldval,Retfield&amp;$format=json
+	 * &lt;br>
+	 * Transforms the received ODATA-JSON to a flat JSON model and sets it as listModel.
+	 * &lt;br>
+	 * Finally fires the modelBuilt event and executes the eventual callBack function.
+	 * 
+	 * @fires modelBuilt: will be fired just before the callBack function will be executed.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+     * @memberOf searchhelp-Select
+	 */
+	buildModel : function (callBack) {
+		//console.log("Select.buildModel");
+		var oControl=this;
+		// Lese Attribute der Suchhilfe
+		var oAttributesModel = new sap.ui.model.json.JSONModel();
+		var attributeSetURL = oControl.getServiceUrl() + "/SearchHelpSet('" + oControl.getSearchHelpId() + "')/AttributeSet?$format=json";
+		var attributeSetQueryString ="$select=Fieldname,ScrtextL,Datatype,Shlpinput,Shlpoutput,Shlpselpos,Shlplispos,Defaultval&amp;$format=json";
+		oAttributesModel.loadData(attributeSetURL, attributeSetQueryString);
+		oControl.setModel(oAttributesModel,"SearchHelpAttributes");
+		oAttributesModel.attachRequestCompleted(null, (function (callBack){
+			var oControl = this;			
+			var oAttributesModel = this.getModel("SearchHelpAttributes");
+			var attributes = oAttributesModel.getProperty("/d/results") ;
+			//Selektionsoptionen aufbauen
+			var selectOptions = oControl.buildSelectOptions(attributes);
+
+			var oValuesModel = new sap.ui.model.json.JSONModel();
+			var valueSetURL = oControl.getServiceUrl() + "/ValueSetBySearchString/?searchHelpName='" + oControl.getSearchHelpId() + "'&amp;searchString='" + selectOptions + "'" ;
+			var valueSetQueryString ="$select=Fieldname,Recordpos,Fieldval,Retfield&amp;$format=json";
+			oValuesModel.loadData(valueSetURL, valueSetQueryString);
+			this.setModel(oValuesModel,"SearchHelpResults");
+			oValuesModel.attachRequestCompleted(null, (function (callBack){
+				var oControl = this;			
+				var oValuesModel = this.getModel("SearchHelpResults");
+				var values = oValuesModel.getProperty("/d/results") ;
+				var transformedValues =  [];//{"d":{"results":[] }};
+
+				//Transforming it to a classical column model
+				values.forEach(function(value) {
+					var pos = value.Recordpos;
+					var fieldname = value.Fieldname;
+					var fieldValue = value.Fieldval;
+
+					var index = parseInt(pos);// - 1;We effectively start the model at 1, this leaves a convenient empty entry at 0
+					if(transformedValues[index] == null) {//.d.results
+						transformedValues[index] = {};//.d.results
+					}      	  
+
+					transformedValues[index][fieldname] = fieldValue;//.d.results
+				});
+
+				oTransformedValuesModel = new sap.ui.model.json.JSONModel(transformedValues);
+				//oTransformedValuesModel.setDefaultBindingMode(sap.ui.model.BindingMode.OneWay);
+				oControl.setListModel(oTransformedValuesModel);
+
+				this.fireModelBuilt();
+				//Fill the list
+				//console.log("Executing buildModel's callback (triggerBinding)");
+				if (callBack) callBack;
+				
+			}).bind(oControl,callBack));
+		}).bind(oControl,callBack));
+	},
+	
+	/**
+	 * @desc Takes the listModel if it exists and applies it as named "List" model to this control.
+	 * &lt;br>
+	 * Then prepares the key and text bindings in a sap.ui.core.Item template and binds the items to the control.
+	 * &lt;br>
+	 * Finally binds the keyBindingPath to the selectedKey property and fires the bindingTriggered event.
+	 * 
+	 * @fires bindingTriggered
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+     * @memberOf searchhelp-Select
+	 */
+	triggerBinding : function () {
+		//console.log("Select.triggerBinding");
+		var oControl=this;
+		if (this.getListModel()!=null){
+			//console.log("Select.triggerBinding-using list model");
+			//We need to use a named model in order to avoid interference with the global unnamed model
+			//Otherwise the selection will not work and the main model will not be filled by the selection change
+			oControl.setModel(this.getListModel(),"List");
+			var textBinding = (oControl.getDisplayKey()==true)? '{List>'+oControl.getKeyField()+'} - {List>'+oControl.getValueField()+'}' : '{List>'+oControl.getValueField()+'}';
+			var itemTemplate = new sap.ui.core.Item({
+				key: '{List>'+oControl.getKeyField()+'}',
+				text: textBinding
+			});
+			oControl.bindItems("List>/",itemTemplate);// /d/results
+			oControl.setProperty("_initialized",true);
+
+			//Telling this control from where it will determine which key is selected
+			//We do this here again as it does not seem to "take" if we do this in onBeforeRendering if the model is not yet defined
+			if (oControl.getKeyBindingPath()!=null &amp;&amp; oControl.getKeyBindingPath()!=""){
+				oControl.bindProperty("selectedKey", {
+					path: oControl.getKeyBindingPath()
+				});
+			}
+		}
+		
+		this.fireBindingTriggered();
+	},
+
+	 /**
+	 * @param {object[]} [attributes] 
+	 * 
+	 * @desc Builds the selection criteria for all attributes with Shlpinput == "X" and Defaultval != ""
+	 * 
+	 * @function
+	 * @returns {string} [mySelectOptions] URL parameter string
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf searchhelp-Select
+	 */
+	buildSelectOptions: function(attributes){
+		// Selektionsoptionen der Suchhilfe aufbauen
+		var mySelectOptions = "";
+		if((attributes===undefined)==false) {
+			attributes.forEach(function(attribute) {
+				if(attribute.Shlpinput == 'X') {
+					var fieldname = attribute.Fieldname;
+					if(attribute.Defaultval &amp;&amp; attribute.Defaultval != "") {
+						if(mySelectOptions != "") {
+							mySelectOptions = mySelectOptions + "%26";
+						}
+						mySelectOptions = mySelectOptions + fieldname + "=" + attribute.Defaultval;
+					}
+				}
+			});
+		}
+		return mySelectOptions;
+	}
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NotificationBarComponent.html">NotificationBarComponent</a></li><li><a href="searchhelp-Input.html">searchhelp-Input</a></li><li><a href="searchhelp-Input-ResultsDialog.html">searchhelp-Input-ResultsDialog</a></li><li><a href="searchhelp-Select.html">searchhelp-Select</a></li><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-Calendar.html">toucon-Calendar</a></li><li><a href="toucon-DateChooser.html">toucon-DateChooser</a></li><li><a href="toucon-FacebookButton.html">toucon-FacebookButton</a></li><li><a href="toucon-FileDropzone.html">toucon-FileDropzone</a></li><li><a href="toucon-FileUploader.html">toucon-FileUploader</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-ImageSlider.html">toucon-ImageSlider</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-Link.html">toucon-Link</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-NotificationBar.html">toucon-NotificationBar</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-Popup.html">toucon-Popup</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Table.html">toucon-Table</a></li><li><a href="toucon-TableColumn.html">toucon-TableColumn</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-Tree.html">toucon-Tree</a></li><li><a href="toucon-TreeNode.html">toucon-TreeNode</a></li><li><a href="toucon-type-BIC.html">toucon-type-BIC</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-EmailAddress.html">toucon-type-EmailAddress</a></li><li><a href="toucon-type-IBAN.html">toucon-type-IBAN</a></li><li><a href="toucon-type-Number.html">toucon-type-Number</a></li><li><a href="toucon-type-PhoneNumber.html">toucon-type-PhoneNumber</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li><li><a href="toucon-YelpBadge.html">toucon-YelpBadge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu Jul 16 2015 11:52:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

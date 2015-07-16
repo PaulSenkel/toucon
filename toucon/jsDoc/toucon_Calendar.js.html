@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: toucon/Calendar.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: toucon/Calendar.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @param {int} [startHour] the time with which you want to start (e.g. 6 for 6am)
+ * @param {int} [numberOfHours] the number of hours you want to display (e.g. 12 if you want to go up to 18:00)
+ * @param {int} [slicesPerHour] 1 for the full hour, 2 for half hours, 4 for quarter hours etc.
+ * @param {int} [appointmentTopMargin] offset in px which the appointments should have from one another
+ * @param {int} [heightPerMinute] height in px, if set to 1, then one hour will be 60px high
+ * @param {array} [data] the data array
+ *
+ * @desc This control permits to display appointments for several days. 
+ * &lt;br>Conflicting appointments are supported and will be rendered in as 
+ * many parallel columns as required.
+ * &lt;br>&lt;br>
+ * The data array must conform to the following structure:
+ * &lt;br>An array which contains the days (columns): [day1,day2,...]
+ * &lt;br>Each day must be an object as follows: {title:"Title day#1",slices: [appointment1, appointment2, ...]}
+ * &lt;br>All appointments must come in a chronological order, sorted by their start time.
+ * &lt;br>Each appointment must be an object as follows (example for an appointment from 6:00 to 9:00): {fromhour:"6",fromminute:"0",tohour:"9",tominute:"0",title:"Title of the appointment",description:"Description of the appointment"}
+ * 
+ * @extends sap.ui.core.Control
+ * @returns sap.ui.core.Control
+ *
+ * @class
+ * @author Paul Senkel
+ * @copyright 2015 Paul Senkel
+ * @license Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * @version 1.01
+ *
+ * @constructor
+ * @public
+ * @alias toucon-Calendar
+ */
+var touconCalendar = sap.ui.core.Control.extend("toucon.Calendar", {                         
+    metadata : {                              
+        properties : {
+			"startHour" : { type: "int", defaultValue: 6 },//start display at 6am
+			"numberOfHours" : { type: "int", defaultValue: 12 },//display 12h up to 6pm
+			"slicesPerHour" : { type: "int", defaultValue: 4 },//display slices of 15 minutes
+			"appointmentTopMargin" : { type: "int", defaultValue: 3 },//leaves 3px space between the appointments
+			"heightPerMinute" : { type: "int", defaultValue: 2 },//pixels per minute
+			"data" : { type: "object", defaultValue: null}//the data array
+        }
+    },
+	 /**
+	 * @desc Returns the Id of the main table.
+	 * 
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf toucon-Calendar
+	 */
+    getTableId : function () {
+    	return this.getId()+"-table";
+    },
+	 /**
+	 * @param {RenderManager} [oRm] 
+	 * @param {Control} [oControl] this control
+	 *
+	 * @desc Renders a table inside a div. The table consists of two rows, one for the header, the other
+	 * for the actual data.
+	 * &lt;br>&lt;br>
+	 * The first data cell visualizes the time slots. They are generated based on the start hour, 
+	 * the number of hours and the number of slices per hour which we want to display.
+	 * &lt;br>
+	 * If we start at 6, go for 12 hours with 4 slices, then this will generate 6:00, 6:15, 6:30, 6:45, 7:00 etc.
+	 * &lt;br>&lt;br>
+	 * The following data cells contain inner tables wo that we can have several columns for displaying
+	 * parallel appointments.
+	 * &lt;br>
+	 * Before we render the divs which represent the appointments we will first check in how far they are
+	 * conflicting and then add more columns as required. At the same time we always check if the current
+	 * appointment may fit into a previous column so as to create only new columns if really required
+	 * (e.g. a further appointment may conflict with column #2, but not necessarily with column #1)
+	 * 
+	 * @function
+	 * @implements CSS: touconCalendar, touconCalendarTable, touconCalendarTimeColumn, touconCalendarDayColumn
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf toucon-Calendar
+	 */
+    renderer : function(oRm, oControl) {
+    	var days = oControl.getData();//daysWithTimeSlices;
+    	var numHours = oControl.getNumberOfHours();
+    	var startHour = oControl.getStartHour();
+    	var slicesPerHour = oControl.getSlicesPerHour();
+    	var topMargin = oControl.getAppointmentTopMargin();
+    	var heightPerMinute = oControl.getHeightPerMinute();
+
+    	oRm.write("&lt;div"); 
+    	oRm.writeControlData(oControl);
+    	oRm.addClass("touconCalendar");
+    	oRm.writeClasses();
+    	oRm.write(">");
+    	if ((days===undefined)==false &amp;&amp; (days===null)==false &amp;&amp; (days.length===undefined)==false) {
+    		
+    		oRm.write("&lt;table id='"+oControl.getTableId()+"' class=touconCalendarTable>&lt;tr>");
+    		//write headers
+    		oRm.write("&lt;th>Uhrzeit&lt;/th>");
+    		for (var d=0; d&lt;days.length;d++) {
+    			oRm.write("&lt;th>"+days[d].title+"&lt;/th>");
+    		}
+    		oRm.write("&lt;/tr>&lt;tr>"); 
+    		//write time column
+    		oRm.write("&lt;td>&lt;table class=touconCalendarTimeColumn>&lt;tr>&lt;td>");
+    		for (var h=startHour;h&lt;(startHour+numHours);h++) {
+    			for (var s=0; s&lt;slicesPerHour; s++){
+    				hr = h; if (hr&lt;10) hr="0"+hr;
+    				mn = (s*60/slicesPerHour); if (mn&lt;10) mn="0"+mn;
+    				var height = 60/slicesPerHour*heightPerMinute-topMargin;
+    				oRm.write("&lt;div style='margin-top:"+topMargin+"px;height:"+height+"px'>&lt;div>"+hr+":"+mn+"&lt;/div>&lt;/div>");
+    			}
+    		}
+    		oRm.write("&lt;/td>&lt;/tr>&lt;/table>&lt;/td>");
+    		//write daily appointments
+    		for (var d=0; d&lt;days.length;d++) {
+    			oRm.write("&lt;td>&lt;table>&lt;td>&lt;table class=touconCalendarDayColumn>&lt;tr>&lt;td>");
+    			var times = days[d].slices;
+    			//split slices into several columns if required
+    			var columns = [];
+    			var column = {lasttohour:startHour,lasttominute:0,incolumns:false,slices:[]};
+    			for (var t=0; t&lt;times.length;t++) {
+    				var ts = times[t];
+    				var fh = parseInt(ts.fromhour);
+    				var fm = parseInt(ts.fromminute);
+    				var th = parseInt(ts.tohour);
+    				var tm = parseInt(ts.tominute);
+    				//If this slice starts before the previous one ended, start a new column
+    				if (fh&lt;column.lasttohour || (fh==column.lasttohour &amp;&amp; fm&lt;column.lasttominute)) {
+    					//pushing current column to array if not already done
+    					if (column.incolumns==false) {
+    						column.incolumns=true;
+    						columns.push(JSON.parse(JSON.stringify(column)));
+    					}
+    					//creating a new column by default
+    					column = {lasttohour:startHour,lasttominute:0,incolumns:false,slices:[]};
+    					//try to find a suitable column and use this one instea
+    					for (var c=0; c&lt;columns.length; c++) {
+    						if (columns[c].lasttohour&lt;fh || (columns[c].lasttohour==fh &amp;&amp; columns[c].lasttominute&lt;=fm)) {
+    							column = columns[c];
+    							break;
+    						}
+    					}
+    				}
+    				column.slices.push(ts);
+    				column.lasttohour=th;
+    				column.lasttominute=tm;
+    			}
+    			//add the last one if required
+    			if (column.incolumns==false) {
+    				column.incolumns=true;
+    				columns.push(column);
+    			}
+
+    			for (var c=0; c&lt;columns.length; c++) {
+    				var times = columns[c].slices;
+    				var lasttohour = startHour;
+    				var lasttominute = 0;
+    				for (var t=0; t&lt;times.length;t++) {
+    					var ts = times[t];
+    					var fh = parseInt(ts.fromhour);
+    					var fm = parseInt(ts.fromminute);
+    					var th = parseInt(ts.tohour);
+    					var tm = parseInt(ts.tominute);
+    					var height = ((th*60+tm)-(fh*60+fm))*heightPerMinute-topMargin;
+    					var offset = ((fh*60+fm)-(lasttohour*60+lasttominute))*heightPerMinute+topMargin;
+    					oRm.write("&lt;div style='margin-top:"+offset+"px;height:"+height+"px'>&lt;div>"+ts.title+"&lt;br>"+ts.description+"&lt;/div>&lt;/div>");
+    					lasttohour=th;
+    					lasttominute=tm;
+    				}
+    				oRm.write("&lt;/td>&lt;/tr>&lt;/table>&lt;/td>");
+    				//Start a new column
+    				if (c&lt;columns.length-1) oRm.write("&lt;td>&lt;table class=touconCalendarDayColumn>&lt;tr>&lt;td>");
+    			}
+
+    			oRm.write("&lt;/table>&lt;/td>");
+    		}
+    		oRm.write("&lt;/tr>&lt;/table>"); 
+    	}
+    	oRm.write("&lt;/div>");
+    }
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NotificationBarComponent.html">NotificationBarComponent</a></li><li><a href="searchhelp-Input.html">searchhelp-Input</a></li><li><a href="searchhelp-Input-ResultsDialog.html">searchhelp-Input-ResultsDialog</a></li><li><a href="searchhelp-Select.html">searchhelp-Select</a></li><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-Calendar.html">toucon-Calendar</a></li><li><a href="toucon-DateChooser.html">toucon-DateChooser</a></li><li><a href="toucon-FacebookButton.html">toucon-FacebookButton</a></li><li><a href="toucon-FileDropzone.html">toucon-FileDropzone</a></li><li><a href="toucon-FileUploader.html">toucon-FileUploader</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-ImageSlider.html">toucon-ImageSlider</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-Link.html">toucon-Link</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-NotificationBar.html">toucon-NotificationBar</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-Popup.html">toucon-Popup</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Table.html">toucon-Table</a></li><li><a href="toucon-TableColumn.html">toucon-TableColumn</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-Tree.html">toucon-Tree</a></li><li><a href="toucon-TreeNode.html">toucon-TreeNode</a></li><li><a href="toucon-type-BIC.html">toucon-type-BIC</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-EmailAddress.html">toucon-type-EmailAddress</a></li><li><a href="toucon-type-IBAN.html">toucon-type-IBAN</a></li><li><a href="toucon-type-Number.html">toucon-type-Number</a></li><li><a href="toucon-type-PhoneNumber.html">toucon-type-PhoneNumber</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li><li><a href="toucon-YelpBadge.html">toucon-YelpBadge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu Jul 16 2015 11:52:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

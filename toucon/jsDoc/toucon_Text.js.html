@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: toucon/Text.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: toucon/Text.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @param {string} [text] the text
+ * @param {string} [indentLevel] integer string or value which will be translated  by the indentRules mapping
+ * valid integer string by the indentRules mapping
+ * @param {object} [indentRules] a map which translates the value passed in "indentLevel" to a valid integer string
+ * @param {string} [color] a web color, e.g. #ff0000, OR a value which will be translated by the colorRules mapping
+ * @param {string} [hAlign] right, left or center
+ * @param {string} [width] CSS width, default is 100% if bgColor is set, otherwise null
+ * @param {object} [colorRules] a map which translates the value passed in "color" to a valid web color
+ * @param {string} [bgColor] a web color, e.g. #ff0000, OR a value which will be translated by the colorRules mapping
+ * @param {object} [bgColorRules] a map which translates the value passed in "bgColor" to a valid web color
+ * @param {float} [indentBy] used for indenting the text in rem units depending on the passed indentLevel, defaultValue is 1.5
+ *
+ * @desc A text which can be indented and colored based on mapped rules
+ * 
+ * @extends sap.m.Text
+ * @returns sap.m.Text
+ *
+ * @class
+ * @author Paul Senkel
+ * @copyright 2015 Paul Senkel
+ * @license Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * @version 1.0
+ *
+ * @constructor
+ * @public
+ * @alias toucon-Text
+ */
+var touconText = sap.m.Text.extend("toucon.Text", {  
+	metadata: {  
+		properties: {  
+			"text" : { type: "string", defaultValue: null },
+			"hAlign" : { type: "string", defaultValue: null },
+			"width" : { type: "string", defaultValue: null },
+			"indentLevel" : { type: "string", defaultValue: null },
+			"color" : { type: "string", defaultValue: null },
+			"bgColor" : { type: "string", defaultValue: null },
+			"indentBy" : { type: "float", defaultValue: 1.5 },
+			"indentRules" : { type: "object", defaultValue: null },
+			"colorRules" : { type: "object", defaultValue: null },
+			"bgColorRules" : { type: "object", defaultValue: null }
+		}
+	},  
+	/**
+	 * @param {RenderManager} [oRm] 
+	 * @param {Control} [oControl] this control
+	 *
+	 * @desc Applies the params, resolves the values of indentLevel, color, background color
+	 * against their respective indentRules and colorRules mappings,
+	 * renders the text with the optional indentLevel multiplied with the indentBy parameter
+	 * and the optional color and calls the sap.m.TextRenderer.render function.
+	 * &lt;br>Please note that the width will be automatically be set to 100% if 
+	 * &lt;br>- the background color option is used
+	 * &lt;br>- text is aligned to left or center
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf toucon-Text
+	 */
+	renderer: function(oRm, oControl) {
+		var useDefaultWidth = false;
+		//If we get an indent level
+		if (oControl.getIndentLevel()!=null &amp;&amp; oControl.getIndentLevel()!="") {
+			//No conversion rule is given, use the value directly if integer
+			if (oControl.getIndentRules()==null &amp;&amp; parseInt(oControl.getIndentLevel())==oControl.getIndentLevel()){
+					oRm.addStyle("padding-left",(oControl.getIndentLevel()*oControl.getIndentBy())+"rem");
+			}
+			//Use the value from the provided lookup if defined
+			else if ((oControl.getIndentRules()[oControl.getIndentLevel()]===undefined)==false){
+				oRm.addStyle("padding-left",(oControl.getIndentRules()[oControl.getIndentLevel()]*oControl.getIndentBy())+"rem");
+			}
+		}
+		if (oControl.getHAlign()!=null &amp;&amp; oControl.getHAlign()!="" &amp;&amp; oControl.getHAlign()!="left"){
+			oRm.addStyle("text-align",oControl.getHAlign()+" !important");
+			useDefaultWidth=true;
+		}
+		//If we get a color (or a key that needs conversion9
+		if (oControl.getColor()!=null &amp;&amp; oControl.getColor()!=""){
+			//No conversion rule given, use the value directly
+			if (oControl.getColorRules()==null){
+				oRm.addStyle("color",oControl.getColor());
+			}
+			//Use the value from the provided lookup if defined
+			else if ((oControl.getColorRules()[oControl.getColor()]===undefined)==false){
+				oRm.addStyle("color",oControl.getColorRules()[oControl.getColor()]);
+			}
+		}
+		//If we get a color (or a key that needs conversion9
+		if (oControl.getBgColor()!=null &amp;&amp; oControl.getBgColor()!=""){
+			//No conversion rule given, use the value directly
+			if (oControl.getBgColorRules()==null){
+				oRm.addStyle("background-color",oControl.getBgColor());
+			}
+			//Use the value from the provided lookup if defined
+			else if ((oControl.getBgColorRules()[oControl.getBgColor()]===undefined)==false){
+				oRm.addStyle("background-color",oControl.getBgColorRules()[oControl.getBgColor()]);
+			}
+			useDefaultWidth=true;
+		}
+		if (oControl.getWidth()!=null &amp;&amp; oControl.getWidth()!=""){
+			oRm.addStyle("width",oControl.getWidth());
+			useDefaultWidth=false;
+		}
+		if (useDefaultWidth==true){
+			oRm.addStyle("width","100%");
+		}
+
+		//Use the standard renderer to rendering this prepared control
+		sap.m.TextRenderer.render(oRm, oControl);
+	}
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NotificationBarComponent.html">NotificationBarComponent</a></li><li><a href="searchhelp-Input.html">searchhelp-Input</a></li><li><a href="searchhelp-Input-ResultsDialog.html">searchhelp-Input-ResultsDialog</a></li><li><a href="searchhelp-Select.html">searchhelp-Select</a></li><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-Calendar.html">toucon-Calendar</a></li><li><a href="toucon-DateChooser.html">toucon-DateChooser</a></li><li><a href="toucon-FacebookButton.html">toucon-FacebookButton</a></li><li><a href="toucon-FileDropzone.html">toucon-FileDropzone</a></li><li><a href="toucon-FileUploader.html">toucon-FileUploader</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-ImageSlider.html">toucon-ImageSlider</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-Link.html">toucon-Link</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-NotificationBar.html">toucon-NotificationBar</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-Popup.html">toucon-Popup</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Table.html">toucon-Table</a></li><li><a href="toucon-TableColumn.html">toucon-TableColumn</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-Tree.html">toucon-Tree</a></li><li><a href="toucon-TreeNode.html">toucon-TreeNode</a></li><li><a href="toucon-type-BIC.html">toucon-type-BIC</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-EmailAddress.html">toucon-type-EmailAddress</a></li><li><a href="toucon-type-IBAN.html">toucon-type-IBAN</a></li><li><a href="toucon-type-Number.html">toucon-type-Number</a></li><li><a href="toucon-type-PhoneNumber.html">toucon-type-PhoneNumber</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li><li><a href="toucon-YelpBadge.html">toucon-YelpBadge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu Jul 16 2015 11:52:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

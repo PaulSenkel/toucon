@@ -36,6 +36,7 @@ var touconBox = sap.ui.layout.Grid.extend("toucon.Box", {
 		properties: {  
 			title : { type: "string", defaultValue: null },
 			icon : { type: "string", defaultValue: null },
+			visible : { type: "boolean", defaultValue: true }
 		},
 		aggregations: {
 		}
@@ -119,12 +120,14 @@ var touconBox = sap.ui.layout.Grid.extend("toucon.Box", {
      * @memberOf toucon-Box
 	 */
 	renderer: function(oRm, oControl) {
-		//Here we fill the icon and title
-		oControl.oIcon.setSrc(oControl.getIcon());
-		oControl.oTitle.setText(oControl.getTitle());
-		oControl.oTitle.setTooltip(oControl.getTitle());
-		
-		//We call the default renderer for this object as we do not want to do anything special
-		sap.ui.layout.GridRenderer.render(oRm, oControl);
+		if (oControl.getVisible()==true) {
+			//Here we fill the icon and title
+			oControl.oIcon.setSrc(oControl.getIcon());
+			oControl.oTitle.setText(oControl.getTitle());
+			oControl.oTitle.setTooltip(oControl.getTitle());
+			
+			//We call the default renderer for this object as we do not want to do anything special
+			sap.ui.layout.GridRenderer.render(oRm, oControl);
+		}
 	}
 });

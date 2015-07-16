@@ -118,6 +118,9 @@ var touconDateChooser = sap.ui.layout.Grid.extend("toucon.DateChooser", {
      * @memberOf toucon-DateChooser
 	 */
 	init: function() {
+		if (sap.ui.layout.Grid.prototype.init) {             
+			sap.ui.layout.Grid.prototype.init.apply(this, arguments);
+		}
 		var oControl = this;
 		
 		//Remove margins
@@ -125,7 +128,7 @@ var touconDateChooser = sap.ui.layout.Grid.extend("toucon.DateChooser", {
 		oControl.setVSpacing(0);
 		
 		//Instantiate both date pickers/inputs
-		oControl.oPicker = new sap.m.DatePicker({
+		oControl.oPicker = new sap.m.DatePicker(oControl.getId()+"-picker",{
 	        visible: oControl.getVisible(),
 	        editable: oControl.getEditable(),
 	        layoutData: new sap.ui.layout.GridData({
@@ -136,7 +139,7 @@ var touconDateChooser = sap.ui.layout.Grid.extend("toucon.DateChooser", {
 	        })
 	    });
 		
-		oControl.oInput = new sap.m.DateTimeInput({
+		oControl.oInput = new sap.m.DateTimeInput(oControl.getId()+"-input",{
 	        visible: oControl.getVisible(),
 	        editable: oControl.getEditable(),
 	        layoutData: new sap.ui.layout.GridData({
@@ -156,19 +159,14 @@ var touconDateChooser = sap.ui.layout.Grid.extend("toucon.DateChooser", {
 		oControl.addContent(oControl.oPicker);
 		oControl.addContent(oControl.oInput);
 	},
-	/**
-	 * @param {RenderManager} [oRm] 
-	 * @param {Control} [oControl] this control
-	 *
-	 * @desc Applies the different params and calls the sap.ui.layout.GridRenderer.render function.
-	 *
-	 * @function
-	 * @since 1.0
-	 * @protected
-	 * @static
-     * @memberOf toucon-DateChooser
-	 */
-	renderer: function(oRm, oControl) {
+	getContent: function () {
+		this.onBeforeRendering();
+		
+		return [this.oPicker,this.oInput];
+	},
+	onBeforeRendering: function () {
+		var oControl = this;
+		//console.log("DateChooser - renderer");
 		if ((oControl.getPath()===null)==false && oControl.getPath()!="") {
 			oControl.oPicker.bindValue({
 				path: oControl.getPath()
@@ -177,6 +175,10 @@ var touconDateChooser = sap.ui.layout.Grid.extend("toucon.DateChooser", {
 				path: oControl.getPath()
 			});
 		}
+		oControl.oPicker.setVisible(oControl.getVisible());
+		oControl.oInput.setVisible(oControl.getVisible());
+		oControl.oPicker.setEditable(oControl.getEditable());
+		oControl.oInput.setEditable(oControl.getEditable());
 		if ((oControl.getPlaceholder()===null)==false && oControl.getPlaceholder()!="") {
 			oControl.oPicker.setPlaceholder(oControl.getPlaceholder());
 			oControl.oInput.setPlaceholder(oControl.getPlaceholder());
@@ -199,6 +201,21 @@ var touconDateChooser = sap.ui.layout.Grid.extend("toucon.DateChooser", {
 			oControl.oPicker.mEventRegistry=oControl.mEventRegistry;
 			oControl.oInput.mEventRegistry=oControl.mEventRegistry;
 		}
+		
+	},
+	/**
+	 * @param {RenderManager} [oRm] 
+	 * @param {Control} [oControl] this control
+	 *
+	 * @desc Applies the different params and calls the sap.ui.layout.GridRenderer.render function.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf toucon-DateChooser
+	 */
+	renderer: function(oRm, oControl) {
 
 		//We call the default renderer for this object as we do not want to do anything special
 		sap.ui.layout.GridRenderer.render(oRm, oControl);

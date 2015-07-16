@@ -31,18 +31,19 @@ jQuery.sap.require("toucon.Icon");
  * @alias toucon-Link
  */
 var touconLink = sap.m.Link.extend("toucon.Link", {
-    metadata : {                              
-        properties : {
-           	"text" : {defaultValue: null},
+	metadata : {                              
+		properties : {
+			"text" : {defaultValue: null},
 			"textRules" : { type: "object", defaultValue: null},
-           	"icon" : {defaultValue: null},
-			"iconRules" : { type: "object", defaultValue: null}
-        },
-        aggregations : {
+			"icon" : {defaultValue: null},
+			"iconRules" : { type: "object", defaultValue: null},
+			"visible" : { type: "boolean", defaultValue: true}
+		},
+		aggregations : {
 			_icon : { type: "toucon.Icon", multiple: false, visibility: "hidden"},
-        }
-    },
-    
+		}
+	},
+
 	/**
 	 * @desc Initializes the link and the icon
 	 *
@@ -50,16 +51,16 @@ var touconLink = sap.m.Link.extend("toucon.Link", {
 	 * @implements .touconLinkIcon
 	 * @since 1.0
 	 * @protected
-     * @memberOf toucon-Link
+	 * @memberOf toucon-Link
 	 */
-    init : function () {
+	init : function () {
 		if (sap.m.Link.prototype.init) {             
 			sap.m.Link.prototype.init.apply(this, arguments);
 		}
-    	//we prepare a toucon icon which will translate common values to icons
-    	this.setAggregation("_icon",new toucon.Icon().addStyleClass("touconLinkIcon"));
-    },
-	 /**
+		//we prepare a toucon icon which will translate common values to icons
+		this.setAggregation("_icon",new toucon.Icon().addStyleClass("touconLinkIcon"));
+	},
+	/**
 	 * @param {RenderManager} [oRm] 
 	 * @param {Control} [oControl] this control
 	 *
@@ -72,44 +73,46 @@ var touconLink = sap.m.Link.extend("toucon.Link", {
 	 * @since 1.0
 	 * @protected
 	 * @static
-     * @memberOf toucon-Link
+	 * @memberOf toucon-Link
 	 */
-    renderer : function(oRm, oControl) {
-    	var text = "";
-    	var icon = "";
-		if (oControl.getText()!=null && oControl.getText()!="") {
-			//No conversion rule is given, use the value directly
-			if (oControl.getTextRules()==null){
-				text = oControl.getText();
-			}
-			//Use the value from the provided lookup if defined
-			else if ((oControl.getTextRules()[oControl.getText()]===undefined)==false){
-				text = oControl.getTextRules()[oControl.getText()];
-			}
+	renderer : function(oRm, oControl) {
+		if (oControl.getVisible()==true) {
+			var text = "";
+			var icon = "";
+			if (oControl.getText()!=null && oControl.getText()!="") {
+				//No conversion rule is given, use the value directly
+				if (oControl.getTextRules()==null){
+					text = oControl.getText();
+				}
+				//Use the value from the provided lookup if defined
+				else if ((oControl.getTextRules()[oControl.getText()]===undefined)==false){
+					text = oControl.getTextRules()[oControl.getText()];
+				}
 
-			//No conversion rule is given, use the value directly
-			if (oControl.getIconRules()==null){
-				icon = oControl.getIcon();
+				//No conversion rule is given, use the value directly
+				if (oControl.getIconRules()==null){
+					icon = oControl.getIcon();
+				}
+				//Use the value from the provided lookup if defined
+				else if ((oControl.getIconRules()[oControl.getIcon()]===undefined)==false){
+					icon = oControl.getIconRules()[oControl.getIcon()];
+				}
+
+				//Global link
+				oRm.write("<a"); 
+				oRm.writeControlData(oControl);  
+				oRm.addClass("sapMLnk sapMLnkMaxWidth touconLink");
+				oRm.writeClasses();
+				oRm.write("href=\"javascript:void(0);\" ");
+				oRm.write(">");
+				//Render icon
+				if (icon!="") {
+					oControl.getAggregation("_icon").setIcon(icon);
+					oRm.renderControl(oControl.getAggregation("_icon"));
+				} 
+				oRm.writeEscaped(text);
+				oRm.write("</a>");
 			}
-			//Use the value from the provided lookup if defined
-			else if ((oControl.getIconRules()[oControl.getIcon()]===undefined)==false){
-				icon = oControl.getIconRules()[oControl.getIcon()];
-			}
-			
-			//Global link
-			oRm.write("<a"); 
-			oRm.writeControlData(oControl);  
-			oRm.addClass("sapMLnk sapMLnkMaxWidth touconLink");
-			oRm.writeClasses();
-			oRm.write("href=\"javascript:void(0);\" ");
-			oRm.write(">");
-			//Render icon
-			if (icon!="") {
-				oControl.getAggregation("_icon").setIcon(icon);
-				oRm.renderControl(oControl.getAggregation("_icon"));
-			} 
-			oRm.writeEscaped(text);
-			oRm.write("</a>");
 		}
-    }
+	}
 });

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: toucon/InfoBox.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: toucon/InfoBox.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @param {string} [title] left-bound title of the info box
+ * @param {string} [tag] right-bound tag of the info box
+ * @param {any} [text] The text parameter can be a string, 
+ * a map like {text:"text",color:"red",indentLevel:1} or
+ * an array of strings or maps like {text:"text",color:"red",indentLevel:1}.
+ * @param {float} [indentBy] used for indenting the text in rem units depending on the passed indentLevel, defaultValue is 1.5
+ * @param {string} [tooltipText]used in a richtexttooltip which is being attached, can be a {binding}
+ * @param {sap.ui.core.Control} [control] e.g. a sap.m.Input which should be rendered in the form line
+ *
+ * @desc A little box with a title on the left, an additional "tag" title on the right
+ * followed with one ore more texts, followed by an optional control.
+ * 
+ * @extends sap.ui.core.Control
+ * @returns sap.ui.core.Control
+ *
+ * @class
+ * @author Paul Senkel
+ * @copyright 2015 Paul Senkel
+ * @license Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * @version 1.0
+ *
+ * @constructor
+ * @public
+ * @alias toucon-InfoBox
+ */
+var touconInfoBox = sap.ui.core.Control.extend("toucon.InfoBox", {  
+	metadata: {  
+		properties: {  
+			"title" : { type: "string", defaultValue: null },
+			"tag" : { type: "string", defaultValue: "" },
+			"text" : { type: "any", defaultValue: null },
+			"indentBy" : { type: "float", defaultValue: 1.5 }
+		},
+		aggregations: {
+			"control" : {type : "sap.ui.core.Control", multiple : false, visibility: "public"}
+		}
+	},  
+	 /**
+	 * @param {RenderManager} [oRm] 
+	 * @param {Control} [oControl] this control
+	 *
+	 * @desc If the text parameter is a string, it will be added to an array.
+	 * &lt;br>
+	 * If the text parameter is a non-array object, we presume that it is a map like {text:"text",color:"red",indentLevel:1}
+	 * and we add it to an array.
+	 * &lt;br>
+	 * If the text parameter is an array, we will use it directly and we will presume that it either
+	 * contains strings or maps like {text:"text",color:"red",indentLevel:1}.
+	 * &lt;br>
+	 * &lt;br>
+	 * Then the InfoBox tag and title will be rendered and the renderer will then iterate over the text array.
+	 * &lt;br>
+	 * It will then render the texts with the optional indentLevel (multiplied with the indentBy parameter)
+	 * and the optional color.
+	 * &lt;br>
+	 * At the end the optional UI5 control will be rendered as well.
+	 * 
+	 * @function
+	 * @implements CSS: .touconInfoBoxTag, .touconInfoBoxTitle, .touconInfoBoxText
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf toucon-InfoBox
+	 */
+	renderer: function(oRm, oControl) {
+		var texts = [];
+		//If text is a simple string, push it to the array
+		if ((oControl.getText()===undefined)==false &amp;&amp; (oControl.getText()===null)==false 
+				&amp;&amp; typeof oControl.getText()==="string") {
+			texts.push(oControl.getText());
+		} 
+		//If text is an object, but not an array, we presume it is a map like {text:"text",color:"red",indentLevel:1}
+		else if ((oControl.getText()===undefined)==false &amp;&amp; (oControl.getText()===null)==false 
+				&amp;&amp; typeof oControl.getText()==="object" &amp;&amp; !oControl.getText().length) {
+			texts.push(oControl.getText());
+		} 
+		//If text is an array, we presume that it is an array of strings or an array of maps like {text:"text",color:"red",indentLevel:1}
+		else if ((oControl.getText()===undefined)==false &amp;&amp; (oControl.getText()===null)==false 
+				&amp;&amp; typeof oControl.getText()==="object" &amp;&amp; oControl.getText().length) {
+			texts=oControl.getText();
+		}
+		oRm.write("&lt;div ");
+		oRm.writeControlData(oControl);  // writes the Control ID and enables event handling - important!
+		oRm.writeClasses(oControl);  // writes classes added with .addStyleClass()
+		oRm.write(">");
+		oRm.write("&lt;div class=\"touconInfoBoxTag\" style=\"width:20%;direction:inherit;float:right;text-align:right\">");
+		oRm.writeEscaped(oControl.getTag());
+		oRm.write("&lt;/div>");
+		oRm.write("&lt;div class=\"touconInfoBoxTitle\" style=\"width:80%;direction:inherit;float:left;text-align:left\">");
+		oRm.writeEscaped(oControl.getTitle());
+		oRm.write("&lt;/div>");
+		for (var i=0; i&lt;texts.length; i++) {
+			var text = {};
+			if (typeof texts[i]==="string") {
+				text.text=texts[i];
+			} else if (typeof texts[i]==="object") {
+				text = texts[i];
+			}
+			oRm.write("&lt;div class=\"sapMText touconInfoBoxText\" style=\"width:100%;direction:inherit;float:left;text-align:left");
+			if ((text.color===undefined)==false) {
+				oRm.write(";color:");oRm.writeEscaped(text.color);
+			}
+			if ((text.indentLevel===undefined)==false &amp;&amp; parseInt(text.indentLevel)==text.indentLevel) {
+				oRm.write(";padding-left:"+(text.indentLevel*oControl.getIndentBy())+"rem");
+			}
+			oRm.write("\">");
+			oRm.writeEscaped(text.text);
+			oRm.write("&lt;/div>");
+		}
+		oRm.write("&lt;div style=\"width:100%;direction:inherit;float:left;text-align:left\">");
+		oRm.renderControl(oControl.getControl());
+		oRm.write("&lt;/div>");
+		oRm.write("&lt;/div>");
+	}
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NotificationBarComponent.html">NotificationBarComponent</a></li><li><a href="searchhelp-Input.html">searchhelp-Input</a></li><li><a href="searchhelp-Input-ResultsDialog.html">searchhelp-Input-ResultsDialog</a></li><li><a href="searchhelp-Select.html">searchhelp-Select</a></li><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-Calendar.html">toucon-Calendar</a></li><li><a href="toucon-DateChooser.html">toucon-DateChooser</a></li><li><a href="toucon-FacebookButton.html">toucon-FacebookButton</a></li><li><a href="toucon-FileDropzone.html">toucon-FileDropzone</a></li><li><a href="toucon-FileUploader.html">toucon-FileUploader</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-ImageSlider.html">toucon-ImageSlider</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-Link.html">toucon-Link</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-NotificationBar.html">toucon-NotificationBar</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-Popup.html">toucon-Popup</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Table.html">toucon-Table</a></li><li><a href="toucon-TableColumn.html">toucon-TableColumn</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-Tree.html">toucon-Tree</a></li><li><a href="toucon-TreeNode.html">toucon-TreeNode</a></li><li><a href="toucon-type-BIC.html">toucon-type-BIC</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-EmailAddress.html">toucon-type-EmailAddress</a></li><li><a href="toucon-type-IBAN.html">toucon-type-IBAN</a></li><li><a href="toucon-type-Number.html">toucon-type-Number</a></li><li><a href="toucon-type-PhoneNumber.html">toucon-type-PhoneNumber</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li><li><a href="toucon-YelpBadge.html">toucon-YelpBadge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu Jul 16 2015 11:52:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

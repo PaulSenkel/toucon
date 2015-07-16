@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: searchhelp-Input</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: searchhelp-Input</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        searchhelp-Input
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="searchhelp-Input"><span class="type-signature"></span>new searchhelp-Input<span class="signature">(serviceUrl<span class="signature-attributes">opt</span>, searchHelpId<span class="signature-attributes">opt</span>, keyField<span class="signature-attributes">opt</span>, keyBindingPath<span class="signature-attributes">opt</span>, valueField<span class="signature-attributes">opt</span>, valueType<span class="signature-attributes">opt</span>, valueBindingPath<span class="signature-attributes">opt</span>, filterFields<span class="signature-attributes">opt</span>, searchFields<span class="signature-attributes">opt</span>, title<span class="signature-attributes">opt</span>, tooManyResultsTitle<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    The searchhelp.Input is an assisted input field which pops up an SAP F4-style dialog with filter and search options.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>serviceUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">the URL of the data service</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>searchHelpId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">name of the backend value help</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keyField</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">name of the SAP column whose data should be written back to the data model</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keyBindingPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">path for the hidden key input (where the keyField's value should be written to)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>valueField</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">name of the SAP column from which the display value should be retrieved</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>valueType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">for type validation (only if the KEY is not used and if this is not valueHelpOnly)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>valueBindingPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">path for the main input field</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filterFields</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">names of the SAP columns which should be displayed in the results dialog</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>searchFields</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">names of the SAP columns on which an eventual pre-filter search should be made</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">title of the TableSelectDialog which displays the results</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tooManyResultsTitle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">title of the Dialog which displays filter parameters if too many results have been returned (also used by the TableSelectDialog if the search still returns too many results.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Tobias Gelhardt, Paul Senkel</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="toucon_searchhelp_Input.js.html">toucon/searchhelp/Input.js</a>, <a href="toucon_searchhelp_Input.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    sap.m.Input
+</div>
+
+
+
+    
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>sap.m.Input</li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".buildSelectOptionsFromDialog"><span class="type-signature">(protected, static) </span>buildSelectOptionsFromDialog<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Builds the selection criteria based on the restriction search including all attributeswith Shlpselpos > 0.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="toucon_searchhelp_Input.js.html">toucon/searchhelp/Input.js</a>, <a href="toucon_searchhelp_Input.js.html#line541">line 541</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    [mySelectOptions] URL parameter string
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".buildSelectOptionsFromView"><span class="type-signature">(protected, static) </span>buildSelectOptionsFromView<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Builds the selection criteria based on the global settings (Shlpinput == 'X')
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="toucon_searchhelp_Input.js.html">toucon/searchhelp/Input.js</a>, <a href="toucon_searchhelp_Input.js.html#line510">line 510</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    [mySelectOptions] URL parameter string
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".countOutputAttributes"><span class="type-signature">(protected, static) </span>countOutputAttributes<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Counts how many output attributes are contained in the attributes of this searchhelp (has Shlplispos > 0).
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="toucon_searchhelp_Input.js.html">toucon/searchhelp/Input.js</a>, <a href="toucon_searchhelp_Input.js.html#line572">line 572</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    [attributesCount]
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getOutputAttributes"><span class="type-signature">(protected, static) </span>getOutputAttributes<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the output attributes (Shlpoutput == "X")
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="toucon_searchhelp_Input.js.html">toucon/searchhelp/Input.js</a>, <a href="toucon_searchhelp_Input.js.html#line643">line 643</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    [result]
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getResultAttribute"><span class="type-signature">(protected, static) </span>getResultAttribute<span class="signature">(index<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the result attribute (Shlplispos == index)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">index</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="toucon_searchhelp_Input.js.html">toucon/searchhelp/Input.js</a>, <a href="toucon_searchhelp_Input.js.html#line621">line 621</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    [result]
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getSelectionAttribute"><span class="type-signature">(protected, static) </span>getSelectionAttribute<span class="signature">(index<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the selection attribute (Shlpselpos == index)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">index</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="toucon_searchhelp_Input.js.html">toucon/searchhelp/Input.js</a>, <a href="toucon_searchhelp_Input.js.html#line597">line 597</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    [result]
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".init"><span class="type-signature">(protected, static) </span>init<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Applies the standard arguments to the sap.m.Input prototype.<br>Initializes the inner key field, the results dialog with its liveChange, confirm and search function as well as the search dialog that pops up if too many results have been returned.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li>CSS: .hidden (for the hidden key field), .touconSearchHelpTableSelectDialog, .touconSearchHelpInputSearchDialogButton</li>
+        
+    </ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="toucon_searchhelp_Input.js.html">toucon/searchhelp/Input.js</a>, <a href="toucon_searchhelp_Input.js.html#line65">line 65</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".onValueHelpRequest"><span class="type-signature">(protected, static) </span>onValueHelpRequest<span class="signature">(oEvent<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Retrieves the title from the backend by calling  [serviceUrl]/SearchHelpSet([searchHelpId])?$select=Ddtext&$format=json<br>Retrieves the available attributes from the backend by calling [serviceUrl]/AttributeSet?$select=Fieldname,ScrtextL,Datatype,Shlpinput,Shlpoutput,Shlpselpos,Shlplispos&$format=json<br>Finally retrieves the number results by calling [serviceUrl]/ValueSetBySearchString/$count?searchHelpName='[searchHelpId]'&searchString='[_selectOptions] (the select options are compiled by the eventual search which the user will make in order to restrict the number of results<br>If the number of results is too big (currently hard-coded to >100), then the search/select dialog will be displayed, otherwise the results dialog will be opened.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>oEvent</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Event</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="toucon_searchhelp_Input.js.html">toucon/searchhelp/Input.js</a>, <a href="toucon_searchhelp_Input.js.html#line276">line 276</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".renderer"><span class="type-signature">(protected, static) </span>renderer<span class="signature">(oRm<span class="signature-attributes">opt</span>, oControl<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Checks if the valueHelpOnly property is true or false and then binds the KEY as a TwoWay binding to the hidden key field while binding the VALUE as a OneWay binding to the visible input field (this enables us to display a nice value, while writinga technical value back to the model) OR binds the visible input field directly to the model and attaches the type (for form validation).<br>This function attaches the onValueHelpRequest function to the valueHelpRequest event and then renders the hidden key field and finally calls the sap.m.InputRenderer.render function for rendering the restof the control.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>oRm</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">RenderManager</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>oControl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Control</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">this control</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="toucon_searchhelp_Input.js.html">toucon/searchhelp/Input.js</a>, <a href="toucon_searchhelp_Input.js.html#line211">line 211</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".showResultDialog"><span class="type-signature">(protected, static) </span>showResultDialog<span class="signature">(forceRefresh<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Loads the results table (if it does not already exist) and then opens it.<br>Results are retrieved by calling[serviceUrl]/ValueSetBySearchString/?searchHelpName='[searchHelpId]'&searchString='[selectOptions]'&$select=Fieldname,Recordpos,Fieldval,Retfield&$format=json<br><br>Please note that the ODATA which is initially loaded is treated like a JSON object and transformedinto a flattened JSONModel before the column list items are generated.<br><br><b>Please note that the results dialog will use the normal title or the tooManyResultsTitleif the number of results exceeds the hard-coded value of 100.</b>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>forceRefresh</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">will cause the destruction of columns and items and therefore trigger thereload of the results table.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="toucon_searchhelp_Input.js.html">toucon/searchhelp/Input.js</a>, <a href="toucon_searchhelp_Input.js.html#line416">line 416</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".showSelectDialog"><span class="type-signature">(protected, static) </span>showSelectDialog<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Builds and shows the select/search dialog.<br>Through calls of getSelectionAttribute all relevant fields will be rendered.<br>ScrtextL is used in order to display a label and must contain a value, otherwise thecorresponding entry will not be rendered.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="toucon_searchhelp_Input.js.html">toucon/searchhelp/Input.js</a>, <a href="toucon_searchhelp_Input.js.html#line356">line 356</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NotificationBarComponent.html">NotificationBarComponent</a></li><li><a href="searchhelp-Input.html">searchhelp-Input</a></li><li><a href="searchhelp-Input-ResultsDialog.html">searchhelp-Input-ResultsDialog</a></li><li><a href="searchhelp-Select.html">searchhelp-Select</a></li><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-Calendar.html">toucon-Calendar</a></li><li><a href="toucon-DateChooser.html">toucon-DateChooser</a></li><li><a href="toucon-FacebookButton.html">toucon-FacebookButton</a></li><li><a href="toucon-FileDropzone.html">toucon-FileDropzone</a></li><li><a href="toucon-FileUploader.html">toucon-FileUploader</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-ImageSlider.html">toucon-ImageSlider</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-Link.html">toucon-Link</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-NotificationBar.html">toucon-NotificationBar</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-Popup.html">toucon-Popup</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Table.html">toucon-Table</a></li><li><a href="toucon-TableColumn.html">toucon-TableColumn</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-Tree.html">toucon-Tree</a></li><li><a href="toucon-TreeNode.html">toucon-TreeNode</a></li><li><a href="toucon-type-BIC.html">toucon-type-BIC</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-EmailAddress.html">toucon-type-EmailAddress</a></li><li><a href="toucon-type-IBAN.html">toucon-type-IBAN</a></li><li><a href="toucon-type-Number.html">toucon-type-Number</a></li><li><a href="toucon-type-PhoneNumber.html">toucon-type-PhoneNumber</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li><li><a href="toucon-YelpBadge.html">toucon-YelpBadge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu Jul 16 2015 11:52:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

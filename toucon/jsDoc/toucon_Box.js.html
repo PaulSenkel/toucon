@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: toucon/Box.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: toucon/Box.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>jQuery.sap.require("sap.ui.layout.Grid");
+jQuery.sap.require("sap.ui.layout.GridData");
+jQuery.sap.require("sap.ui.layout.HorizontalLayout");
+
+/**
+ * @param {string} [title] title of the box
+ * @param {string} [icon] URL to an icon, e.g. sap-icon://home
+ * @param {boolean} [visible] default is true
+ *
+ * @desc The Box control is a content area with an icon, a title
+ * both are contained in an horizontal layout
+ * followed by the standard content[]
+ * @extends sap.ui.layout.Grid
+ * @returns sap.ui.layout.Grid
+ *
+ * @class
+ * @author Paul Senkel
+ * @copyright 2015 Paul Senkel
+ * @license Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * @version 1.0
+ *
+ * @constructor
+ * @public
+ * @alias toucon-Box
+ */
+var touconBox = sap.ui.layout.Grid.extend("toucon.Box", {  
+	metadata: {  
+		properties: {  
+			title : { type: "string", defaultValue: null },
+			icon : { type: "string", defaultValue: null },
+			visible : { type: "boolean", defaultValue: true }
+		},
+		aggregations: {
+		}
+	},
+	//We use these "private" variables instead of "private" aggregations
+	//As the objects are removed from aggregations when we use the addContent functions
+	oHeader: null,
+	oIcon: null,
+	oTitle: null,
+	//We release these variables manually onExit
+	/**
+	 * @desc Releases private variables
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+     * @memberOf toucon-Box
+	 */
+	exit: function () {
+        if (this.oHeader) {
+            this.oHeader.destroy();
+            delete this.oHeader;
+        }
+        if (this.oIcon) {
+            this.oIcon.destroy();
+            delete this.oIcon;
+        }
+        if (this.oTitle) {
+            this.oTitle.destroy();
+            delete this.oTitle;
+        }
+    },
+	/**
+	 * @desc Initializes the header, icon and title controls and applies CSS classes.
+	 *
+	 * @function
+	 * @implements CSS: .touconBox, .touconBoxUnderline, .touconBoxIcon, .touconBoxTitle
+	 * @since 1.0
+	 * @protected
+     * @memberOf toucon-Box
+	 */
+	init: function() {
+		//Box decoration (background, rounded corners etc.)
+		this.addStyleClass("touconBox");
+		
+		//We prepare the header zone
+		this.oHeader = new sap.ui.layout.HorizontalLayout({
+			layoutData : new sap.ui.layout.GridData({
+				span: "L12 M12 S12"})
+		}).addStyleClass("touconBoxUnderline");
+		this.addContent(this.oHeader);
+
+		//We prepare the icon zone
+		this.oIcon = new sap.ui.core.Icon( {  
+	        src : ""  
+	    } ).addStyleClass("touconBoxIcon");
+		this.oHeader.addContent(this.oIcon);
+
+		//We prepare the title zone
+		this.oTitle = new sap.m.Label({
+			text: "",
+			tooltip: "",
+			layoutData : new sap.ui.layout.GridData({
+				span: "L12 M12 S12",
+				linebreakL: true,
+				linebreakM: true,
+				linebreakS: true
+			})}).addStyleClass("touconBoxTitle");
+		this.oHeader.addContent(this.oTitle);
+	},
+	/**
+	 * @param {RenderManager} [oRm] 
+	 * @param {Control} [oControl] this control
+	 *
+	 * @desc Applies the Box params and calls the sap.ui.layout.GridRenderer.render function.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf toucon-Box
+	 */
+	renderer: function(oRm, oControl) {
+		if (oControl.getVisible()==true) {
+			//Here we fill the icon and title
+			oControl.oIcon.setSrc(oControl.getIcon());
+			oControl.oTitle.setText(oControl.getTitle());
+			oControl.oTitle.setTooltip(oControl.getTitle());
+			
+			//We call the default renderer for this object as we do not want to do anything special
+			sap.ui.layout.GridRenderer.render(oRm, oControl);
+		}
+	}
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NotificationBarComponent.html">NotificationBarComponent</a></li><li><a href="searchhelp-Input.html">searchhelp-Input</a></li><li><a href="searchhelp-Input-ResultsDialog.html">searchhelp-Input-ResultsDialog</a></li><li><a href="searchhelp-Select.html">searchhelp-Select</a></li><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-Calendar.html">toucon-Calendar</a></li><li><a href="toucon-DateChooser.html">toucon-DateChooser</a></li><li><a href="toucon-FacebookButton.html">toucon-FacebookButton</a></li><li><a href="toucon-FileDropzone.html">toucon-FileDropzone</a></li><li><a href="toucon-FileUploader.html">toucon-FileUploader</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-ImageSlider.html">toucon-ImageSlider</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-Link.html">toucon-Link</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-NotificationBar.html">toucon-NotificationBar</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-Popup.html">toucon-Popup</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Table.html">toucon-Table</a></li><li><a href="toucon-TableColumn.html">toucon-TableColumn</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-Tree.html">toucon-Tree</a></li><li><a href="toucon-TreeNode.html">toucon-TreeNode</a></li><li><a href="toucon-type-BIC.html">toucon-type-BIC</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-EmailAddress.html">toucon-type-EmailAddress</a></li><li><a href="toucon-type-IBAN.html">toucon-type-IBAN</a></li><li><a href="toucon-type-Number.html">toucon-type-Number</a></li><li><a href="toucon-type-PhoneNumber.html">toucon-type-PhoneNumber</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li><li><a href="toucon-YelpBadge.html">toucon-YelpBadge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu Jul 16 2015 11:52:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

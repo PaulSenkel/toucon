@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: toucon/searchhelp/Input.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: toucon/searchhelp/Input.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @param {string} [serviceUrl] the URL of the data service
+ * @param {string} [searchHelpId] name of the backend value help
+ * @param {string} [keyField] name of the SAP column whose data should be written back to the data model
+ * @param {string} [keyBindingPath] path for the hidden key input (where the keyField's value should be written to)
+ * @param {string} [valueField] name of the SAP column from which the display value should be retrieved
+ * @param {object} [valueType] for type validation (only if the KEY is not used and if this is not valueHelpOnly)
+ * @param {string} [valueBindingPath] path for the main input field
+ * @param {string[]} [filterFields] names of the SAP columns which should be displayed in the results dialog
+ * @param {string[]} [searchFields] names of the SAP columns on which an eventual pre-filter search should be made
+ * @param {string} [title] title of the TableSelectDialog which displays the results
+ * @param {string} [tooManyResultsTitle] title of the Dialog which displays filter parameters 
+ * if too many results have been returned (also used by the TableSelectDialog if the search 
+ * still returns too many results.
+ *
+ * @desc The searchhelp.Input is an assisted input field which pops up an SAP F4-style dialog with filter and search options.
+ * @extends sap.m.Input
+ * @returns sap.m.Input
+ *
+ * @class
+ * @author Tobias Gelhardt, Paul Senkel
+ * @version 1.0
+ *
+ * @constructor
+ * @public
+ * @alias searchhelp-Input
+ */
+var touconSearchhelpInput = sap.m.Input.extend("toucon.searchhelp.Input", {
+
+	metadata : {
+		properties : {
+			serviceUrl : { type: "string", defaultValue: "" },
+			searchHelpId : { type: "string", defaultValue: null },
+			keyField :  { type: "string", defaultValue: null },
+			keyBindingPath :  { type: "string", defaultValue: null },
+			valueField :  { type: "string", defaultValue: null },
+			valueType :  { type: "object", defaultValue: null },
+			valueBindingPath :  { type: "string", defaultValue: null },
+			filterFields : { type: "string[]", defaultValue: null },
+			searchFields : { type: "string[]", defaultValue: null },
+			title : { type: "string", defaultValue: null },
+			tooManyResultsTitle : { type: "string", defaultValue: "Too many results, please restrict your search."},
+			_selectOptions : { type: "string", defaultValue: null },
+			_attributes : { type: "object[]", defaultValue: null },
+			_count : { type: "int", defaultValue: null }
+		},
+		aggregations: {
+			_keyField : { type: "sap.m.Input", multiple: false, visibility: "hidden"},
+			_searchDialog : { type: "sap.m.Dialog", multiple: false, visibility: "hidden"},
+			_resultsDialog : { type: "sap.m.TableSelectDialog", multiple: false, visibility: "hidden"}
+		},
+	},
+
+	/**
+	 * @desc Applies the standard arguments to the sap.m.Input prototype.
+	 * &lt;br>Initializes the inner key field, the results dialog with its liveChange, confirm and search function 
+	 * as well as the search dialog that pops up if too many results have been returned.
+	 *
+	 * @function
+	 * @implements CSS: .hidden (for the hidden key field), .touconSearchHelpTableSelectDialog, .touconSearchHelpInputSearchDialogButton
+	 * @since 1.0
+	 * @protected
+     * @memberOf searchhelp-Input
+	 */
+	init: function() {
+		console.log("SearchHelp.init");
+		if (sap.m.Input.prototype.init) {             
+			sap.m.Input.prototype.init.apply(this, arguments);
+		}
+
+		//Prepares a hidden field which can take and bind a key
+		//console.log("SearchHelp.init binding path: "+this.getBindingInfo());
+		this.setAggregation("_keyField",new sap.m.Input(this.getId()+"_KEY",{}).addStyleClass("hidden"));
+		/**
+		 * @desc Private TableSelectDialog of toucon.searchhelp.Input
+		 *
+		 * @class
+		 * @author Tobias Gelhardt, Paul Senkel
+		 * @version 1.0
+		 *
+		 * @constructor
+		 * @protected
+		 * @alias searchhelp-Input-ResultsDialog
+		 */
+		var touconSearchhelpInputResultsDialog = this.setAggregation("_resultsDialog",new sap.m.TableSelectDialog({
+			 /**
+			 * @param {Event} [oEvent] 
+			 *
+			 * @desc Applies StartsWith filters to all columns and binds the combined filters against the items aggregation.
+			 *
+			 * @function
+			 * @since 1.0
+			 * @protected
+			 * @static
+		     * @memberOf searchhelp-Input-ResultsDialog
+			 */
+			liveChange:(function(oEvent) {
+				var sValue = oEvent.getParameter("value");
+				var filters = [];
+				for (var i=0; i&lt;this.getFilterFields().length; i++) {
+					var columnFilter = new sap.ui.model.Filter({path:this.getFilterFields()[i], operator:sap.ui.model.FilterOperator.StartsWith, value1:sValue});
+					filters.push(columnFilter);
+				}
+				var tableFilter = new sap.ui.model.Filter({filters:filters,and:false});
+				tableFilter.bAnd=false;
+				oEvent.getSource().getBinding("items").filter(tableFilter);
+			}).bind(this),
+			 /**
+			 * @param {Event} [oEvent] 
+			 *
+			 * @desc Retrieves the selectedItem and sets the value of the Input field.
+			 * &lt;br>Sets also the value of the private keyField.
+			 * &lt;br>If this Input does not allow direct input (valueHelpOnly == true), then
+			 * this function also unbinds the value property of the Input so that the model
+			 * will not overwrite the set value.
+			 *
+			 * @function
+			 * @since 1.0
+			 * @protected
+			 * @static
+		     * @memberOf searchhelp-Input-ResultsDialog
+			 */
+			confirm:(function (oEvent) {
+				//console.log("confirm");
+				//console.log(oEvent);
+				var oSelectedItem = oEvent.getParameter("selectedItem");
+				if (oSelectedItem) {
+					console.log(this.getValueField());
+					console.log(oSelectedItem.getBindingContext().getProperty(this.getValueField()));
+					if (this.getValueHelpOnly()==true) {
+						this.unbindProperty("value");//makes sure that the value which is written with setValue will not be overwritten by the model
+					}
+					this.setValue(oSelectedItem.getBindingContext().getProperty(this.getValueField()));
+					this.getAggregation("_keyField").setValue(oSelectedItem.getBindingContext().getProperty(this.getKeyField()));
+				}
+				oEvent.getSource().getBinding("items").filter([]);
+			}).bind(this),
+			 /**
+			 * @param {Event} [oEvent] 
+			 *
+			 * @desc Applies Contains filters to all columns and binds the combined filters against the items aggregation.
+			 *
+			 * @function
+			 * @since 1.0
+			 * @protected
+			 * @static
+		     * @memberOf searchhelp-Input-ResultsDialog
+			 */
+			search:(function(oEvent) {
+				var sValue = oEvent.getParameter("value");
+				var filters = [];
+				for (var i=0; i&lt;this.getFilterFields().length; i++) {
+					var columnFilter = new sap.ui.model.Filter({path:this.getFilterFields()[i], operator:sap.ui.model.FilterOperator.Contains, value1:sValue});
+					//console.log(columnFilter);
+					filters.push(columnFilter);
+				}
+				var tableFilter = new sap.ui.model.Filter({filters:filters,and:false});
+				//tableFilter.bAnd=false;
+				oEvent.getSource().getBinding("items").filter(tableFilter);
+			}).bind(this)
+		}).addStyleClass("touconSearchHelpTableSelectDialog"));
+		this.setAggregation("_searchDialog",new sap.m.Dialog({
+			buttons : [new sap.m.Button({
+				icon: "sap-icon://decline",
+				type: sap.m.ButtonType.Reject,
+				press: (function(oEvent){
+//					//Avoid duplication of fields when opened again
+//					oEvent.getSource().getParent().getParent().destroyContent();
+					oEvent.getSource().getParent().getParent().close();
+				})
+			}).addStyleClass("touconSearchHelpInputSearchDialogButton"),
+			new sap.m.Button({
+				icon: "sap-icon://search",
+				type: sap.m.ButtonType.Accept,
+				press: (function(oEvent){
+					var refresh = false;
+					//Build the select params for the search help
+					var selectOptions = this.buildSelectOptionsFromDialog();
+					//If there have been changes, we need to rebuild the table select dialog's contents
+					if (this.getProperty("_selectOptions")!=selectOptions) refresh=true;
+					this.setProperty("_selectOptions",selectOptions);
+//					//Avoid duplication of fields when opened again
+//					oEvent.getSource().getParent().getParent().destroyContent();
+					oEvent.getSource().getParent().getParent().close();
+					this.showResultDialog(refresh);
+				}).bind(this)
+			}).addStyleClass("touconSearchHelpInputSearchDialogButton")
+			]
+		}));
+	},
+
+	 /**
+	 * @param {RenderManager} [oRm] 
+	 * @param {Control} [oControl] this control
+	 *
+	 * @desc Checks if the valueHelpOnly property is true or false and then binds the KEY as a TwoWay binding to the hidden key field 
+	 * while binding the VALUE as a OneWay binding to the visible input field (this enables us to display a nice value, while writing
+	 * a technical value back to the model) OR binds the visible input field directly to the model and attaches the type (for form 
+	 * validation).
+	 * &lt;br>
+	 * This function attaches the onValueHelpRequest function to the valueHelpRequest event and then renders the hidden key field and 
+	 * finally calls the sap.m.InputRenderer.render function for rendering the rest
+	 * of the control.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf searchhelp-Input
+	 */
+	renderer: function(oRm, oControl) {
+		console.log("SearchHelp.renderer");
+		if (oControl.getValueHelpOnly()==true) {
+//			console.log("SearchHelp mode is VALUE HELP ONLY");
+//			console.log("Values from "+oControl.getKeyField()+" will be written to the hidden KEY field "+oControl.getAggregation("_keyField").getId());
+//			console.log("Values from "+oControl.getValueField()+" will be written to the visible input field "+oControl.getId());
+//			console.log("The KEY's value is bound to the model.");
+			//Use KEY (hidden) and VALUE
+			oControl.getAggregation("_keyField").bindValue({
+				path: oControl.getKeyBindingPath()
+			});
+			oControl.bindProperty("value", {
+				path: oControl.getValueBindingPath(),
+				mode: sap.ui.model.BindingMode.OneWay,//TODO: issue is that after setValue this will overwrite the visible text
+//				formatter:function (val) {
+//				console.log("searchhelp.Input.renderer.formatter: "+val);
+//				console.log(this.getModel());
+//				/*TODO: Devise a way to retrieve the Title/Description for the KEY
+//				* through a mapping? generic model?
+//				var vhEntries = (this.getModel())?  this.getModel().oData.UI_VALUEHELP_ATTR : [];
+//				for (var i=0; i&lt;vhEntries.length; i++) {
+//				if (vhEntries[i].VALUE.KEY==val) {
+//				return vhEntries[i].VALUE.VALUE;
+//				}
+//				}*/
+//				return val;
+//				}			
+			});
+		}
+		else {
+//			console.log("SearchHelp mode is TYPING IS ALLOWED");
+//			console.log("Values from "+oControl.getValueField()+" will be written to the visible input field "+oControl.getId());
+//			console.log("The VALUE's value is bound to the model.");
+			//Use VALUE only
+			oControl.bindProperty("value", {
+				path: oControl.getValueBindingPath(),
+				type: oControl.getValueType()
+			});
+		}
+
+		oControl.attachValueHelpRequest(oControl.onValueHelpRequest, oControl);
+		oControl.setShowValueHelp(true),
+		//console.log("Rendering hidden field");
+		oRm.renderControl(oControl.getAggregation("_keyField"));
+		//console.log("Rendering visible input");
+		sap.m.InputRenderer.render(oRm, oControl);
+	},
+
+	 /**
+	 * @param {Event} [oEvent] 
+	 *
+	 * @desc Retrieves the title from the backend by calling  [serviceUrl]/SearchHelpSet([searchHelpId])?$select=Ddtext&amp;$format=json
+	 * &lt;br>
+	 * Retrieves the available attributes from the backend by calling [serviceUrl]/AttributeSet?$select=Fieldname,ScrtextL,Datatype,Shlpinput,Shlpoutput,Shlpselpos,Shlplispos&amp;$format=json
+	 * &lt;br>
+	 * Finally retrieves the number results by calling [serviceUrl]/ValueSetBySearchString/$count?searchHelpName='[searchHelpId]'&amp;searchString='[_selectOptions] (the select options are compiled by the eventual search which the user will make in order to restrict the number of results
+	 * &lt;br>
+	 * If the number of results is too big (currently hard-coded to >100), then the search/select dialog will be displayed, otherwise the results dialog will be opened.
+	 * 
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf searchhelp-Input
+	 */
+	onValueHelpRequest: function(oEvent){
+		console.log("SearchHelp.onValueHelpRequest");
+
+		//If number of value help results has not yet been determined, null translates unfortunately to 0
+		if (this.getProperty("_count")==0) {
+			//At every value help request, reload title asynchronously
+			var oSearchHelpModel = new sap.ui.model.json.JSONModel();
+			var searchHelpURL = this.getServiceUrl()+ "/SearchHelpSet('" + this.getSearchHelpId() + "')?$format=json";
+			var searchHelpQueryString ="$select=Ddtext&amp;$format=json";
+			oSearchHelpModel.loadData(searchHelpURL, searchHelpQueryString);
+			this.setModel(oSearchHelpModel,"SearchHelpMetadata");
+			oSearchHelpModel.attachRequestCompleted(null, function (oContext){
+				console.log("searchhelp.Input.onValueHelpRequest.SearchHelpMetadata.attachRequestCompleted setting title to "+this.getModel("SearchHelpMetadata").getProperty("/d/Ddtext"));
+				if (this.getTitle()==null) this.setTitle(this.getModel("SearchHelpMetadata").getProperty("/d/Ddtext"));
+			},this);
+
+			//Read attributes
+			var oAttributesModel = new sap.ui.model.json.JSONModel();
+			var attributeSetURL = this.getServiceUrl() + "/SearchHelpSet('" + this.getSearchHelpId() + "')/AttributeSet?$format=json";
+			var attributeSetQueryString ="$select=Fieldname,ScrtextL,Datatype,Shlpinput,Shlpoutput,Shlpselpos,Shlplispos&amp;$format=json";
+			oAttributesModel.loadData(attributeSetURL, attributeSetQueryString);
+			this.setModel(oAttributesModel,"SearchHelpAttributes");
+
+			//When attribute list comes back
+			oAttributesModel.attachRequestCompleted(null, function (oContext){
+				console.log("searchhelp.Input.onValueHelpRequest.SearchHelpAttributes.attachRequestCompleted loading attributes");
+				this.setProperty("_attributes",this.getModel("SearchHelpAttributes").getProperty("/d/results"));
+				var attributesCount = this.countOutputAttributes();
+
+				//Selektionsoptionen aufbauen
+				this.setProperty("_selectOptions",this.buildSelectOptionsFromView());
+
+				//Anzahl der Ergebnisse prüfen
+				var oValuesModel = new sap.ui.model.json.JSONModel();
+				var valueSetCountURL = this.getServiceUrl() + "/ValueSetBySearchString/$count?searchHelpName='" + this.getSearchHelpId() + "'&amp;searchString='" + this.getProperty("_selectOptions") + "'" ;
+				this.setModel(oValuesModel,"SearchHelpCount");
+				oValuesModel.loadData(valueSetCountURL);
+
+				//When receiving the result count
+				oValuesModel.attachRequestCompleted(null, (function (attributesCount){
+					console.log("searchhelp.Input.onValueHelpRequest.SearchHelpCount.attachRequestCompleted: "+this.getModel("SearchHelpCount").getProperty("/"));
+					var count = this.getModel("SearchHelpCount").getProperty("/") ;
+
+					//Calculate the "real" number of result lines (one row per attribute, thus the division)
+					var valuesCount = Math.floor(count / attributesCount);//TODO check if attributesCount makes really sense
+					this.setProperty("_count",valuesCount);
+					// Suchdialog oder Ergebnis anzeigen
+					if(valuesCount > 100) {
+						this.showSelectDialog();
+					}
+					else {
+						this.showResultDialog();
+					}
+				}).bind(this,attributesCount));
+			},this);
+		} else {
+			// Suchdialog oder Ergebnis anzeigen
+			if(this.getProperty("_count") > 100) {
+				this.showSelectDialog();
+			}
+			else {
+				this.showResultDialog();
+			}
+		}
+	},
+
+	 /**
+	 * @desc Builds and shows the select/search dialog.
+	 * &lt;br>
+	 * Through calls of getSelectionAttribute all relevant fields will be rendered.
+	 * &lt;br>
+	 * ScrtextL is used in order to display a label and must contain a value, otherwise the
+	 * corresponding entry will not be rendered.
+	 * 
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf searchhelp-Input
+	 */
+	showSelectDialog: function () {
+		console.log("SearchHelp.showSelectDialog");
+		var searchDialog = this.getAggregation("_searchDialog");
+
+		if (searchDialog.getContent().length==0) {
+
+			var vBox = new sap.m.VBox();
+			searchDialog.addContent(vBox);
+			var index = 1;
+			//Preparing data structure for model
+			var json = {};
+			while((attribute = this.getSelectionAttribute(index)) != null) {
+				//Creating empty entry for field
+				json[attribute.Fieldname]="";
+				var text = attribute.ScrtextL;
+
+				if (text &amp;&amp; text!="") {
+					var searchFieldLabel = new sap.m.Label ({text : text+":"});
+					//We let UI5 defined the ID and no longer get the value by naming, but through the model
+					var searchField = new sap.m.Input({
+						type: sap.m.InputType.Text, //TODO
+						value: "{SearchDialog>/"+attribute.Fieldname+"}",//binding the value to the model
+						showValueHelp: false,
+					});
+
+					vBox.addItem(searchFieldLabel);
+					vBox.addItem(searchField);
+				}
+				index++;
+			}
+			//Creating, saving and setting of the empty model, typed values are now stored here
+			this.setModel(new sap.ui.model.json.JSONModel(json),"SearchDialog");
+		}
+
+		searchDialog.setTitle(this.getTooManyResultsTitle());
+		searchDialog.open();
+	},
+
+	 /**
+	 * @param {boolean} [forceRefresh] will cause the destruction of columns and items and therefore trigger the
+	 * reload of the results table.
+	 * 
+	 * @desc Loads the results table (if it does not already exist) and then opens it.
+	 * &lt;br>
+	 * Results are retrieved by calling[serviceUrl]/ValueSetBySearchString/?searchHelpName='[searchHelpId]'&amp;searchString='[selectOptions]'&amp;$select=Fieldname,Recordpos,Fieldval,Retfield&amp;$format=json
+	 * &lt;br>
+	 * &lt;br>
+	 * Please note that the ODATA which is initially loaded is treated like a JSON object and transformed
+	 * into a flattened JSONModel before the column list items are generated.
+	 * &lt;br>
+	 * &lt;br>
+	 * &lt;b>Please note that the results dialog will use the normal title or the tooManyResultsTitle
+	 * if the number of results exceeds the hard-coded value of 100.&lt;/b>
+	 * 
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf searchhelp-Input
+	 */
+	showResultDialog: function (forceRefresh) {
+		console.log("SearchHelp.showResultDialog");
+		var resultsDialog = this.getAggregation("_resultsDialog");
+
+		//We can either destroy the contents and regenerate them (rather expensive operation in this dialog)
+		//Or we reset the filters
+		var binding = resultsDialog.getBinding("items");
+		//If binding has already been defined -> model was loaded and potentially filters were set
+		if ((binding===undefined)==false) {
+			binding.filter([]);
+		}
+
+		//If we have not added columns and bound data yet OR if search/select criteria changed, then
+		if (resultsDialog.getColumns().length==0 || forceRefresh==true) {
+			if (resultsDialog.getColumns().length>0) {
+				//cleanup
+				resultsDialog.destroyColumns();
+				resultsDialog.destroyItems();
+			}
+			
+			//Retrieving the SAP line model
+			var oValuesModel = new sap.ui.model.json.JSONModel();
+			var valueSetURL = this.getServiceUrl() + "/ValueSetBySearchString/?searchHelpName='" + this.getSearchHelpId() + "'&amp;searchString='" + this.getProperty("_selectOptions") + "'" ;
+			var valueSetQueryString ="$select=Fieldname,Recordpos,Fieldval,Retfield&amp;$format=json";
+			this.setModel(oValuesModel,"SearchHelpResults");
+			oValuesModel.loadData(valueSetURL, valueSetQueryString);
+			oValuesModel.attachRequestCompleted(null, function (oContext){
+				console.log("searchhelp.Input.showResultDialog.attachRequestCompleted");
+				var values = this.getModel("SearchHelpResults").getProperty("/d/results") ;
+				var transformedValues =  [];
+				var countRows=0;
+
+				var resultsDialog = this.getAggregation("_resultsDialog");
+
+				//Transforming it to a classical column model
+				values.forEach(function(value) {
+					var fieldname = value.Fieldname;
+					var pos = value.Recordpos;
+					var fieldValue = value.Fieldval;
+
+					var index = parseInt(pos) - 1;
+					if(transformedValues[index] == null) {
+						transformedValues[index] = {};
+					}      	  
+
+					transformedValues[index][fieldname] = fieldValue;
+					countRows = index;
+				});
+
+
+				var oTransformedValuesModel = new sap.ui.model.json.JSONModel();
+				oTransformedValuesModel.setData(transformedValues);
+
+				//Building the results table / table select dialog
+				var templateListItem = new sap.m.ColumnListItem({});
+				var index = 1;
+				while((attribute = this.getResultAttribute(index)) != null) {
+					var fieldname = attribute.Fieldname;
+					var text = attribute.ScrtextL;
+					resultsDialog.addColumn(
+							new sap.m.Column({header: new sap.m.Text({text: text}) })
+					);
+
+					templateListItem.addCell(new sap.m.Text({text: "{" + fieldname + "}"}));
+					index++;
+				}
+				resultsDialog.setModel(oTransformedValuesModel);
+				resultsDialog.bindItems({path: "/", template: templateListItem} );
+
+				var title;
+				if(countRows >= 100) {			
+					title = this.getTooManyResultsTitle();
+				}
+				else {
+					title = this.getTitle();
+				}
+				resultsDialog.setTitle(title);
+				resultsDialog.open();
+			},this);
+		} else {
+			resultsDialog.open();
+		}
+	},
+
+	 /**
+	 * @desc Builds the selection criteria based on the global settings (Shlpinput == 'X')
+	 * 
+	 * @function
+	 * @returns {string} [mySelectOptions] URL parameter string
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf searchhelp-Input
+	 */
+	buildSelectOptionsFromView: function(){
+		console.log("SearchHelp.buildSelectOptionsFromView");
+		var mySelectOptions = "";
+		var attributes = this.getProperty("_attributes");
+		attributes.forEach(function(attribute) {
+			if(attribute.Shlpinput == 'X') {
+				var fieldname = attribute.Fieldname;
+				var field = sap.ui.getCore().byId(fieldname);
+				if(field) {
+					var value = field.getValue();
+					if(mySelectOptions != "") {
+						mySelectOptions = mySelectOptions + "%26";
+					}
+					mySelectOptions = mySelectOptions + fieldname + "=" + value;
+				}
+			}
+		});
+		return mySelectOptions;
+	},
+
+	 /**
+	 * @desc Builds the selection criteria based on the restriction search including all attributes
+	 * with Shlpselpos > 0.
+	 * 
+	 * @function
+	 * @returns {string} [mySelectOptions] URL parameter string
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf searchhelp-Input
+	 */
+	buildSelectOptionsFromDialog: function(){
+		console.log("SearchHelp.buildSelectOptionsFromDialog");
+		var searchDialogModel = this.getModel("SearchDialog");
+		var mySelectOptions = "";
+		var attributes = this.getProperty("_attributes");
+		attributes.forEach(function(attribute) {
+			if(parseInt(attribute.Shlpselpos) > 0) {
+				var fieldname = attribute.Fieldname;
+				//Using model data instead of accessing fields based on naming convention
+				if (searchDialogModel.oData &amp;&amp; searchDialogModel.oData[fieldname]) {
+					var value = searchDialogModel.oData[fieldname];
+					if(mySelectOptions != "") {
+						mySelectOptions = mySelectOptions + "%26";
+					}
+					mySelectOptions = mySelectOptions + fieldname + "=" + value;
+				}
+			}
+		});
+		return mySelectOptions;
+	},
+
+	 /**
+	 * @desc Counts how many output attributes are contained in the attributes of this searchhelp (has Shlplispos > 0).
+	 * 
+	 * @function
+	 * @returns {int} [attributesCount]
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf searchhelp-Input
+	 */
+	countOutputAttributes: function() {
+		console.log("SearchHelp.countOutputAttributes");
+		var attributesCount = 0;
+		//console.log(this);
+		var attributes = this.getProperty("_attributes");
+		attributes.forEach(function(attribute) {
+			if(attribute.Shlplispos &amp;&amp; parseInt(attribute.Shlplispos) > 0) {
+				attributesCount++;
+			}
+		});
+		return attributesCount;
+	},
+
+	 /**
+	 * @param {int} [index] index
+	 * 
+	 * @desc Returns the selection attribute (Shlpselpos == index)
+	 * 
+	 * @function
+	 * @returns {string} [result] 
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf searchhelp-Input
+	 */
+	getSelectionAttribute : function(index) {
+		console.log("SearchHelp.getSelectionAttribute");
+		var result = null;
+		var attributes = this.getProperty("_attributes");
+		attributes.forEach(function(attribute) {
+			if(parseInt(attribute.Shlpselpos) == index) {
+				result = attribute;
+			}
+		});
+		return result;
+	},
+
+	 /**
+	 * @param {int} [index] index
+	 * 
+	 * @desc Returns the result attribute (Shlplispos == index)
+	 * 
+	 * @function
+	 * @returns {string} [result] 
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf searchhelp-Input
+	 */
+	getResultAttribute : function(index) {
+		console.log("SearchHelp.getResultAttribute");
+		var result = null;
+		var attributes = this.getProperty("_attributes");
+		attributes.forEach(function(attribute) {
+			if(parseInt(attribute.Shlplispos) == index) {
+				result = attribute;
+			}
+		});
+		return result;
+	},
+
+	 /**
+	 * @desc Returns the output attributes (Shlpoutput == "X")
+	 * 
+	 * @function
+	 * @returns {string[]} [result] 
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf searchhelp-Input
+	 */
+	getOutputAttributes : function() {
+		console.log("SearchHelp.getOutputAttributes");
+		var result = [];
+		var attributes = this.getProperty("_attributes");
+		attributes.forEach(function(attribute) {
+			if(attribute.Shlpoutput == 'X') {
+				result.push(attribute);
+			}
+		});
+		return result;
+	}
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NotificationBarComponent.html">NotificationBarComponent</a></li><li><a href="searchhelp-Input.html">searchhelp-Input</a></li><li><a href="searchhelp-Input-ResultsDialog.html">searchhelp-Input-ResultsDialog</a></li><li><a href="searchhelp-Select.html">searchhelp-Select</a></li><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-Calendar.html">toucon-Calendar</a></li><li><a href="toucon-DateChooser.html">toucon-DateChooser</a></li><li><a href="toucon-FacebookButton.html">toucon-FacebookButton</a></li><li><a href="toucon-FileDropzone.html">toucon-FileDropzone</a></li><li><a href="toucon-FileUploader.html">toucon-FileUploader</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-ImageSlider.html">toucon-ImageSlider</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-Link.html">toucon-Link</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-NotificationBar.html">toucon-NotificationBar</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-Popup.html">toucon-Popup</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Table.html">toucon-Table</a></li><li><a href="toucon-TableColumn.html">toucon-TableColumn</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-Tree.html">toucon-Tree</a></li><li><a href="toucon-TreeNode.html">toucon-TreeNode</a></li><li><a href="toucon-type-BIC.html">toucon-type-BIC</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-EmailAddress.html">toucon-type-EmailAddress</a></li><li><a href="toucon-type-IBAN.html">toucon-type-IBAN</a></li><li><a href="toucon-type-Number.html">toucon-type-Number</a></li><li><a href="toucon-type-PhoneNumber.html">toucon-type-PhoneNumber</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li><li><a href="toucon-YelpBadge.html">toucon-YelpBadge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu Jul 16 2015 11:52:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

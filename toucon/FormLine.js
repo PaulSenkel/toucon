@@ -86,7 +86,7 @@ var touconFormLine = sap.ui.core.Control.extend("toucon.FormLine", {
      * @memberOf toucon-FormLine
 	 */
 	init: function() {
-		console.log("toucon.FormLine.init");
+		//console.log("toucon.FormLine.init");
 		//Creating the auxiliary controls 
 		var innerGrid = new sap.ui.layout.Grid({vSpacing:0,hSpacing:0});//no spacing -> no visual impact
 		var labelLM = new sap.m.Label();//this.getId()+"-LabelLM");

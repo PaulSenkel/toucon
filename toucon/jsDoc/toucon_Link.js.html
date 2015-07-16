@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: toucon/Link.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: toucon/Link.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>jQuery.sap.require("toucon.Icon");
+/**
+ * @param {string} [text] a string which will be translated by the textRules map or used as is
+ * @param {object} [textRules] a map which translates the text to a different string if given
+ * @param {string} [icon] an icon URL or a value which will be translated by the iconRules map
+ * @param {object} [iconRules] a map which translates the icon value to a valid icon URL
+ *
+ * @desc This Link will render an imitation of a sap.m.Link which does not only display a text,
+ * but also an icon before that text.
+ * 
+ * @extends sap.m.Link
+ * @returns sap.ui.core.Control
+ *
+ * @class
+ * @author Paul Senkel
+ * @copyright 2015 Paul Senkel
+ * @license Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * @version 1.0
+ *
+ * @constructor
+ * @public
+ * @alias toucon-Link
+ */
+var touconLink = sap.m.Link.extend("toucon.Link", {
+	metadata : {                              
+		properties : {
+			"text" : {defaultValue: null},
+			"textRules" : { type: "object", defaultValue: null},
+			"icon" : {defaultValue: null},
+			"iconRules" : { type: "object", defaultValue: null},
+			"visible" : { type: "boolean", defaultValue: true}
+		},
+		aggregations : {
+			_icon : { type: "toucon.Icon", multiple: false, visibility: "hidden"},
+		}
+	},
+
+	/**
+	 * @desc Initializes the link and the icon
+	 *
+	 * @function
+	 * @implements .touconLinkIcon
+	 * @since 1.0
+	 * @protected
+	 * @memberOf toucon-Link
+	 */
+	init : function () {
+		if (sap.m.Link.prototype.init) {             
+			sap.m.Link.prototype.init.apply(this, arguments);
+		}
+		//we prepare a toucon icon which will translate common values to icons
+		this.setAggregation("_icon",new toucon.Icon().addStyleClass("touconLinkIcon"));
+	},
+	/**
+	 * @param {RenderManager} [oRm] 
+	 * @param {Control} [oControl] this control
+	 *
+	 * @desc Resolves the text and icon values 
+	 * against their respective textRules and iconRules mappings,
+	 * renders the link's HTML and the icon through its own renderer.
+	 * 
+	 * @function
+	 * @implements .touconLink, .sapMLnk, .sapMLnkMaxWidth
+	 * @since 1.0
+	 * @protected
+	 * @static
+	 * @memberOf toucon-Link
+	 */
+	renderer : function(oRm, oControl) {
+		if (oControl.getVisible()==true) {
+			var text = "";
+			var icon = "";
+			if (oControl.getText()!=null &amp;&amp; oControl.getText()!="") {
+				//No conversion rule is given, use the value directly
+				if (oControl.getTextRules()==null){
+					text = oControl.getText();
+				}
+				//Use the value from the provided lookup if defined
+				else if ((oControl.getTextRules()[oControl.getText()]===undefined)==false){
+					text = oControl.getTextRules()[oControl.getText()];
+				}
+
+				//No conversion rule is given, use the value directly
+				if (oControl.getIconRules()==null){
+					icon = oControl.getIcon();
+				}
+				//Use the value from the provided lookup if defined
+				else if ((oControl.getIconRules()[oControl.getIcon()]===undefined)==false){
+					icon = oControl.getIconRules()[oControl.getIcon()];
+				}
+
+				//Global link
+				oRm.write("&lt;a"); 
+				oRm.writeControlData(oControl);  
+				oRm.addClass("sapMLnk sapMLnkMaxWidth touconLink");
+				oRm.writeClasses();
+				oRm.write("href=\"javascript:void(0);\" ");
+				oRm.write(">");
+				//Render icon
+				if (icon!="") {
+					oControl.getAggregation("_icon").setIcon(icon);
+					oRm.renderControl(oControl.getAggregation("_icon"));
+				} 
+				oRm.writeEscaped(text);
+				oRm.write("&lt;/a>");
+			}
+		}
+	}
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NotificationBarComponent.html">NotificationBarComponent</a></li><li><a href="searchhelp-Input.html">searchhelp-Input</a></li><li><a href="searchhelp-Input-ResultsDialog.html">searchhelp-Input-ResultsDialog</a></li><li><a href="searchhelp-Select.html">searchhelp-Select</a></li><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-Calendar.html">toucon-Calendar</a></li><li><a href="toucon-DateChooser.html">toucon-DateChooser</a></li><li><a href="toucon-FacebookButton.html">toucon-FacebookButton</a></li><li><a href="toucon-FileDropzone.html">toucon-FileDropzone</a></li><li><a href="toucon-FileUploader.html">toucon-FileUploader</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-ImageSlider.html">toucon-ImageSlider</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-Link.html">toucon-Link</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-NotificationBar.html">toucon-NotificationBar</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-Popup.html">toucon-Popup</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Table.html">toucon-Table</a></li><li><a href="toucon-TableColumn.html">toucon-TableColumn</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-Tree.html">toucon-Tree</a></li><li><a href="toucon-TreeNode.html">toucon-TreeNode</a></li><li><a href="toucon-type-BIC.html">toucon-type-BIC</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-EmailAddress.html">toucon-type-EmailAddress</a></li><li><a href="toucon-type-IBAN.html">toucon-type-IBAN</a></li><li><a href="toucon-type-Number.html">toucon-type-Number</a></li><li><a href="toucon-type-PhoneNumber.html">toucon-type-PhoneNumber</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li><li><a href="toucon-YelpBadge.html">toucon-YelpBadge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu Jul 16 2015 11:52:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

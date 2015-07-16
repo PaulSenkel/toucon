@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: toucon/NotificationBar.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: toucon/NotificationBar.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @desc The NotificationBar control can be used as a header or footer bar.
+ * &lt;br>By default the toucon.Page uses a NotificationBar as footer.
+ * 
+ * @extends sap.m.Bar
+ * @returns sap.m.Bar
+ *
+ * @class
+ * @author Paul Senkel
+ * @copyright 2015 Paul Senkel
+ * @license Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * @version 1.0
+ *
+ * @constructor
+ * @public
+ * @alias toucon-NotificationBar
+ */
+var touconNotificationBar = sap.m.Bar.extend("toucon.NotificationBar", {  
+	metadata: {  
+	},
+	_notificationButton: null,
+	_notificationMessage: null,
+	_notificationPopover: null,
+	_notificationIconSet: null,
+	_messages: [],
+	/**
+	 * @desc Releases private variables
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @memberOf toucon-NotificationBar
+	 */
+	exit: function () {
+		if (this._notificationButton) {
+			this._notificationButton.destroy();
+			delete this._notificationButton;
+		}
+		if (this._notificationMessage) {
+			this._notificationMessage.destroy();
+			delete this._notificationMessage;
+		}
+		if (this._notificationPopover) {
+			this._notificationPopover.destroy();
+			delete this._notificationPopover;
+		}
+		if (this._notificationIconSet) {
+			this._notificationIconSet.destroy();
+			delete this._notificationIconSet;
+		}
+		if (this._messages) {
+			this._messages.destroy();
+			delete this._messages;
+		}
+	},
+	/**
+	 * @desc Applies the standard arguments to the sap.m.Bar prototype.
+	 * &lt;br>Initializes the button, the popover, the list and the text element.
+	 * &lt;br>The button gets a press event which opens the popover and is added as leftContent of this bar.
+	 * &lt;br>The list gets a StandardListItem as bind template and is added to the popover.
+	 * &lt;br>The text is added as middleContent to this bar.
+	 * 
+	 * @function
+	 * @since 1.0
+	 * @protected
+     * @memberOf toucon-NotificationBar
+	 */
+	init: function() {
+		console.log("Notificationbar-Init");
+		if (sap.m.Bar.prototype.init) {             
+			sap.m.Bar.prototype.init.apply(this, arguments);
+		}
+
+		this._notificationButton = new sap.m.Button({press:(function (oEvent) {this._notificationPopover.openBy(oEvent.getSource());}).bind(this)});
+		this._notificationMessage = new sap.m.Text();
+		this._notificationList = new sap.m.List({items: {
+			path: '/',
+			template: new sap.m.StandardListItem({
+				icon: '{icon}',
+				title: '{title}',
+				description: '{description}'
+			})
+		}});
+		this._notificationPopover = new sap.m.Popover({
+			showHeader: false,
+			content:[this._notificationList]});
+		this.addContentLeft(this._notificationButton);
+		this.addContentMiddle(this._notificationMessage);
+		this._notificationIconSet = {
+				"sap-icon://message-error":4,
+				"sap-icon://message-warning":3,
+				"sap-icon://message-success":2,
+				"sap-icon://message-information":1
+		};
+		this._messages=[];
+	},
+	/**
+	 * @desc Returns true or false depending on whether the messages[] has elements.
+	 * 
+	 * @function
+	 * @since 1.0
+	 * @protected
+     * @memberOf toucon-NotificationBar
+	 */
+	hasMessages: function () {
+		if (this._messages &amp;&amp; this._messages.length>0) return true;
+		else return false;
+	},
+	/**
+	 * @param {array} [messages] Must be an array of maps like {icon:"",title:"",description:""}
+	 * 
+	 * @desc Fills the NotificationBar with one function call and makes this bar visible.
+	 * &lt;br>At the same time it attemps to get the parent (usually the page) and to show the footer.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @memberOf toucon-NotificationBar
+	 */
+	setMessages : function (messages) {
+		//if the sap.m.Page's footer is not visible, this control will
+		//not be rendered
+		if (messages.length>0) {
+			this.setVisible(true);
+			if (this.getParent().setShowFooter) {
+				this.getParent().setShowFooter(true);
+			}
+		} else {
+			this.setVisible(false);
+			if (this.getParent().setShowFooter) {
+				this.getParent().setShowFooter(false);
+			}
+		}
+		this._messages=messages;
+	},
+	/**
+	 * @param {string} [title] The title of the notification.
+	 * @param {string} [description] The long text of the notificaiton.
+	 * 
+	 * @desc Adds a map like {icon:"sap-icon://message-error",title:title,description:description} 
+	 * and makes this bar visible.
+	 * &lt;br>At the same time it attemps to get the parent (usually the page) and to show the footer.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @memberOf toucon-NotificationBar
+	 */
+	addError: function (title,description) {
+		this._messages.push({
+			icon:"sap-icon://message-error",
+			title:title, 
+			description:description
+		});
+		this.setVisible(true);
+		if (this.getParent().setShowFooter) {
+			this.getParent().setShowFooter(true);
+		}
+	},
+	/**
+	 * @param {string} [title] The title of the notification.
+	 * @param {string} [description] The long text of the notificaiton.
+	 * 
+	 * @desc Adds a map like {icon:"sap-icon://message-success",title:title,description:description} 
+	 * and makes this bar visible.
+	 * &lt;br>At the same time it attemps to get the parent (usually the page) and to show the footer.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @memberOf toucon-NotificationBar
+	 */
+	addSuccess: function (title,description) {
+		this._messages.push({
+			icon:"sap-icon://message-success",
+			title:title, 
+			description:description
+		});
+		this.setVisible(true);
+		if (this.getParent().setShowFooter) {
+			this.getParent().setShowFooter(true);
+		}
+	},
+	/**
+	 * @param {string} [title] The title of the notification.
+	 * @param {string} [description] The long text of the notificaiton.
+	 * 
+	 * @desc Adds a map like {icon:"sap-icon://message-information",title:title,description:description} 
+	 * and makes this bar visible.
+	 * &lt;br>At the same time it attemps to get the parent (usually the page) and to show the footer.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @memberOf toucon-NotificationBar
+	 */
+	addInformation: function (title,description) {
+		this._messages.push({
+			icon:"sap-icon://message-information",
+			title:title, 
+			description:description
+		});
+		this.setVisible(true);
+		if (this.getParent().setShowFooter) {
+			this.getParent().setShowFooter(true);
+		}
+	},
+	/**
+	 * @param {string} [title] The title of the notification.
+	 * @param {string} [description] The long text of the notificaiton.
+	 * 
+	 * @desc Adds a map like {icon:"sap-icon://message-warning",title:title,description:description} 
+	 * and makes this bar visible.
+	 * &lt;br>At the same time it attemps to get the parent (usually the page) and to show the footer.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @memberOf toucon-NotificationBar
+	 */
+	addWarning: function (title,description) {
+		this._messages.push({
+			icon:"sap-icon://message-warning",
+			title:title, 
+			description:description
+		});
+		this.setVisible(true);
+		if (this.getParent().setShowFooter) {
+			this.getParent().setShowFooter(true);
+		}
+	},
+	/**
+	 * @desc Removes all messages and hides this bar.
+	 * &lt;br>At the same time it attemps to get the parent (usually the page) and to hide the footer.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @memberOf toucon-NotificationBar
+	 */
+	reset: function () {
+		this._messages=[];
+		this.setVisible(false);
+		if (this.getParent().setShowFooter) {
+			this.getParent().setShowFooter(false);
+		}
+	},
+	/**
+	 * @param {RenderManager} [oRm] 
+	 * @param {Control} [oControl] this control
+	 *
+	 * @desc Creates a JSON model based on the messages array and adds it to the notification list.
+	 * &lt;br>Goes through the messages array and determines which icon has the biggest weight.
+	 * &lt;br>The result of this will determine the color and icon of the button which opens the popover.
+	 * &lt;br>The last message's description will then be used as the main text of the bar.
+	 * &lt;br>At the end the sap.m.BarRenderer.render is called.
+	 *
+	 * @function
+	 * @since 1.0
+	 * @protected
+	 * @static
+     * @memberOf toucon-NotificationBar
+	 */
+	renderer: function(oRm, oControl) {
+		console.log("Notificationbar-Render");
+		//If no icon (key) was given, then let's use the default one
+
+		if (oControl._messages.length>0) {
+			var jsonModel = new sap.ui.model.json.JSONModel(oControl._messages);
+			oControl._notificationList.setModel(jsonModel);
+
+			var icon = "";
+			var iconWeight = 0;
+			for (var i=0; i&lt;oControl._messages.length; i++) {
+				var tIcon = oControl._messages[i].icon;
+				if (oControl._notificationIconSet[tIcon]>iconWeight) {
+					iconWeight = oControl._notificationIconSet[tIcon];
+					icon = tIcon;
+					if (iconWeight==4) break;
+				}
+			}
+			
+			oControl._notificationButton.setText(oControl._messages.length+"");
+			oControl._notificationButton.setIcon(icon);
+			if (iconWeight==4) {
+				oControl._notificationButton.setType(sap.m.ButtonType.Reject);
+			}
+			else if (iconWeight==3) {
+				oControl._notificationButton.setType(sap.m.ButtonType.Reject);
+			}
+			else if (iconWeight==2) {
+				oControl._notificationButton.setType(sap.m.ButtonType.Accept);
+			}
+			else {
+				oControl._notificationButton.setType(sap.m.ButtonType.Emphasized);
+			}
+			oControl._notificationMessage.setText(oControl._messages[oControl._messages.length-1].description);
+			oControl._notificationMessage.setTooltip(oControl._messages[oControl._messages.length-1].description);
+		}
+		sap.m.BarRenderer.render(oRm, oControl);
+	}
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NotificationBarComponent.html">NotificationBarComponent</a></li><li><a href="searchhelp-Input.html">searchhelp-Input</a></li><li><a href="searchhelp-Input-ResultsDialog.html">searchhelp-Input-ResultsDialog</a></li><li><a href="searchhelp-Select.html">searchhelp-Select</a></li><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-Calendar.html">toucon-Calendar</a></li><li><a href="toucon-DateChooser.html">toucon-DateChooser</a></li><li><a href="toucon-FacebookButton.html">toucon-FacebookButton</a></li><li><a href="toucon-FileDropzone.html">toucon-FileDropzone</a></li><li><a href="toucon-FileUploader.html">toucon-FileUploader</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-ImageSlider.html">toucon-ImageSlider</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-Link.html">toucon-Link</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-NotificationBar.html">toucon-NotificationBar</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-Popup.html">toucon-Popup</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Table.html">toucon-Table</a></li><li><a href="toucon-TableColumn.html">toucon-TableColumn</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-Tree.html">toucon-Tree</a></li><li><a href="toucon-TreeNode.html">toucon-TreeNode</a></li><li><a href="toucon-type-BIC.html">toucon-type-BIC</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-EmailAddress.html">toucon-type-EmailAddress</a></li><li><a href="toucon-type-IBAN.html">toucon-type-IBAN</a></li><li><a href="toucon-type-Number.html">toucon-type-Number</a></li><li><a href="toucon-type-PhoneNumber.html">toucon-type-PhoneNumber</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li><li><a href="toucon-YelpBadge.html">toucon-YelpBadge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu Jul 16 2015 11:52:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

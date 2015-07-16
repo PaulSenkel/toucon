@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: NotificationBarComponent.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: NotificationBarComponent.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>jQuery.sap.require("sap.ui.ux3.NotificationBar");
+/**
+ * Abstracts access to a sap.ui.ux3.NotificationBar and its new sap.ui.ux3.Notifier.
+ * Also provides several convenience methods.
+ * @constructor
+ * @param {object} data - A map that supports the following arguments:
+ * data.id - for ID generation
+ * data.controller - oController
+ * data.visibleStatus - Min, Max, None, Default as string, default:Default
+ * data.modelName - default:NONAME
+ * data.aggregationName - default:messages
+ * data.typeField - default:TYPE
+ * data.messageField - default:MESSAGE
+ */
+function NotificationBarComponent (data) {
+	//DEFAULTS
+	this.visibleStatus = "Min";
+	this.modelName = "NONAME";
+	this.bindingPath = this.modelName + '>/';
+	this.typeField = "TYPE";
+	this.messageField = "MESSAGE";
+	
+	//CUSTOMISATION VIA data
+	if ((data.visibleStatus === undefined)==false) {
+		this.visibleStatus = data.visibleStatus;
+	}
+	if ((data.modelName === undefined)==false) {
+		this.modelName = data.modelName;
+		this.bindingPath = this.modelName + '>/';
+	}
+	if ((data.typeField === undefined)==false) {
+		this.typeField = data.typeField;
+	}
+	if ((data.messageField === undefined)==false) {
+		this.messageField = data.messageField;
+	}
+	//overwrites the standard binding path based on the modelname
+	if ((data.bindingPath === undefined)==false) {
+		this.bindingPath = data.bindingPath;
+	}
+
+	//CUSTOMISATION VIA setters
+	this.setVisibleStatus=function (visibleStatus) {
+		this.visibleStatus = visibleStatus;
+		//additional code permitting to change behaviour at runtime
+		if ((this.notificationBar===undefined)==false) {
+			this.notificationBar.setVisibleStatus(sap.ui.ux3.NotificationBarStatus[this.visibleStatus]);
+		}
+	};
+	this.setModelName=function (modelName) {
+		this.modelName = modelName;
+	};
+	//overwrites the standard bindingpath based on the modelName
+	this.setBindingPath=function (bindingPath) {
+		this.bindingPath = bindingPath;
+	};
+	this.setTypeField=function (typeField) {
+		this.typeField = typeField;
+	};
+	this.setMessageField=function (messageField) {
+		this.messageField = messageField;
+	};
+	this.addError=function (message) {
+		this.getNotifier().addMessage(new sap.ui.core.Message({
+			level : sap.ui.core.MessageType.Error,
+			text : message
+		}));
+		this.setVisibleStatus("Default");
+	};
+	this.addSuccess=function (message) {
+		this.getNotifier().addMessage(new sap.ui.core.Message({
+			level : sap.ui.core.MessageType.Success,
+			text : message
+		}));
+		this.setVisibleStatus("Default");
+	};
+	this.addInformation=function (message) {
+		this.getNotifier().addMessage(new sap.ui.core.Message({
+			level : sap.ui.core.MessageType.Information,
+			text : message
+		}));
+		this.setVisibleStatus("Default");
+	};
+	this.addWarning=function (message) {
+		this.getNotifier().addMessage(new sap.ui.core.Message({
+			level : sap.ui.core.MessageType.Warning,
+			text : message
+		}));
+		this.setVisibleStatus("Default");
+	};
+	this.getNotifier=function () {
+		if (this.notifier===undefined) {
+			this.getNotificationBar();//inits the bar
+		}
+		return this.notifier;
+	};
+	this.getNotificationBar=function () {
+		if (this.notificationBar===undefined) {
+			this.notificationBar = new sap.ui.ux3.NotificationBar({
+				visibleStatus : sap.ui.ux3.NotificationBarStatus[this.visibleStatus]
+			});
+			console.log("bindingPath: "+this.bindingPath);
+			this.notifier = new sap.ui.ux3.Notifier(data.controller.createId(data.id),{});
+			this.notificationBar.setMessageNotifier(this.notifier);
+		}
+		return this.notificationBar;
+	};
+	this.triggerBindAggregation=function () {
+		console.log("NotificationBarComponent.triggerBindAggregation");
+		console.log(this.bindingPath);
+		this.notifier.bindAggregation("messages", this.bindingPath, (function(component, sId, oContext) {
+			var oMessageTemplate = new sap.ui.core.Message();
+			var type = "";
+			var level = sap.ui.core.MessageType.None;
+			var message = "";
+			type = oContext.getProperty("TYPE");
+			message = oContext.getProperty("MESSAGE");
+			oMessageTemplate.setText(message);
+			switch (type) {
+			case 'success':
+				level = sap.ui.core.MessageType.Success;
+				break;
+			case 'error':
+				level = sap.ui.core.MessageType.Error;
+				break;
+			case 'info':
+				level = sap.ui.core.MessageType.Information;
+				break;
+			case 'warning':
+				level = sap.ui.core.MessageType.Warning;
+				break;
+			case 'S':
+				level = sap.ui.core.MessageType.Success;
+				break;
+			case 'E':
+				level = sap.ui.core.MessageType.Error;
+				break;
+			case 'I':
+				level = sap.ui.core.MessageType.Information;
+				break;
+			case 'W':
+				level = sap.ui.core.MessageType.Warning;
+				break;
+			default:
+				level = sap.ui.core.MessageType.None;
+			};
+
+			oMessageTemplate.setLevel(level);
+			component.setVisibleStatus("Default");
+			return oMessageTemplate;
+		}).bind(null,this));
+	};
+	this.reset = function (){
+		this.getNotifier().removeAllMessages();
+		this.setVisibleStatus("Min");
+	};
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NotificationBarComponent.html">NotificationBarComponent</a></li><li><a href="searchhelp-Input.html">searchhelp-Input</a></li><li><a href="searchhelp-Input-ResultsDialog.html">searchhelp-Input-ResultsDialog</a></li><li><a href="searchhelp-Select.html">searchhelp-Select</a></li><li><a href="toucon-Box.html">toucon-Box</a></li><li><a href="toucon-Calendar.html">toucon-Calendar</a></li><li><a href="toucon-DateChooser.html">toucon-DateChooser</a></li><li><a href="toucon-FacebookButton.html">toucon-FacebookButton</a></li><li><a href="toucon-FileDropzone.html">toucon-FileDropzone</a></li><li><a href="toucon-FileUploader.html">toucon-FileUploader</a></li><li><a href="toucon-FormLine.html">toucon-FormLine</a></li><li><a href="toucon-Icon.html">toucon-Icon</a></li><li><a href="toucon-ImageSlider.html">toucon-ImageSlider</a></li><li><a href="toucon-InfoBox.html">toucon-InfoBox</a></li><li><a href="toucon-Link.html">toucon-Link</a></li><li><a href="toucon-MailButton.html">toucon-MailButton</a></li><li><a href="toucon-NotificationBar.html">toucon-NotificationBar</a></li><li><a href="toucon-Page.html">toucon-Page</a></li><li><a href="toucon-PhoneButton.html">toucon-PhoneButton</a></li><li><a href="toucon-Popup.html">toucon-Popup</a></li><li><a href="toucon-StatusIndicator.html">toucon-StatusIndicator</a></li><li><a href="toucon-Table.html">toucon-Table</a></li><li><a href="toucon-TableColumn.html">toucon-TableColumn</a></li><li><a href="toucon-Text.html">toucon-Text</a></li><li><a href="toucon-Tree.html">toucon-Tree</a></li><li><a href="toucon-TreeNode.html">toucon-TreeNode</a></li><li><a href="toucon-type-BIC.html">toucon-type-BIC</a></li><li><a href="toucon-type-Default.html">toucon-type-Default</a></li><li><a href="toucon-type-EmailAddress.html">toucon-type-EmailAddress</a></li><li><a href="toucon-type-IBAN.html">toucon-type-IBAN</a></li><li><a href="toucon-type-Number.html">toucon-type-Number</a></li><li><a href="toucon-type-PhoneNumber.html">toucon-type-PhoneNumber</a></li><li><a href="toucon-type-PostCodeGermany.html">toucon-type-PostCodeGermany</a></li><li><a href="toucon-type-String.html">toucon-type-String</a></li><li><a href="toucon-UrlButton.html">toucon-UrlButton</a></li><li><a href="toucon-YelpBadge.html">toucon-YelpBadge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Thu Jul 16 2015 11:52:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
